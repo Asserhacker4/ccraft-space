@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>CCRAFT SPACE | محرر الأكواد</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+
+/* ============================================================
+   محرر الأكواد الاحترافي — Roblox Lua
+   نفس نظام الألوان والخط المستخدم في NOVA AI بالضبط
+   ============================================================ */
+
+:root {
+    --nova-primary: #8b5cf6;
+    --nova-cyan: #22d3ee;
+    --nova-primary-soft: rgba(139,92,246,0.14);
+    --nova-gradient: linear-gradient(135deg, #8b5cf6, #6366f1);
+    --nova-cyan-gradient: linear-gradient(135deg, #22d3ee, #6366f1);
+    --nova-bg: #0b0c10;
+    --nova-surface: #14151c;
+    --nova-card: #1a1c25;
+    --nova-border: rgba(255,255,255,0.09);
+    --nova-text: #eceef2;
+    --nova-text-dim: #999cad;
+    --nova-success: #4ade80;
+    --nova-danger: #f87171;
+    --nova-code-bg: #0d0e13;
+
+    /* ألوان تلوين الكود */
+    --tok-keyword: #c792ea;
+    --tok-global: #22d3ee;
+    --tok-string: #a5d6a7;
+    --tok-comment: #6b7280;
+    --tok-number: #f78c6c;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0; padding: 0;
+    background: var(--nova-bg);
+    color: var(--nova-text);
+    width: 100%;
+    overflow-x: hidden;
+}
+body {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Tajawal', sans-serif;
+}
+header { flex: none; }
+
+.editor-app {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+}
+
+/* ===================== الهيدر العلوي ===================== */
+.nova-topbar {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--nova-border);
+    background: var(--nova-surface);
+}
+.icon-btn {
+    flex: none;
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--nova-border);
+    background: rgba(255,255,255,0.03);
+    color: var(--nova-text);
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; margin: 0; padding: 0;
+}
+.icon-btn:active { transform: scale(0.94); }
+.nova-avatar {
+    flex: none; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--nova-cyan-gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; box-shadow: 0 0 14px rgba(34,211,238,0.45);
+}
+.nova-title-block { flex: 1 1 auto; min-width: 0; }
+.nova-title-block h1 {
+    font-size: 0.98rem; font-weight: 900; margin: 0;
+    background: var(--nova-cyan-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.nova-status {
+    font-size: 0.66rem; color: var(--nova-text-dim); font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ===================== شريط أدوات القوالب ===================== */
+.snippet-bar {
+    flex: none;
+    display: flex;
+    gap: 8px;
+    padding: 9px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--nova-border);
+}
+.snippet-bar::-webkit-scrollbar { display: none; }
+.sn-chip {
+    flex: none;
+    background: var(--nova-primary-soft);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 50px;
+    padding: 7px 14px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    color: var(--nova-primary);
+    white-space: nowrap;
+    cursor: pointer; margin: 0;
+    font-family: 'Tajawal', sans-serif;
+}
+.sn-chip:active { background: rgba(139,92,246,0.25); }
+
+/* ===================== منطقة المحرر ===================== */
+.editor-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    position: relative;
+    background: var(--nova-code-bg);
+}
+
+.gutter {
+    flex: none;
+    width: 42px;
+    overflow: hidden;
+    padding: 12px 6px 12px 0;
+    text-align: left;
+    font-family: 'Consolas', 'Menlo', monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #565a6e;
+    background: rgba(255,255,255,0.02);
+    border-left: 1px solid var(--nova-border);
+    user-select: none;
+    direction: ltr;
+}
+.gutter div { padding-left: 8px; }
+
+.code-stack {
+    flex: 1 1 auto;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+#codeHighlight, #codeInput {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 12px 14px;
+    font-family: 'Consolas', 'Menlo', monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    white-space: pre;
+    overflow: auto;
+    direction: ltr;
+    text-align: left;
+    tab-size: 4;
+}
+#codeHighlight {
+    color: #d6d6e2;
+    pointer-events: none;
+    z-index: 1;
+}
+#codeInput {
+    background: transparent;
+    color: transparent;
+    caret-color: #eceef2;
+    border: none;
+    outline: none;
+    resize: none;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+}
+#codeHighlight .tok-kw { color: var(--tok-keyword); font-weight: 700; }
+#codeHighlight .tok-gl { color: var(--tok-global); }
+#codeHighlight .tok-str { color: var(--tok-string); }
+#codeHighlight .tok-cm { color: var(--tok-comment); font-style: italic; }
+#codeHighlight .tok-num { color: var(--tok-number); }
+
+/* ===================== شريط الاقتراحات (auto-complete) ===================== */
+.suggest-bar {
+    flex: none;
+    display: none;
+    gap: 8px;
+    padding: 8px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--nova-border);
+    background: var(--nova-surface);
+    direction: ltr;
+}
+.suggest-bar.show { display: flex; }
+.suggest-bar::-webkit-scrollbar { display: none; }
+.sg-chip {
+    flex: none;
+    background: rgba(34,211,238,0.12);
+    border: 1px solid rgba(34,211,238,0.35);
+    color: var(--nova-cyan);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-family: 'Consolas', 'Menlo', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer; margin: 0;
+}
+.sg-chip:active { background: rgba(34,211,238,0.25); }
+
+/* ===================== الشريط السفلي ===================== */
+.bottom-bar {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px calc(9px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--nova-border);
+    background: var(--nova-surface);
+}
+.bb-btn {
+    flex: 1 1 auto;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: var(--nova-card);
+    border: 1px solid var(--nova-border);
+    color: var(--nova-text);
+    border-radius: 12px;
+    padding: 10px 8px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer; margin: 0;
+}
+.bb-btn:active { transform: scale(0.97); }
+.bb-btn.primary {
+    background: var(--nova-gradient);
+    border: none;
+    color: white;
+    flex: none;
+    padding: 10px 16px;
+}
+
+/* ===================== لوحة نوفا (Drawer) ===================== */
+.sidebar-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 90; opacity: 0; pointer-events: none;
+    transition: opacity 0.22s ease;
+}
+.sidebar-backdrop.show { opacity: 1; pointer-events: auto; }
+
+.nova-panel {
+    position: fixed; top: 0; bottom: 0; right: 0;
+    width: min(340px, 90vw);
+    background: var(--nova-surface);
+    border-left: 1px solid var(--nova-border);
+    z-index: 100;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+}
+.nova-panel.open { transform: translateX(0); }
+
+.files-panel {
+    position: fixed; top: 0; bottom: 0; right: 0;
+    width: min(340px, 90vw);
+    background: var(--nova-surface);
+    border-left: 1px solid var(--nova-border);
+    z-index: 100;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+}
+.files-panel.open { transform: translateX(0); }
+.fp-head {
+    flex: none;
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px;
+    border-bottom: 1px solid var(--nova-border);
+}
+.fp-head h2 {
+    flex: 1 1 auto; min-width: 0;
+    font-size: 0.92rem; font-weight: 900; margin: 0;
+    background: var(--nova-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.fp-actions {
+    flex: none;
+    display: flex; gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--nova-border);
+}
+.fp-btn {
+    flex: 1 1 auto;
+    background: var(--nova-primary-soft);
+    border: 1px solid rgba(139,92,246,0.3);
+    color: var(--nova-primary);
+    border-radius: 10px;
+    padding: 9px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    cursor: pointer; margin: 0;
+    font-family: 'Tajawal', sans-serif;
+}
+.fp-btn:active { background: rgba(139,92,246,0.25); }
+.fp-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+}
+.fp-hint {
+    flex: none;
+    padding: 8px 12px 12px;
+    font-size: 0.68rem;
+    color: var(--nova-text-dim);
+    line-height: 1.6;
+    text-align: center;
+}
+
+.conv-item {
+    flex: none;
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    font-size: 0.84rem;
+    color: var(--nova-text-dim);
+    cursor: pointer;
+}
+.conv-item:active { background: rgba(255,255,255,0.06); }
+.conv-item.active { background: var(--nova-primary-soft); color: var(--nova-text); }
+.conv-item .conv-title {
+    flex: 1 1 auto; min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.conv-item .conv-del {
+    flex: none;
+    font-size: 0.85rem;
+    color: var(--nova-text-dim);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+.conv-item .conv-del:active { color: var(--nova-danger); background: rgba(248,113,113,0.15); }
+
+.np-head {
+    flex: none;
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px;
+    border-bottom: 1px solid var(--nova-border);
+}
+.np-head .nova-avatar { width: 30px; height: 30px; font-size: 0.85rem; }
+.np-head h2 {
+    flex: 1 1 auto; min-width: 0;
+    font-size: 0.92rem; font-weight: 900; margin: 0;
+    background: var(--nova-cyan-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.np-actions {
+    flex: none;
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--nova-border);
+}
+.np-action {
+    flex: none;
+    background: var(--nova-primary-soft);
+    border: 1px solid rgba(139,92,246,0.3);
+    color: var(--nova-primary);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer; margin: 0;
+    font-family: 'Tajawal', sans-serif;
+}
+.np-action:active { background: rgba(139,92,246,0.25); }
+
+.np-chat {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 12px;
+}
+.np-empty {
+    margin: auto 0;
+    text-align: center;
+    color: var(--nova-text-dim);
+    font-size: 0.8rem;
+    padding: 20px;
+    line-height: 1.7;
+}
+
+.message-row { display: flex; gap: 8px; align-items: flex-start; max-width: 100%; }
+.message-row.user { flex-direction: row-reverse; align-self: flex-end; max-width: 90%; }
+.message-row.nova { align-self: flex-start; max-width: 96%; width: 100%; }
+.msg-avatar {
+    flex: none; width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; margin-top: 2px;
+}
+.message-row.user .msg-avatar { background: var(--nova-gradient); color: white; font-weight: 900; }
+.message-row.nova .msg-avatar { background: rgba(34,211,238,0.15); border: 1px solid rgba(34,211,238,0.3); }
+.msg-bubble {
+    min-width: 0; padding: 9px 12px; border-radius: 14px;
+    font-size: 0.82rem; line-height: 1.6;
+    word-break: break-word; overflow-wrap: anywhere;
+}
+.message-row.user .msg-bubble { background: var(--nova-gradient); color: white; border-bottom-left-radius: 4px; }
+.message-row.nova .msg-bubble {
+    background: var(--nova-card); border: 1px solid var(--nova-border);
+    border-bottom-right-radius: 4px; direction: rtl; text-align: right; flex: 1 1 auto;
+}
+.np-code-block {
+    direction: ltr; text-align: left;
+    background: var(--nova-code-bg);
+    border: 1px solid var(--nova-border);
+    border-radius: 10px; margin: 8px 0; overflow: hidden;
+}
+.np-code-block pre { margin: 0; padding: 10px; overflow-x: auto; }
+.np-code-block code {
+    font-family: 'Consolas', monospace; font-size: 0.76rem;
+    color: #d6d6e2; white-space: pre;
+}
+.np-copy-btn {
+    display: block; width: 100%;
+    background: rgba(139,92,246,0.15);
+    border: none; border-top: 1px solid var(--nova-border);
+    color: var(--nova-primary);
+    padding: 7px; font-size: 0.72rem; font-weight: 800;
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+}
+.typing-dots { display: flex; gap: 5px; padding: 3px 0; }
+.typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--nova-cyan); animation: bounce 1.2s ease infinite; }
+.typing-dots span:nth-child(2) { animation-delay: .2s; }
+.typing-dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.5} 30%{transform:translateY(-5px);opacity:1} }
+
+.np-input-bar {
+    flex: none;
+    display: flex; align-items: flex-end; gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--nova-border);
+}
+#npInput {
+    flex: 1 1 auto; min-width: 0;
+    background: var(--nova-card);
+    border: 1px solid var(--nova-border);
+    border-radius: 14px;
+    padding: 10px 13px;
+    color: var(--nova-text);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.85rem;
+    outline: none; resize: none; max-height: 90px;
+    line-height: 1.5; direction: rtl; margin: 0;
+}
+#npInput::placeholder { color: var(--nova-text-dim); }
+#npInput:focus { border-color: var(--nova-cyan); }
+#npSendBtn {
+    flex: none; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--nova-cyan-gradient);
+    color: white; border: none; font-size: 0.95rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    margin: 0; padding: 0; box-shadow: 0 4px 14px rgba(34,211,238,0.3);
+}
+#npSendBtn:disabled { opacity: 0.4; }
+
+/* ===================== توست ===================== */
+.nova-toast {
+    position: fixed;
+    bottom: calc(90px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%) translateY(50px);
+    background: var(--nova-card);
+    border: 1px solid var(--nova-primary);
+    border-radius: 50px;
+    padding: 9px 20px;
+    font-size: 0.82rem; font-weight: 800;
+    z-index: 400;
+    transition: transform 0.3s ease;
+    max-width: 88vw; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap;
+    pointer-events: none;
+}
+.nova-toast.show { transform: translateX(-50%) translateY(0); }
+
+</style>
+</head>
+<body>
+
+<header>
+    <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div class="editor-app">
+
+    <div class="nova-topbar">
+        <button class="icon-btn" onclick="toggleFilesPanel(true)" title="ملفاتي">📁</button>
+        <button class="icon-btn" onclick="downloadCode()" title="تحميل">💾</button>
+        <button class="icon-btn" onclick="copyAllCode()" title="نسخ الكود">📋</button>
+        <div class="nova-title-block">
+            <h1>محرر الأكواد</h1>
+            <div class="nova-status">Luau / Roblox — تلوين تلقائي واقتراحات</div>
+        </div>
+        <button class="icon-btn" id="novaBtn" onclick="togglePanel(true)" title="اسأل نوفا">🤖</button>
+    </div>
+
+    <div class="snippet-bar">
+        <button class="sn-chip" onclick="insertSnippet('local function ${1}()\n\t\nend')">🧩 دالة</button>
+        <button class="sn-chip" onclick="insertSnippet('game:GetService(\"${1}\")')">🔧 GetService</button>
+        <button class="sn-chip" onclick="insertSnippet('Instance.new(\"${1}\")')">✨ Instance.new</button>
+        <button class="sn-chip" onclick="insertSnippet('local player = game.Players.LocalPlayer')">🧍 LocalPlayer</button>
+        <button class="sn-chip" onclick="insertSnippet('game.Players.PlayerAdded:Connect(function(player)\n\t\nend)')">🔌 PlayerAdded</button>
+        <button class="sn-chip" onclick="insertSnippet('task.wait(${1})')">⏱️ task.wait</button>
+        <button class="sn-chip" onclick="insertSnippet('pcall(function()\n\t\nend)')">🛡️ pcall</button>
+    </div>
+
+    <div class="suggest-bar" id="suggestBar"></div>
+
+    <div class="editor-wrap">
+        <div class="gutter" id="gutter"><div>1</div></div>
+        <div class="code-stack">
+            <pre id="codeHighlight"><code></code></pre>
+            <textarea id="codeInput" spellcheck="false" autocapitalize="off" autocorrect="off" placeholder="-- ابدأ الكتابة هنا... local function ابدأ()"></textarea>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <button class="bb-btn" onclick="clearEditor()">🗑️ مسح الكل</button>
+        <button class="bb-btn" onclick="formatIndentHint()">📐 محاذاة</button>
+        <button class="bb-btn primary" onclick="togglePanel(true)">🤖 اسأل نوفا</button>
+    </div>
+
+    <div class="sidebar-backdrop" id="panelBackdrop" onclick="closeAllPanels()"></div>
+
+    <aside class="files-panel" id="filesPanel">
+        <div class="fp-head">
+            <span style="font-size:1.2rem;">📁</span>
+            <h2>ملفاتي</h2>
+            <button class="icon-btn" onclick="toggleFilesPanel(false)" style="width:32px;height:32px;font-size:0.85rem;">✕</button>
+        </div>
+        <div class="fp-actions">
+            <button class="fp-btn" onclick="saveCurrentFile()">💾 حفظ الحالي</button>
+            <button class="fp-btn" onclick="saveAsNewFile()">➕ حفظ كملف جديد</button>
+        </div>
+        <div class="fp-list" id="filesList"></div>
+        <div class="fp-hint">تقدر تشفّر أي ملف بكلمة سر وقت الحفظ 🔒 — التشفير بسيط ومحلي بالكامل جوه المتصفح من غير أي سيرفر</div>
+    </aside>
+
+    <aside class="nova-panel" id="novaPanel">
+        <div class="np-head">
+            <div class="nova-avatar">🤖</div>
+            <h2>مساعد نوفا للكود</h2>
+            <button class="icon-btn" onclick="togglePanel(false)" style="width:32px;height:32px;font-size:0.85rem;">✕</button>
+        </div>
+        <div class="np-actions">
+            <button class="np-action" onclick="askNova('اشرحلي الكود ده بالتفصيل، من غير ما تديني كود جديد، فسّر بس')">📖 اشرح الكود</button>
+            <button class="np-action" onclick="askNova('دور على أي أخطاء في الكود ده وصلحها بنفسك وابعتلي الكود الكامل بعد التصحيح')">🐞 دوّر على الأخطاء</button>
+            <button class="np-action" onclick="askNova('حسّن أداء وتنظيم الكود ده وابعتلي الكود الكامل بعد التحسين')">⚡ حسّن الكود</button>
+            <button class="np-action" onclick="askNova('كمل الكود ده بمنطقية وابعتلي الكود الكامل بعد الإكمال')">➕ أكمل الكود</button>
+        </div>
+        <div class="np-chat" id="npChat">
+            <div class="np-empty" id="npEmpty">اسألني عن أي حاجة في الكود اللي بتكتبه، أو دوسي على زر جاهز فوق ⬆️</div>
+        </div>
+        <div class="np-input-bar">
+            <textarea id="npInput" rows="1" placeholder="اكتب سؤالك لنوفا..."></textarea>
+            <button id="npSendBtn" onclick="sendNovaMessage()">➤</button>
+        </div>
+    </aside>
+
+</div>
+
+<div class="nova-toast" id="novaToast"></div>
+
+<script>
+/* ================================================================
+   إعدادات عامة
+   ================================================================ */
+const NOVA_URL = "https://ghgh62131r.pythonanywhere.com";
+
+const codeInput   = document.getElementById('codeInput');
+const codeHi      = document.getElementById('codeHighlight').querySelector('code');
+const gutter      = document.getElementById('gutter');
+const suggestBar  = document.getElementById('suggestBar');
+const novaPanel   = document.getElementById('novaPanel');
+const panelBack   = document.getElementById('panelBackdrop');
+const npChat      = document.getElementById('npChat');
+const npInput     = document.getElementById('npInput');
+const npSendBtn   = document.getElementById('npSendBtn');
+
+/* ================================================================
+   هوية المستخدم لجلسة نوفا الخاصة بالمحرر
+   ================================================================ */
+let userId = localStorage.getItem('novaUserId');
+if (!userId) {
+    userId = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('novaUserId', userId);
+}
+const editorSessionKey = userId + '::editor';
+
+/* ================================================================
+   قوائم الكلمات لـ Luau / Roblox
+   ================================================================ */
+const KEYWORDS = ['and','break','do','else','elseif','end','false','for','function','if','in',
+    'local','nil','not','or','repeat','return','then','true','until','while','self'];
+
+const GLOBALS = ['game','workspace','script','Instance','Vector3','Vector2','CFrame','Color3',
+    'UDim2','UDim','Enum','Ray','BrickColor','TweenInfo','Random','math','string','table','os',
+    'task','Players','Workspace','Humanoid','require','typeof','warn','print','pairs','ipairs',
+    'pcall','xpcall','wait','spawn','delay','tick'];
+
+/* قائمة اقتراحات الإكمال التلقائي (مرتبة حسب الاستخدام الشائع) */
+const SUGGESTIONS = [
+    'print(', 'pairs(', 'ipairs(', 'pcall(', 'xpcall(', 'require(', 'typeof(', 'warn(',
+    'wait(', 'task.wait(', 'task.spawn(', 'spawn(', 'delay(', 'tick()',
+    'local function', 'function', 'end', 'if', 'then', 'else', 'elseif', 'for', 'while',
+    'repeat', 'until', 'return', 'break', 'do', 'not', 'and', 'or', 'nil', 'true', 'false', 'self',
+    'game', 'game:GetService("', 'workspace', 'script', 'script.Parent',
+    'Instance.new("', 'Vector3.new(', 'Vector2.new(', 'CFrame.new(',
+    'Color3.fromRGB(', 'Color3.new(', 'UDim2.new(', 'UDim.new(', 'Enum.',
+    'BrickColor.new("', 'TweenInfo.new(', 'Random.new()',
+    'math.random(', 'math.floor(', 'math.huge', 'math.clamp(',
+    'string.format(', 'string.sub(', 'string.find(', 'string.split(',
+    'table.insert(', 'table.remove(', 'table.concat(', 'os.time()',
+    'Players.LocalPlayer', 'Players.PlayerAdded:Connect(function(',
+    'Humanoid', 'Humanoid.Died:Connect(function()',
+    'RunService.Heartbeat:Connect(function(', 'RunService.RenderStepped:Connect(function(',
+    ':Connect(function(', ':FindFirstChild("', ':WaitForChild("', ':IsA("',
+    ':Destroy()', ':Clone()', ':GetChildren()'
+];
+
+/* ================================================================
+   تلوين الكود (Syntax Highlighting)
+   ================================================================ */
+function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.innerText = str;
+    return d.innerHTML;
+}
+
+const kwPattern  = KEYWORDS.join('|');
+const glPattern  = GLOBALS.join('|');
+const masterRe = new RegExp(
+    '(--\\[\\[[\\s\\S]*?\\]\\])' +                 // 1: block comment
+    '|(--[^\\n]*)' +                                // 2: line comment
+    '|(\\[\\[[\\s\\S]*?\\]\\])' +                   // 3: long string
+    '|("(?:[^"\\\\]|\\\\.)*")' +                     // 4: double-quoted string
+    "|('(?:[^'\\\\]|\\\\.)*')" +                     // 5: single-quoted string
+    '|\\b(' + kwPattern + ')\\b' +                  // 6: keyword
+    '|\\b(' + glPattern + ')\\b' +                  // 7: global
+    '|\\b(\\d+\\.?\\d*)\\b'                         // 8: number
+, 'g');
+
+function highlight(code) {
+    const escaped = escapeHtml(code);
+    return escaped.replace(masterRe, (m, blockCm, lineCm, longStr, dq, sq, kw, gl, num) => {
+        if (blockCm !== undefined) return '<span class="tok-cm">' + blockCm + '</span>';
+        if (lineCm  !== undefined) return '<span class="tok-cm">' + lineCm + '</span>';
+        if (longStr !== undefined) return '<span class="tok-str">' + longStr + '</span>';
+        if (dq      !== undefined) return '<span class="tok-str">' + dq + '</span>';
+        if (sq      !== undefined) return '<span class="tok-str">' + sq + '</span>';
+        if (kw      !== undefined) return '<span class="tok-kw">' + kw + '</span>';
+        if (gl      !== undefined) return '<span class="tok-gl">' + gl + '</span>';
+        if (num     !== undefined) return '<span class="tok-num">' + num + '</span>';
+        return m;
+    });
+}
+
+function renderHighlight() {
+    const code = codeInput.value;
+    codeHi.innerHTML = highlight(code) + '\n';
+    renderGutter(code);
+    syncScroll();
+}
+
+function renderGutter(code) {
+    const lines = code.split('\n').length;
+    let html = '';
+    for (let i = 1; i <= lines; i++) html += '<div>' + i + '</div>';
+    gutter.innerHTML = html;
+}
+
+function syncScroll() {
+    document.getElementById('codeHighlight').scrollTop = codeInput.scrollTop;
+    document.getElementById('codeHighlight').scrollLeft = codeInput.scrollLeft;
+    gutter.scrollTop = codeInput.scrollTop;
+}
+
+/* ================================================================
+   إدراج مقتطفات (Snippets) من الشريط العلوي
+   ================================================================ */
+function insertSnippet(tpl) {
+    const clean = tpl.replace(/\$\{\d+\}/g, '');
+    insertAtCursor(clean);
+}
+
+function insertAtCursor(text) {
+    const start = codeInput.selectionStart;
+    const end = codeInput.selectionEnd;
+    const val = codeInput.value;
+    codeInput.value = val.slice(0, start) + text + val.slice(end);
+    const newPos = start + text.length;
+    codeInput.focus();
+    codeInput.setSelectionRange(newPos, newPos);
+    renderHighlight();
+}
+
+/* ================================================================
+   الإكمال التلقائي — شريط اقتراحات يتحدث أثناء الكتابة
+   ================================================================ */
+function getCurrentWordRange() {
+    const pos = codeInput.selectionStart;
+    const val = codeInput.value;
+    let start = pos;
+    while (start > 0 && /[A-Za-z0-9_.:]/.test(val[start - 1])) start--;
+    return { start, end: pos, word: val.slice(start, pos) };
+}
+
+function updateSuggestions() {
+    const { word } = getCurrentWordRange();
+    if (!word || word.length < 1) { suggestBar.classList.remove('show'); suggestBar.innerHTML = ''; return; }
+
+    const lower = word.toLowerCase();
+    const matches = SUGGESTIONS.filter(s => s.toLowerCase().startsWith(lower) && s.toLowerCase() !== lower).slice(0, 10);
+
+    if (matches.length === 0) { suggestBar.classList.remove('show'); suggestBar.innerHTML = ''; return; }
+
+    suggestBar.innerHTML = '';
+    matches.forEach(s => {
+        const chip = document.createElement('button');
+        chip.className = 'sg-chip';
+        chip.innerText = s;
+        chip.onclick = () => applySuggestion(s);
+        suggestBar.appendChild(chip);
+    });
+    suggestBar.classList.add('show');
+}
+
+function applySuggestion(suggestion) {
+    const { start, end } = getCurrentWordRange();
+    const val = codeInput.value;
+    codeInput.value = val.slice(0, start) + suggestion + val.slice(end);
+    const newPos = start + suggestion.length;
+    codeInput.focus();
+    codeInput.setSelectionRange(newPos, newPos);
+    renderHighlight();
+    suggestBar.classList.remove('show');
+    suggestBar.innerHTML = '';
+}
+
+/* ================================================================
+   أزرار سفلية: مسح / تنزيل / نسخ
+   ================================================================ */
+function clearEditor() {
+    if (codeInput.value && !confirm('مسح كل الكود؟')) return;
+    codeInput.value = '';
+    currentFileId = null;
+    renderHighlight();
+    codeInput.focus();
+}
+
+function copyAllCode() {
+    const code = codeInput.value;
+    if (!code) { showToast('المحرر فارغ'); return; }
+    navigator.clipboard?.writeText(code).then(() => showToast('✅ تم نسخ الكود'))
+        .catch(() => { fallbackCopy(code); showToast('✅ تم نسخ الكود'); });
+}
+
+function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy'); } catch {}
+    document.body.removeChild(ta);
+}
+
+function downloadCode() {
+    const code = codeInput.value;
+    if (!code) { showToast('المحرر فارغ'); return; }
+    const blob = new Blob([code], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'script.lua';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('💾 تم تحميل الملف');
+}
+
+function formatIndentHint() {
+    showToast('💡 استخدم Tab أو مسافات للمحاذاة داخل الأكواد');
+}
+
+function showToast(msg) {
+    const t = document.getElementById('novaToast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ================================================================
+   أحداث المحرر
+   ================================================================ */
+codeInput.addEventListener('input', () => { renderHighlight(); updateSuggestions(); });
+codeInput.addEventListener('scroll', syncScroll);
+codeInput.addEventListener('keyup', (e) => {
+    if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key)) updateSuggestions();
+});
+const AUTO_PAIRS = { '(': ')', '{': '}', '[': ']', '"': '"', "'": "'" };
+const AUTO_CLOSERS = [')', '}', ']', '"', "'"];
+
+codeInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        insertAtCursor('\t');
+        return;
+    }
+
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const pos = codeInput.selectionStart;
+        const val = codeInput.value;
+        const lineStart = val.lastIndexOf('\n', pos - 1) + 1;
+        const currentLine = val.slice(lineStart, pos);
+        const indentMatch = currentLine.match(/^[ \t]*/);
+        let indent = indentMatch ? indentMatch[0] : '';
+        const trimmed = currentLine.trim();
+        if (/(then|do|function\([^)]*\)|\{|\(|\[)$/.test(trimmed)) indent += '\t';
+        insertAtCursor('\n' + indent);
+        return;
+    }
+
+    if (Object.keys(AUTO_PAIRS).includes(e.key)) {
+        const start = codeInput.selectionStart;
+        const end = codeInput.selectionEnd;
+        if (start === end) {
+            e.preventDefault();
+            const closer = AUTO_PAIRS[e.key];
+            insertAtCursor(e.key + closer);
+            codeInput.setSelectionRange(start + 1, start + 1);
+            return;
+        }
+    }
+
+    if (AUTO_CLOSERS.includes(e.key)) {
+        const pos = codeInput.selectionStart;
+        if (codeInput.value[pos] === e.key && codeInput.selectionStart === codeInput.selectionEnd) {
+            e.preventDefault();
+            codeInput.setSelectionRange(pos + 1, pos + 1);
+        }
+    }
+});
+codeInput.addEventListener('click', updateSuggestions);
+
+const filesPanel = document.getElementById('filesPanel');
+
+/* ================================================================
+   فتح/قفل اللوحات (نوفا / الملفات) — لوحة واحدة مفتوحة في نفس الوقت
+   ================================================================ */
+function togglePanel(force) {
+    const open = force !== undefined ? force : !novaPanel.classList.contains('open');
+    if (open) filesPanel.classList.remove('open');
+    novaPanel.classList.toggle('open', open);
+    panelBack.classList.toggle('show', open || filesPanel.classList.contains('open'));
+}
+
+function toggleFilesPanel(force) {
+    const open = force !== undefined ? force : !filesPanel.classList.contains('open');
+    if (open) novaPanel.classList.remove('open');
+    filesPanel.classList.toggle('open', open);
+    panelBack.classList.toggle('show', open || novaPanel.classList.contains('open'));
+    if (open) renderFilesList();
+}
+
+function closeAllPanels() {
+    novaPanel.classList.remove('open');
+    filesPanel.classList.remove('open');
+    panelBack.classList.remove('show');
+}
+
+/* ================================================================
+   نظام حفظ الملفات — كله محلي جوه المتصفح (localStorage)، من غير باك اند
+   ================================================================ */
+const FILES_KEY = 'ccraftEditorFiles_v1';
+let currentFileId = null;
+
+function loadFiles() {
+    try { return JSON.parse(localStorage.getItem(FILES_KEY) || '[]'); } catch { return []; }
+}
+function saveFilesList(files) { localStorage.setItem(FILES_KEY, JSON.stringify(files)); }
+
+/* ================================================================
+   تشفير بسيط خالص (XOR + Base64) — يشتغل بالكامل جوه المتصفح
+   مش تشفير حقيقي قوي، بس كفاية لحماية الملف من عين حد بيتصفح بسرعة
+   ================================================================ */
+function simpleChecksum(str) {
+    let sum = 7;
+    for (let i = 0; i < str.length; i++) sum = (sum * 31 + str.charCodeAt(i)) % 999999937;
+    return sum;
+}
+
+function xorBytes(bytes, key) {
+    const keyBytes = new TextEncoder().encode(key);
+    const out = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) out[i] = bytes[i] ^ keyBytes[i % keyBytes.length];
+    return out;
+}
+function bytesToBase64(bytes) {
+    let binary = '';
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    return btoa(binary);
+}
+function base64ToBytes(b64) {
+    const binary = atob(b64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+}
+function encryptText(text, password) {
+    return bytesToBase64(xorBytes(new TextEncoder().encode(text), password));
+}
+function decryptText(b64, password) {
+    return new TextDecoder().decode(xorBytes(base64ToBytes(b64), password));
+}
+
+/* ================================================================
+   حفظ / فتح / إعادة تسمية / حذف الملفات
+   ================================================================ */
+function saveCurrentFile() {
+    const code = codeInput.value;
+    if (!code.trim()) { showToast('المحرر فارغ، اكتب كود الأول'); return; }
+
+    let files = loadFiles();
+    let file = files.find(f => f.id === currentFileId);
+    const wantEncrypt = confirm('عايز تشفّر الملف بكلمة سر؟\n"موافق" = تشفير، "إلغاء" = حفظ عادي');
+
+    let payload = code, encrypted = false, checksum = null;
+    if (wantEncrypt) {
+        const password = prompt('اكتب كلمة السر للتشفير:');
+        if (!password) { showToast('اتلغى الحفظ، محتاج كلمة سر للتشفير'); return; }
+        checksum = simpleChecksum(code);
+        payload = encryptText(code, password);
+        encrypted = true;
+    }
+
+    if (file) {
+        file.encrypted = encrypted;
+        file.data = payload;
+        file.checksum = checksum;
+        file.updatedAt = Date.now();
+    } else {
+        const name = prompt('اسم الملف:', 'سكربت جديد');
+        if (!name) return;
+        file = {
+            id: 'f_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            name, encrypted, data: payload, checksum, updatedAt: Date.now()
+        };
+        files.unshift(file);
+        currentFileId = file.id;
+    }
+    saveFilesList(files);
+    renderFilesList();
+    showToast(encrypted ? '🔒 تم حفظ الملف مشفّرًا' : '💾 تم حفظ الملف');
+}
+
+function saveAsNewFile() {
+    currentFileId = null;
+    saveCurrentFile();
+}
+
+function openFile(id) {
+    const files = loadFiles();
+    const file = files.find(f => f.id === id);
+    if (!file) return;
+
+    if (file.encrypted) {
+        const password = prompt('الملف ده مشفّر 🔒 اكتب كلمة السر:');
+        if (!password) return;
+        let decrypted;
+        try { decrypted = decryptText(file.data, password); } catch { showToast('❌ كلمة السر غلط'); return; }
+        if (simpleChecksum(decrypted) !== file.checksum) { showToast('❌ كلمة السر غلط'); return; }
+        codeInput.value = decrypted;
+    } else {
+        codeInput.value = file.data;
+    }
+    currentFileId = file.id;
+    renderHighlight();
+    toggleFilesPanel(false);
+    showToast('📂 اتفتح: ' + file.name);
+}
+
+function renameFile(id, evt) {
+    evt.stopPropagation();
+    const files = loadFiles();
+    const file = files.find(f => f.id === id);
+    if (!file) return;
+    const name = prompt('اسم جديد للملف:', file.name);
+    if (!name) return;
+    file.name = name;
+    saveFilesList(files);
+    renderFilesList();
+}
+
+function deleteFile(id, evt) {
+    evt.stopPropagation();
+    if (!confirm('حذف الملف ده نهائيًا؟')) return;
+    const files = loadFiles().filter(f => f.id !== id);
+    saveFilesList(files);
+    if (currentFileId === id) currentFileId = null;
+    renderFilesList();
+}
+
+function renderFilesList() {
+    const files = loadFiles();
+    const list = document.getElementById('filesList');
+    list.innerHTML = '';
+
+    if (files.length === 0) {
+        list.innerHTML = '<div class="np-empty">لسه مفيش ملفات محفوظة. احفظ أول سكربت من الأزرار فوق 👆</div>';
+        return;
+    }
+
+    files.forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'conv-item' + (f.id === currentFileId ? ' active' : '');
+        item.onclick = () => openFile(f.id);
+
+        const title = document.createElement('span');
+        title.className = 'conv-title';
+        title.innerText = (f.encrypted ? '🔒 ' : '📄 ') + f.name;
+
+        const ren = document.createElement('span');
+        ren.className = 'conv-del';
+        ren.innerText = '✎';
+        ren.onclick = (e) => renameFile(f.id, e);
+
+        const del = document.createElement('span');
+        del.className = 'conv-del';
+        del.innerText = '✕';
+        del.onclick = (e) => deleteFile(f.id, e);
+
+        item.appendChild(title);
+        item.appendChild(ren);
+        item.appendChild(del);
+        list.appendChild(item);
+    });
+}
+
+function npAppendMessage(text, sender) {
+    document.getElementById('npEmpty')?.remove();
+    const row = document.createElement('div');
+    row.className = 'message-row ' + sender;
+    const avatar = document.createElement('div');
+    avatar.className = 'msg-avatar';
+    avatar.innerText = sender === 'user' ? '🧑' : '🤖';
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.innerHTML = sender === 'nova' ? renderNovaRichText(text) : escapeHtml(text);
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    npChat.appendChild(row);
+    npChat.scrollTop = npChat.scrollHeight;
+}
+
+function renderNovaRichText(text) {
+    const blocks = [];
+    let working = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (m, lang, code) => {
+        blocks.push(code.replace(/\n$/, ''));
+        return `%%CB${blocks.length - 1}%%`;
+    });
+    working = escapeHtml(working)
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`([^`]+?)`/g, '<span style="background:rgba(139,92,246,0.18);padding:2px 6px;border-radius:5px;font-family:Consolas,monospace;font-size:0.85em;direction:ltr;display:inline-block;">$1</span>')
+        .replace(/\n/g, '<br>');
+    working = working.replace(/%%CB(\d+)%%/g, (m, i) => {
+        const code = blocks[+i];
+        const encoded = encodeURIComponent(code);
+        return `<div class="np-code-block"><pre><code>${escapeHtml(code)}</code></pre>
+            <button class="np-copy-btn" data-code="${encoded}" onclick="npCopyCode(this)">📋 نسخ الكود</button></div>`;
+    });
+    return working;
+}
+
+function npCopyCode(btn) {
+    const code = decodeURIComponent(btn.getAttribute('data-code'));
+    navigator.clipboard?.writeText(code).then(() => { btn.innerText = '✅ تم النسخ'; setTimeout(() => btn.innerText = '📋 نسخ الكود', 1500); })
+        .catch(() => { fallbackCopy(code); btn.innerText = '✅ تم النسخ'; setTimeout(() => btn.innerText = '📋 نسخ الكود', 1500); });
+}
+
+/* ================================================================
+   تطبيق تعديلات نوفا مباشرة على الكود بدل ما تدي كود يتنسخ
+   ================================================================ */
+const novaUndoStack = [];
+
+function handleNovaReply(text) {
+    const codeBlockRe = /```(\w*)\n?([\s\S]*?)```/g;
+    let match, lastCode = null;
+    while ((match = codeBlockRe.exec(text)) !== null) {
+        lastCode = match[2].replace(/\n$/, '');
+    }
+
+    if (lastCode && lastCode.trim().length > 3 && lastCode.trim() !== codeInput.value.trim()) {
+        novaUndoStack.push(codeInput.value);
+        codeInput.value = lastCode;
+        renderHighlight();
+        showToast('✅ نوفا عدّلت الكود في المحرر');
+
+        const explanation = text.replace(codeBlockRe, '').trim();
+        npAppendAppliedMessage(explanation || 'تم تحديث الكود في المحرر مباشرة.');
+    } else {
+        npAppendMessage(text, 'nova');
+    }
+}
+
+function npAppendAppliedMessage(explanation) {
+    document.getElementById('npEmpty')?.remove();
+    const row = document.createElement('div');
+    row.className = 'message-row nova';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'msg-avatar';
+    avatar.innerText = '🤖';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.innerHTML = renderNovaRichText(explanation) +
+        '<div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+        '<span style="background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.35);color:var(--nova-success);border-radius:8px;padding:4px 9px;font-size:0.7rem;font-weight:800;">✅ اتطبق على المحرر</span>' +
+        '<button class="np-copy-btn" style="width:auto;border:1px solid var(--nova-border);border-radius:8px;padding:4px 9px;font-size:0.7rem;" onclick="undoNovaEdit(this)">↩️ تراجع عن التعديل</button>' +
+        '</div>';
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    npChat.appendChild(row);
+    npChat.scrollTop = npChat.scrollHeight;
+}
+
+function undoNovaEdit(btn) {
+    if (novaUndoStack.length === 0) { showToast('مفيش تعديل سابق للتراجع عنه'); return; }
+    codeInput.value = novaUndoStack.pop();
+    renderHighlight();
+    showToast('↩️ تم التراجع عن تعديل نوفا');
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+}
+
+function npShowTyping() {
+    const row = document.createElement('div');
+    row.className = 'message-row nova';
+    row.id = 'npTypingRow';
+    row.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+    npChat.appendChild(row);
+    npChat.scrollTop = npChat.scrollHeight;
+}
+function npRemoveTyping() { document.getElementById('npTypingRow')?.remove(); }
+
+async function sendToNova(message) {
+    togglePanel(true);
+    npAppendMessage(message, 'user');
+    npSendBtn.disabled = true;
+    npShowTyping();
+
+    const code = codeInput.value;
+    const pageCtx = `الصفحة: editor.html (محرر أكواد روبلوكس Lua). الكود الحالي في المحرر:\n${code.slice(0, 4000)}\n\n` +
+        `تعليمات مهمة: لو المستخدم طلب تعديل، تصحيح، تحسين، أو إكمال للكود، متديش الكود كنصيحة يطبقها هو — ابعت الكود الكامل بعد التعديل جوه بلوك كود واحد (\`\`\`lua ... \`\`\`) وده هيتطبق تلقائيًا في المحرر، واكتب شرح مختصر بس خارج البلوك. لو الطلب مجرد سؤال أو شرح من غير تعديل، متبعتش بلوك كود للكود كامل.`;
+
+    try {
+        const res = await fetch(`${NOVA_URL}/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, user_id: editorSessionKey, page_context: pageCtx })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        npRemoveTyping();
+        if (data.reply) handleNovaReply(data.reply);
+    } catch (e) {
+        npRemoveTyping();
+        npAppendMessage(`عذراً، حدث خطأ 😢 — ${e.message}`, 'nova');
+    } finally {
+        npSendBtn.disabled = false;
+    }
+}
+
+function askNova(prompt) { sendToNova(prompt); }
+
+function sendNovaMessage() {
+    const msg = npInput.value.trim();
+    if (!msg) return;
+    npInput.value = '';
+    npAutoResize();
+    sendToNova(msg);
+}
+
+function npAutoResize() {
+    npInput.style.height = 'auto';
+    npInput.style.height = Math.min(npInput.scrollHeight, 90) + 'px';
+}
+npInput.addEventListener('input', npAutoResize);
+npInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendNovaMessage(); }
+});
+
+/* ================================================================
+   بدء التشغيل
+   ================================================================ */
+codeInput.value = `-- اكتب سكربت الروبلوكس بتاعك هنا
+local Players = game:GetService("Players")
+
+Players.PlayerAdded:Connect(function(player)
+\tprint(player.Name .. " انضم للعبة")
+end)`;
+renderHighlight();
+</script>
+</body>
+</html>

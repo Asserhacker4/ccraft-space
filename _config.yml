@@ -1,0 +1,8 @@
+include:
+  - sitemap.xml
+defaults:
+  - scope:
+      path: "sitemap.xml"
+    values:
+      layout: null
+      

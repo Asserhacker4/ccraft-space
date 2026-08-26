@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | شخصيتي</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+
+body { overflow-x: hidden; }
+
+.av-layout {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* ---- Preview ---- */
+
+.preview-panel {
+    position: sticky;
+    top: 90px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 28px 22px;
+    text-align: center;
+    animation: fadeIn 0.5s ease both;
+}
+
+.preview-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent-gradient);
+    border-radius: 24px 24px 0 0;
+}
+
+.avatar-stage {
+    width: 170px; height: 170px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: #06060f;
+    border: 3px solid rgba(139,92,246,0.3);
+    box-shadow: 0 0 36px rgba(139,92,246,0.25), inset 0 0 20px rgba(0,0,0,0.6);
+    overflow: hidden;
+    transition: box-shadow 0.4s;
+}
+
+.avatar-stage:hover { box-shadow: 0 0 56px rgba(139,92,246,0.4), inset 0 0 20px rgba(0,0,0,0.6); }
+
+.preview-name  { font-size: 1.1rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px; }
+.preview-email { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 14px; }
+
+.points-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: #fbbf24;
+    margin-bottom: 18px;
+}
+
+#saveBtn {
+    width: 100%;
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    border-radius: var(--radius-btn);
+    padding: 13px;
+    font-size: 0.95rem;
+    box-shadow: 0 8px 20px rgba(139,92,246,0.3);
+    margin-bottom: 8px;
+}
+
+#resetBtn {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-btn);
+    padding: 10px;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.save-msg { font-size: 0.78rem; color: var(--success); margin-top: 10px; min-height: 18px; }
+
+
+/* ---- Editor ---- */
+
+.editor-panel { display: flex; flex-direction: column; gap: 16px; }
+
+.editor-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 20px 22px;
+    animation: fadeIn 0.5s ease both;
+    transition: border-color 0.3s;
+}
+
+.editor-card:hover { border-color: var(--border-hover); }
+
+.editor-card h3 {
+    font-size: 0.77rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+}
+
+.editor-card h3::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+
+.sub-label { color: var(--text-muted); font-size: 0.74rem; margin: 12px 0 8px; font-weight: 700; }
+
+
+/* Swatches */
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.swatch {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+}
+
+.swatch:hover { transform: scale(1.25); }
+.swatch.active { border-color: white; box-shadow: 0 0 0 2px var(--primary); transform: scale(1.2); }
+
+
+/* Style buttons */
+.style-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.style-btn {
+    background: rgba(255,255,255,0.04);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Tajawal', sans-serif;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.style-btn:hover  { border-color: rgba(139,92,246,0.4); color: var(--text-main); transform: translateY(-2px); filter: none; }
+.style-btn.active { background: var(--primary-dim); color: var(--primary); border-color: rgba(139,92,246,0.4); transform: none; }
+
+/* Locked button */
+.style-btn.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.style-btn.locked:hover { transform: none; border-color: rgba(251,191,36,0.4); color: #fbbf24; }
+.style-btn.locked::after { content: '🔒'; margin-right: 4px; font-size: 0.7rem; }
+
+.lock-cost {
+    font-size: 0.65rem;
+    color: #fbbf24;
+    font-weight: 900;
+    background: rgba(251,191,36,0.12);
+    padding: 1px 5px;
+    border-radius: 50px;
+}
+
+/* Unlock toast */
+.unlock-toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, rgba(139,92,246,0.95), rgba(59,130,246,0.95));
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    z-index: 999;
+    transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.unlock-toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Responsive */
+@media (max-width: 680px) {
+    .av-layout { grid-template-columns: 1fr; }
+    .preview-panel { position: static; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <button onclick="location.href='profile.html'">👤 البروفايل</button>
+    <button class="nav-button" onclick="location.href='index.html'">رجوع</button>
+</header>
+
+<div style="max-width:980px;margin:26px auto 18px;padding:0 20px">
+    <h1 style="font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">🎭 شخصيتي</h1>
+    <p style="color:var(--text-muted);font-size:0.9rem">خصّص شخصيتك — الملابس المقفولة 🔒 تفتح بالنقاط</p>
+</div>
+
+<div class="av-layout">
+
+    <!-- Preview -->
+    <div class="preview-panel">
+        <div class="avatar-stage" id="avatarStage"></div>
+        <div class="preview-name" id="previewName">—</div>
+        <div class="preview-email" id="previewEmail">—</div>
+        <div class="points-display">⭐ <span id="myPts">0</span> نقطة</div>
+        <button id="saveBtn">💾 حفظ الشخصية</button>
+        <button id="resetBtn">↩️ إعادة تعيين</button>
+        <div class="save-msg" id="saveMsg"></div>
+    </div>
+
+    <!-- Editor -->
+    <div class="editor-panel" id="editorPanel">
+
+        <!-- البشرة -->
+        <div class="editor-card">
+            <h3>🎨 لون البشرة</h3>
+            <div class="swatches" id="skin-sw"></div>
+        </div>
+
+        <!-- الشعر -->
+        <div class="editor-card">
+            <h3>💇 الشعر</h3>
+            <div class="sub-label">التسريحة</div>
+            <div class="style-grid" id="hair-style"></div>
+            <div class="sub-label">اللون</div>
+            <div class="swatches" id="hair-sw"></div>
+        </div>
+
+        <!-- العيون -->
+        <div class="editor-card">
+            <h3>👁️ العيون</h3>
+            <div class="sub-label">الشكل</div>
+            <div class="style-grid" id="eye-style"></div>
+            <div class="sub-label">اللون</div>
+            <div class="swatches" id="eye-sw"></div>
+        </div>
+
+        <!-- الشفايف -->
+        <div class="editor-card">
+            <h3>👄 الشفايف</h3>
+            <div class="swatches" id="lip-sw"></div>
+        </div>
+
+        <!-- الملابس -->
+        <div class="editor-card">
+            <h3>👕 الملابس</h3>
+            <div class="sub-label">النمط</div>
+            <div class="style-grid" id="outfit-style"></div>
+            <div class="sub-label">اللون</div>
+            <div class="swatches" id="outfit-sw"></div>
+        </div>
+
+        <!-- الإكسسوار -->
+        <div class="editor-card">
+            <h3>✨ إكسسوار</h3>
+            <div class="style-grid" id="accessory-style"></div>
+        </div>
+
+        <!-- الخلفية -->
+        <div class="editor-card">
+            <h3>🌌 خلفية الشخصية</h3>
+            <div class="style-grid" id="bg-style"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Unlock Toast -->
+<div class="unlock-toast" id="unlockToast"></div>
+
+
+<script type="module">
+import { get, getAuth, getDatabase, initializeApp, onAuthStateChanged, ref, set } from "./supabase-config.js";
+
+
+
+
+import {
+    buildAvatar, DEFAULT_CHAR, AVATAR_OPTIONS,
+    HAIR_STYLES, OUTFIT_STYLES, EYE_STYLES, ACCESSORY_STYLES, BACKGROUND_STYLES
+} from './avatar.js';
+
+
+
+
+const db   = getDatabase(app);
+const auth = getAuth(app);
+
+let char        = { ...DEFAULT_CHAR };
+let myPoints    = 0;
+let unlockedSet = new Set(); // IDs المفتوحة
+let currentUser = null;
+
+/* ---- Auth ---- */
+onAuthStateChanged(auth, async user => {
+    if (!user) { location.href = 'login.html'; return; }
+    currentUser = user;
+
+    document.getElementById('previewName').innerText  = user.email.split('@')[0];
+    document.getElementById('previewEmail').innerText = user.email;
+
+    // جيب الشخصية + النقاط + المفتوح
+    const [avatarSnap, pointsSnap, unlockedSnap] = await Promise.all([
+        get(ref(db, `users/${user.uid}/avatar`)),
+        get(ref(db, `users/${user.uid}/points`)),
+        get(ref(db, `users/${user.uid}/unlockedItems`)),
+    ]);
+
+    if (avatarSnap.exists())   char     = { ...DEFAULT_CHAR, ...avatarSnap.val() };
+    if (pointsSnap.exists())   myPoints = pointsSnap.val() || 0;
+    if (unlockedSnap.exists()) unlockedSet = new Set(Object.keys(unlockedSnap.val()));
+
+    document.getElementById('myPts').innerText = myPoints;
+
+    buildUI();
+    updatePreview();
+});
+
+/* ---- بناء الـ UI ---- */
+function buildUI() {
+    makeSwatches('skin-sw',   AVATAR_OPTIONS.skinColors,   'skinColor');
+    makeSwatches('hair-sw',   AVATAR_OPTIONS.hairColors,   'hairColor');
+    makeSwatches('eye-sw',    AVATAR_OPTIONS.eyeColors,    'eyeColor');
+    makeSwatches('lip-sw',    AVATAR_OPTIONS.lipColors,    'lipColor');
+    makeSwatches('outfit-sw', AVATAR_OPTIONS.outfitColors, 'outfitColor');
+
+    makeStyleBtns('hair-style',     HAIR_STYLES,       'hairStyle');
+    makeStyleBtns('eye-style',      EYE_STYLES,        'eyeStyle');
+    makeStyleBtns('outfit-style',   OUTFIT_STYLES,     'outfitStyle');
+    makeStyleBtns('accessory-style',ACCESSORY_STYLES,  'accessory');
+    makeStyleBtns('bg-style',       BACKGROUND_STYLES, 'background');
+}
+
+function isUnlocked(item) {
+    if (item.cost === 0) return true;
+    return unlockedSet.has(item.id);
+}
+
+function makeSwatches(id, colors, prop) {
+    const cont = document.getElementById(id);
+    if (!cont) return;
+    colors.forEach(color => {
+        const sw = document.createElement('div');
+        sw.className = 'swatch' + (char[prop] === color ? ' active' : '');
+        sw.style.background = color;
+        sw.title = color;
+        sw.onclick = () => {
+            char[prop] = color;
+            cont.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
+            sw.classList.add('active');
+            updatePreview();
+        };
+        cont.appendChild(sw);
+    });
+}
+
+function makeStyleBtns(id, options, prop) {
+    const cont = document.getElementById(id);
+    if (!cont) return;
+    options.forEach(item => {
+        const unlocked = isUnlocked(item);
+        const btn = document.createElement('button');
+
+        if (unlocked) {
+            btn.className = 'style-btn' + (char[prop] === item.id ? ' active' : '');
+            btn.innerHTML = `<span>${item.icon}</span> ${item.label}`;
+            btn.onclick = () => {
+                char[prop] = item.id;
+                cont.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                updatePreview();
+            };
+        } else {
+            btn.className = 'style-btn locked';
+            btn.innerHTML = `<span>${item.icon}</span> ${item.label} <span class="lock-cost">⭐${item.cost}</span>`;
+            btn.onclick = () => tryUnlock(item, btn, cont, prop);
+        }
+
+        cont.appendChild(btn);
+    });
+}
+
+/* ---- فتح عنصر مقفول ---- */
+async function tryUnlock(item, btn, cont, prop) {
+    if (!currentUser) return;
+    if (myPoints < item.cost) {
+        showToast(`❌ تحتاج ${item.cost} نقطة — عندك ${myPoints} فقط`);
+        return;
+    }
+    if (!confirm(`فتح "${item.label}" مقابل ${item.cost} نقطة؟`)) return;
+
+    // خصم النقاط
+    myPoints -= item.cost;
+    await set(ref(db, `users/${currentUser.uid}/points`), myPoints);
+    await set(ref(db, `users/${currentUser.uid}/unlockedItems/${item.id}`), { unlockedAt: Date.now(), cost: item.cost });
+
+    unlockedSet.add(item.id);
+    document.getElementById('myPts').innerText = myPoints;
+
+    // تحويل الزر لـ active
+    btn.className = 'style-btn';
+    btn.innerHTML = `<span>${item.icon}</span> ${item.label}`;
+    btn.onclick = () => {
+        char[prop] = item.id;
+        cont.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        updatePreview();
+    };
+
+    // اختره تلقائياً
+    char[prop] = item.id;
+    cont.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    updatePreview();
+
+    showToast(`✅ تم فتح "${item.label}"! 🎉`);
+}
+
+/* ---- Toast ---- */
+function showToast(msg) {
+    const t = document.getElementById('unlockToast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ---- Preview ---- */
+function updatePreview() {
+    document.getElementById('avatarStage').innerHTML = buildAvatar(char, 170);
+}
+
+/* ---- Save ---- */
+document.getElementById('saveBtn').onclick = async () => {
+    if (!currentUser) return;
+    const btn = document.getElementById('saveBtn');
+    const msg = document.getElementById('saveMsg');
+    btn.disabled = true; btn.innerText = '⏳ جارٍ الحفظ...';
+    await set(ref(db, `users/${currentUser.uid}/avatar`), char);
+    btn.disabled = false; btn.innerText = '💾 حفظ الشخصية';
+    msg.innerText = '✅ تم حفظ الشخصية!';
+    setTimeout(() => msg.innerText = '', 3000);
+};
+
+/* ---- Reset ---- */
+document.getElementById('resetBtn').onclick = () => {
+    if (!confirm('إعادة تعيين الشخصية؟')) return;
+    char = { ...DEFAULT_CHAR };
+    document.getElementById('editorPanel').querySelectorAll('.swatches,.style-grid').forEach(el=>el.innerHTML='');
+    buildUI();
+    updatePreview();
+};
+
+</script>
+</body>
+</html>

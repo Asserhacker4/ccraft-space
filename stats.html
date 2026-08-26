@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | إحصائيات</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+
+    /* ============================================================
+       Stats Page
+       ============================================================ */
+
+    .stats-hero {
+        text-align: center;
+        padding: 40px 20px 28px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .stats-hero h1 {
+        font-size: clamp(1.8rem, 5vw, 2.6rem);
+        font-weight: 900;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 6px;
+    }
+
+    .stats-hero p {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        margin-bottom: 0;
+    }
+
+    /* ---- top numbers ---- */
+
+    .numbers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+        max-width: 900px;
+        margin: 0 auto 32px;
+        padding: 0 20px;
+        animation: fadeIn 0.5s ease both;
+    }
+
+    .num-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 22px 16px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+
+    .num-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+
+    .num-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%; height: 3px;
+        background: var(--accent-gradient);
+        opacity: 0.6;
+    }
+
+    .num-card .n-icon  { font-size: 1.6rem; display: block; margin-bottom: 8px; }
+    .num-card .n-value {
+        font-size: 2.2rem;
+        font-weight: 900;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: block;
+        margin-bottom: 4px;
+        line-height: 1;
+    }
+    .num-card .n-label { color: var(--text-muted); font-size: 0.78rem; font-weight: 700; }
+
+    /* ---- charts grid ---- */
+
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 20px;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px 80px;
+    }
+
+    .chart-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 24px;
+        animation: fadeIn 0.5s ease both;
+        transition: var(--transition);
+    }
+
+    .chart-card:hover { border-color: var(--border-hover); }
+
+    .chart-card.full { grid-column: 1 / -1; }
+
+    .chart-card h3 {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .chart-card h3::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--border-color);
+    }
+
+    canvas { max-height: 260px; }
+
+    /* ---- Top lists ---- */
+
+    .top-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .top-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .top-item:hover { border-color: var(--border-hover); transform: translateX(-4px); }
+
+    .top-rank {
+        font-size: 1rem;
+        font-weight: 900;
+        min-width: 28px;
+        text-align: center;
+        color: var(--text-muted);
+    }
+
+    .top-rank.gold   { color: #ffd700; }
+    .top-rank.silver { color: #c0c0c0; }
+    .top-rank.bronze { color: #cd7f32; }
+
+    .top-info { flex: 1; min-width: 0; }
+    .top-info .ti-name { font-size: 0.9rem; font-weight: 800; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .top-info .ti-sub  { font-size: 0.72rem; color: var(--text-muted); }
+
+    .top-val {
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--primary);
+        white-space: nowrap;
+    }
+
+    /* loading */
+    .loading-pulse {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+    }
+
+    .loading-pulse span {
+        display: inline-block;
+        animation: pulse 1.2s ease infinite;
+    }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    @media (max-width: 600px) {
+        .charts-grid { grid-template-columns: 1fr; }
+        .numbers-grid { grid-template-columns: repeat(2,1fr); }
+    }
+
+</style>
+</head>
+<body>
+
+<header>
+    <button onclick="location.href='scripts.html'">📜 السكربتات</button>
+    <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div class="stats-hero">
+    <h1>📊 إحصائيات الموقع</h1>
+    <p id="lastUpdate">جارٍ التحميل...</p>
+</div>
+
+<!-- الأرقام الكبيرة -->
+<div class="numbers-grid">
+    <div class="num-card"><span class="n-icon">📜</span><span class="n-value" id="n-scripts">—</span><span class="n-label">سكربت</span></div>
+    <div class="num-card"><span class="n-icon">👥</span><span class="n-value" id="n-users">—</span><span class="n-label">مستخدم</span></div>
+    <div class="num-card"><span class="n-icon">👍</span><span class="n-value" id="n-likes">—</span><span class="n-label">إجمالي لايكات</span></div>
+    <div class="num-card"><span class="n-icon">⭐</span><span class="n-value" id="n-ratings">—</span><span class="n-label">تقييم</span></div>
+    <div class="num-card"><span class="n-icon">💬</span><span class="n-value" id="n-comments">—</span><span class="n-label">تعليق</span></div>
+</div>
+
+<!-- الجرافات -->
+<div class="charts-grid" id="chartsGrid">
+    <div class="loading-pulse" style="grid-column:1/-1"><span>⏳ جارٍ تحميل الإحصائيات...</span></div>
+</div>
+
+
+<script type="module">
+import { get, getDatabase, initializeApp, ref } from "./supabase-config.js";
+
+
+
+
+
+
+
+const db  = getDatabase(app);
+
+// ألوان الجرافات
+const COLORS = [
+    'rgba(139,92,246,0.8)',
+    'rgba(59,130,246,0.8)',
+    'rgba(0,242,254,0.8)',
+    'rgba(74,222,128,0.8)',
+    'rgba(251,191,36,0.8)',
+    'rgba(248,113,113,0.8)',
+    'rgba(167,139,250,0.8)',
+    'rgba(96,165,250,0.8)',
+];
+
+const CHART_DEFAULTS = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+        legend: { labels: { color: '#8b949e', font: { family: 'Tajawal', size: 12 } } },
+        tooltip: {
+            backgroundColor: '#0f0f18',
+            borderColor: 'rgba(139,92,246,0.3)',
+            borderWidth: 1,
+            titleColor: '#f8fafc',
+            bodyColor: '#8b949e',
+            titleFont: { family: 'Tajawal' },
+            bodyFont:  { family: 'Tajawal' },
+        }
+    },
+    scales: {
+        x: { ticks: { color: '#8b949e', font: { family: 'Tajawal' } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: '#8b949e', font: { family: 'Tajawal' } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+    }
+};
+
+
+/* ============================================================
+   Load & Process
+   ============================================================ */
+
+async function loadStats() {
+    const [scriptsSnap, usersSnap, chatSnap] = await Promise.all([
+        get(ref(db, 'scripts')),
+        get(ref(db, 'users')),
+        get(ref(db, 'chat')),
+    ]);
+
+    const scripts  = scriptsSnap.exists() ? scriptsSnap.val() : {};
+    const users    = usersSnap.exists()   ? usersSnap.val()   : {};
+    const chatMsgs = chatSnap.exists()    ? Object.keys(chatSnap.val()).length : 0;
+
+    const scriptList = Object.entries(scripts);
+
+    // --- الأرقام الكبيرة ---
+    let totalLikes = 0, totalRatings = 0, totalComments = 0;
+    scriptList.forEach(([, s]) => {
+        totalLikes    += s.likes || 0;
+        totalRatings  += s.votes || 0;
+        // عد التعليقات
+        if (s.comments) totalComments += Object.keys(s.comments).length;
+    });
+
+    animateCount('n-scripts',  scriptList.length);
+    animateCount('n-users',    Object.keys(users).length);
+    animateCount('n-likes',    totalLikes);
+    animateCount('n-ratings',  totalRatings);
+    animateCount('n-comments', totalComments);
+
+    document.getElementById('lastUpdate').innerText =
+        `آخر تحديث: ${new Date().toLocaleString('ar-EG')}`;
+
+    // --- تحليل البيانات ---
+    const categoryCounts = {};
+    const mapCounts      = {};
+    const authorCounts   = {};
+    const likesByAuthor  = {};
+    const byDay          = {};
+
+    scriptList.forEach(([, s]) => {
+        // category
+        const cat = s.category || 'غير محدد';
+        categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+
+        // map
+        const map = s.map || 'ليس لماب محدد';
+        mapCounts[map] = (mapCounts[map] || 0) + 1;
+
+        // author
+        const author = s.author || 'مجهول';
+        authorCounts[author]  = (authorCounts[author]  || 0) + 1;
+        likesByAuthor[author] = (likesByAuthor[author] || 0) + (s.likes || 0);
+
+        // by day (آخر 14 يوم)
+        if (s.timestamp) {
+            const d = new Date(s.timestamp);
+            const key = `${d.getDate()}/${d.getMonth()+1}`;
+            byDay[key] = (byDay[key] || 0) + 1;
+        }
+    });
+
+    // --- بناء الجرافات ---
+    const grid = document.getElementById('chartsGrid');
+    grid.innerHTML = '';
+
+    renderDonut(grid,  'chart-categories', '📁 توزيع الأقسام',  categoryCounts);
+    renderDonut(grid,  'chart-maps',       '🗺️ أكتر مابات',     mapCounts, true);
+    renderBar(grid,    'chart-authors',    '👤 أكتر ناشرين',    authorCounts, 'scripts');
+    renderBar(grid,    'chart-likes',      '👍 أكتر يوزرز لايكات', likesByAuthor, 'likes');
+    renderLine(grid,   'chart-days',       '📅 السكربتات بمرور الوقت', byDay);
+    renderTopList(grid,'top-scripts',      '🏆 أكتر سكربتات لايكات', scriptList);
+}
+
+
+/* ============================================================
+   Chart Renderers
+   ============================================================ */
+
+function makeCard(grid, id, title, full = false) {
+    const card = document.createElement('div');
+    card.className = 'chart-card' + (full ? ' full' : '');
+    card.innerHTML = `<h3>${title}</h3><canvas id="${id}"></canvas>`;
+    grid.appendChild(card);
+    return document.getElementById(id);
+}
+
+function renderDonut(grid, id, title, data, limit = false) {
+    let entries = Object.entries(data).sort((a,b) => b[1] - a[1]);
+    if (limit) entries = entries.slice(0, 7);
+    const canvas = makeCard(grid, id, title);
+    new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+            labels: entries.map(e => e[0]),
+            datasets: [{
+                data: entries.map(e => e[1]),
+                backgroundColor: COLORS,
+                borderColor: '#0f0f18',
+                borderWidth: 3,
+            }]
+        },
+        options: {
+            ...CHART_DEFAULTS,
+            scales: {},
+            cutout: '60%',
+            plugins: { ...CHART_DEFAULTS.plugins }
+        }
+    });
+}
+
+function renderBar(grid, id, title, data, unit) {
+    const entries = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 8);
+    const canvas  = makeCard(grid, id, title);
+    new Chart(canvas, {
+        type: 'bar',
+        data: {
+            labels: entries.map(e => e[0]),
+            datasets: [{
+                label: unit,
+                data: entries.map(e => e[1]),
+                backgroundColor: COLORS,
+                borderRadius: 8,
+                borderSkipped: false,
+            }]
+        },
+        options: {
+            ...CHART_DEFAULTS,
+            indexAxis: 'y',
+            plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } }
+        }
+    });
+}
+
+function renderLine(grid, id, title, data) {
+    // آخر 14 يوم
+    const keys   = Object.keys(data).slice(-14);
+    const values = keys.map(k => data[k]);
+    const canvas = makeCard(grid, id, title, true);
+    new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels: keys,
+            datasets: [{
+                label: 'سكربت',
+                data: values,
+                borderColor: 'rgba(139,92,246,1)',
+                backgroundColor: 'rgba(139,92,246,0.1)',
+                borderWidth: 2.5,
+                pointBackgroundColor: 'rgba(139,92,246,1)',
+                pointRadius: 5,
+                tension: 0.4,
+                fill: true,
+            }]
+        },
+        options: {
+            ...CHART_DEFAULTS,
+            plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } }
+        }
+    });
+}
+
+function renderTopList(grid, id, title, scriptList) {
+    const sorted = [...scriptList]
+        .sort((a,b) => (b[1].likes||0) - (a[1].likes||0))
+        .slice(0, 7);
+
+    const card = document.createElement('div');
+    card.className = 'chart-card';
+    card.innerHTML = `<h3>${title}</h3><div class="top-list" id="${id}"></div>`;
+    grid.appendChild(card);
+
+    const list = document.getElementById(id);
+    const rankClass = ['gold','silver','bronze'];
+
+    sorted.forEach(([id, s], i) => {
+        const item = document.createElement('div');
+        item.className = 'top-item';
+        item.onclick = () => location.href = `script.html?id=${id}`;
+        item.innerHTML = `
+            <div class="top-rank ${rankClass[i]||''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+            <div class="top-info">
+                <div class="ti-name">${s.title || '—'}</div>
+                <div class="ti-sub">${s.author || 'مجهول'} • ${s.category || '—'}</div>
+            </div>
+            <div class="top-val">👍 ${s.likes || 0}</div>
+        `;
+        list.appendChild(item);
+    });
+}
+
+
+/* ============================================================
+   Animate Counter
+   ============================================================ */
+
+function animateCount(id, target) {
+    const el = document.getElementById(id);
+    let current = 0;
+    const step  = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.innerText = current.toLocaleString('ar-EG');
+        if (current >= target) clearInterval(timer);
+    }, 30);
+}
+
+
+loadStats();
+</script>
+
+</body>
+</html>

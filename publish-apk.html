@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCRAFT SPACE | نشر تطبيق أو لعبة أندرويد معدلة</title>
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ccraftspace.ddnsking.com/publish-apk.html">
+  <link rel="icon"            type="image/jpeg" href="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <link rel="shortcut icon"   type="image/jpeg" href="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <link rel="apple-touch-icon"                  href="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <link rel="stylesheet" href="styles.css">
+
+<style>
+
+body { min-height: 100svh; }
+
+.publish-page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+}
+
+.page-hero {
+    padding: 28px 0 24px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+
+.page-hero h1 {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-weight: 900;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin: 0 0 6px;
+}
+
+.page-hero p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.pf-form {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.pf-group { display: flex; flex-direction: column; gap: 6px; }
+
+.pf-label {
+    font-size: 0.8rem; font-weight: 800; color: var(--text-main);
+    display: flex; align-items: center; gap: 6px;
+}
+
+.pf-hint { font-size: 0.72rem; color: var(--text-muted); line-height: 1.6; }
+
+.pf-input, .pf-textarea, .pf-select {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--text-main);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: var(--transition);
+    box-sizing: border-box;
+    direction: rtl;
+}
+
+.pf-input:focus, .pf-textarea:focus, .pf-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+}
+
+.pf-textarea { resize: vertical; min-height: 80px; font-family: 'Tajawal', sans-serif; }
+
+.pf-cat-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.pf-cat-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-color);
+    border-radius: 50px; padding: 8px 18px;
+    font-size: 0.8rem; font-weight: 700; color: var(--text-muted);
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+    margin: 0; transition: var(--transition);
+}
+
+.pf-cat-btn.active { background: var(--primary-dim); color: var(--primary); border-color: rgba(139,92,246,0.4); }
+
+.pf-drop {
+    border: 2px dashed var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.pf-drop:hover { border-color: var(--primary); background: rgba(139,92,246,0.04); }
+.pf-drop input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.pf-drop-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+.pf-drop-text { font-size: 0.85rem; color: var(--text-muted); font-weight: 700; }
+
+.pf-preview-wrap {
+    display: none;
+    align-items: center; gap: 14px;
+    margin-top: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.pf-preview-wrap.show { display: flex; }
+
+#pfIconPreview {
+    width: 72px; height: 72px; border-radius: 14px;
+    object-fit: cover; border: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.pf-preview-info { font-size: 0.75rem; color: var(--text-muted); line-height: 1.7; }
+.pf-preview-info b { color: var(--text-main); }
+
+.pf-submit-btn {
+    background: var(--accent-gradient);
+    color: white; border: none;
+    border-radius: 14px; padding: 14px;
+    font-size: 0.95rem; font-weight: 900;
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+    margin: 0; transition: var(--transition);
+    box-shadow: 0 4px 16px rgba(139,92,246,0.35);
+}
+
+.pf-submit-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
+.pf-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.pf-status {
+    display: none;
+    font-size: 0.82rem; font-weight: 700;
+    padding: 12px 16px; border-radius: 12px;
+    line-height: 1.6;
+}
+
+.pf-status.show { display: block; }
+.pf-status.ok   { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; }
+.pf-status.err  { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: #f87171; }
+.pf-status.busy { background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.25); color: #b48bf8; }
+
+@media (max-width: 640px) {
+    .pf-form { padding: 18px; }
+}
+
+/* ---- تسجيل الدخول ---- */
+#authNotice { max-width: 640px; margin: 40px auto; padding: 0 20px; display: none; }
+
+.notice-card {
+    background: var(--bg-card); border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 20px; padding: 40px 32px; text-align: center;
+    animation: fadeIn 0.5s ease both;
+}
+
+.notice-card .n-icon { font-size: 3rem; margin-bottom: 16px; display: block; }
+.notice-card h2 { font-size: 1.4rem; font-weight: 900; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+.notice-card p  { color: var(--text-muted); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.7; }
+.notice-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.notice-btns button { background: var(--accent-gradient); color: white; border: none; border-radius: var(--radius-btn); padding: 13px 28px; box-shadow: 0 8px 20px rgba(139,92,246,0.3); cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 800; margin: 0; }
+.notice-btns .ghost { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border-color); box-shadow: none; }
+
+#userInfo { display: none; max-width: 640px; margin: 30px auto 0; padding: 0 20px; }
+.user-bar { display: flex; align-items: center; gap: 12px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px 18px; }
+.ub-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 0.9rem; flex-shrink: 0; }
+.ub-name  { font-weight: 800; font-size: 0.9rem; }
+.ub-email { color: var(--text-muted); font-size: 0.78rem; }
+.ub-badge { margin-right: auto; background: var(--primary-dim); color: var(--primary); font-size: 0.72rem; font-weight: 800; padding: 4px 12px; border-radius: 50px; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 640px) {
+    #authNotice, #userInfo { margin-top: 24px; }
+    .notice-card { padding: 30px 20px; }
+}
+
+#loadError {
+    display: none;
+    max-width: 640px; margin: 40px auto; padding: 20px 24px;
+    background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3);
+    border-radius: 16px; color: #f87171; font-size: 0.88rem;
+    line-height: 1.8; text-align: center;
+}
+#loadError.show { display: block; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <button onclick="location.href='apks.html'">📱 قائمة التطبيقات</button>
+  <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div id="loadError">
+    ⚠️ الصفحة محتاجة تتشغّل من سيرفر (http/https) مش بفتح الملف مباشرة.<br>
+    لو أنت شايف الصفحة فاضية أونلاين، افتح Console (F12) وابعتلي رسالة الخطأ.
+</div>
+
+<script>
+    // Fallback: لو موديول Firebase اتأخر أو فشل، اظهار تنبيه بدل صفحة فاضية
+    window.__pfLoaded = false;
+    setTimeout(() => {
+        if (!window.__pfLoaded) {
+            document.getElementById('loadError').classList.add('show');
+        }
+    }, 4000);
+</script>
+
+<div id="authNotice">
+    <div class="notice-card">
+        <span class="n-icon">🔐</span>
+        <h2>محتاج تسجّل دخول الأول</h2>
+        <p>عشان تنشر تطبيق أو لعبة معدّلة ويتحسب باسمك،<br>لازم يكون عندك حساب على CCRAFT SPACE.</p>
+        <div class="notice-btns">
+            <button onclick="location.href='login.html'">🚀 تسجيل الدخول</button>
+            <button class="ghost" onclick="location.href='apks.html'">رجوع لقائمة التطبيقات</button>
+        </div>
+    </div>
+</div>
+
+<div id="userInfo">
+    <div class="user-bar">
+        <div class="ub-avatar" id="ubAvatar">أ</div>
+        <div>
+            <div class="ub-name"  id="ubName">—</div>
+            <div class="ub-email" id="ubEmail">—</div>
+        </div>
+        <span class="ub-badge">✅ مسجل دخول</span>
+    </div>
+</div>
+
+<div class="publish-page" id="publishMain" style="display:none">
+
+    <div class="page-hero">
+        <h1>📤 نشر تطبيق أو لعبة معدّلة</h1>
+        <p>هننشر رابط التحميل بتاعك بس، مش هنرفع ملف الـ APK على السيرفر. التطبيق هيظهر في القائمة العامة فورًا بعد النشر.</p>
+    </div>
+
+    <form class="pf-form" id="pfForm">
+
+        <div class="pf-group">
+            <label class="pf-label">📛 اسم التطبيق / اللعبة</label>
+            <input class="pf-input" id="pfTitle" type="text" placeholder="مثال: PUBG Mobile Mod Menu" required maxlength="80">
+        </div>
+
+        <div class="pf-group">
+            <label class="pf-label">📝 وصف مختصر (اختياري)</label>
+            <textarea class="pf-textarea" id="pfDesc" placeholder="ايه اللي اتعدل في النسخة دي؟" maxlength="300"></textarea>
+        </div>
+
+        <div class="pf-group">
+            <label class="pf-label">🗂️ القسم</label>
+            <div class="pf-cat-row" id="pfCatRow">
+                <button type="button" class="pf-cat-btn active" data-cat="game">🎮 لعبة</button>
+                <button type="button" class="pf-cat-btn" data-cat="app">📲 تطبيق</button>
+                <button type="button" class="pf-cat-btn" data-cat="mod">🧩 مود</button>
+            </div>
+        </div>
+
+        <div class="pf-group">
+            <label class="pf-label">🔗 رابط التحميل الخارجي</label>
+            <input class="pf-input" id="pfUrl" type="url" placeholder="https://www.mediafire.com/... أو https://mega.nz/..." required>
+            <span class="pf-hint">استخدم رابط تحميل مباشر من مصدر موثوق (MediaFire، Mega، Google Drive...).</span>
+        </div>
+
+        <div class="pf-group">
+            <label class="pf-label">🖼️ أيقونة التطبيق</label>
+            <div class="pf-drop" id="pfDrop">
+                <span class="pf-drop-icon">📷</span>
+                <span class="pf-drop-text">اضغط أو اسحب صورة هنا (هتتضغط تلقائيًا)</span>
+                <input type="file" id="pfIconInput" accept="image/*">
+            </div>
+            <div class="pf-preview-wrap" id="pfPreviewWrap">
+                <img id="pfIconPreview" alt="معاينة الأيقونة">
+                <div class="pf-preview-info">
+                    الحجم الأصلي: <b id="pfOrigSize">—</b><br>
+                    بعد الضغط: <b id="pfNewSize">—</b> (400×400 كحد أقصى، جودة 60%)
+                </div>
+            </div>
+        </div>
+
+        <div class="pf-status" id="pfStatus"></div>
+
+        <button type="submit" class="pf-submit-btn" id="pfSubmitBtn">📤 نشر الآن</button>
+
+    </form>
+
+</div>
+
+<script type="module">
+import { getAuth, getDatabase, initializeApp, onAuthStateChanged, push, ref, set } from "./supabase-config.js";
+
+
+
+
+
+
+
+
+const db   = getDatabase(app);
+const auth = getAuth(app);
+
+const MAX_DIM   = 400;   // أقصى بعد (عرض أو ارتفاع) بالبكسل
+const JPEG_QUALITY = 0.6; // جودة الضغط
+
+let activeCat    = 'game';
+let compressedBase64 = null;
+let currentUser  = null;
+
+/* ---- Auth: نفس نمط publish.html ---- */
+onAuthStateChanged(auth, user => {
+    window.__pfLoaded = true;
+    document.getElementById('loadError').classList.remove('show');
+    if (user) {
+        currentUser = user;
+        const name = user.email.split('@')[0];
+        document.getElementById('ubAvatar').innerText = name.charAt(0).toUpperCase();
+        document.getElementById('ubName').innerText   = name;
+        document.getElementById('ubEmail').innerText  = user.email;
+        document.getElementById('userInfo').style.display    = 'block';
+        document.getElementById('publishMain').style.display = 'block';
+        document.getElementById('authNotice').style.display  = 'none';
+    } else {
+        currentUser = null;
+        document.getElementById('authNotice').style.display  = 'block';
+        document.getElementById('publishMain').style.display = 'none';
+        document.getElementById('userInfo').style.display    = 'none';
+    }
+});
+
+// اختيار القسم
+try {
+
+document.querySelectorAll('.pf-cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.pf-cat-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCat = btn.dataset.cat;
+    });
+});
+
+const pfIconInput   = document.getElementById('pfIconInput');
+const pfPreviewWrap = document.getElementById('pfPreviewWrap');
+const pfIconPreview = document.getElementById('pfIconPreview');
+const pfOrigSize    = document.getElementById('pfOrigSize');
+const pfNewSize     = document.getElementById('pfNewSize');
+const pfStatus      = document.getElementById('pfStatus');
+const pfSubmitBtn   = document.getElementById('pfSubmitBtn');
+
+function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    return (bytes/1024).toFixed(1) + ' KB';
+}
+
+function showStatus(type, msg) {
+    pfStatus.className = `pf-status show ${type}`;
+    pfStatus.innerHTML = msg;
+}
+
+/* ============================================================
+   ضغط الصورة عبر Canvas: تصغير الأبعاد لحد أقصى 400×400
+   وتقليل الجودة لـ 60% ثم تحويلها لـ Base64 (JPEG)
+   ============================================================ */
+function compressImage(file, maxDim, quality) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                let { width, height } = img;
+
+                if (width > height) {
+                    if (width > maxDim) { height = Math.round(height * (maxDim/width)); width = maxDim; }
+                } else {
+                    if (height > maxDim) { width = Math.round(width * (maxDim/height)); height = maxDim; }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width; canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                resolve(dataUrl);
+            };
+            img.onerror = () => reject(new Error('تعذّر قراءة الصورة'));
+            img.src = e.target.result;
+        };
+        reader.onerror = () => reject(new Error('تعذّر قراءة الملف'));
+        reader.readAsDataURL(file);
+    });
+}
+
+function base64SizeBytes(dataUrl) {
+    const base64 = dataUrl.split(',')[1] || '';
+    return Math.round(base64.length * 0.75);
+}
+
+pfIconInput.addEventListener('change', async () => {
+    const file = pfIconInput.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        showStatus('err', '⚠️ من فضلك اختر ملف صورة صالح.');
+        return;
+    }
+
+    pfOrigSize.textContent = formatBytes(file.size);
+
+    try {
+        compressedBase64 = await compressImage(file, MAX_DIM, JPEG_QUALITY);
+        pfIconPreview.src = compressedBase64;
+        pfNewSize.textContent = formatBytes(base64SizeBytes(compressedBase64));
+        pfPreviewWrap.classList.add('show');
+        pfStatus.classList.remove('show');
+    } catch (err) {
+        showStatus('err', '⚠️ حصل خطأ أثناء ضغط الصورة: ' + err.message);
+        compressedBase64 = null;
+    }
+});
+
+document.getElementById('pfForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!currentUser) {
+        showStatus('err', '⚠️ لازم تسجّل دخول الأول عشان تقدر تنشر.');
+        return;
+    }
+
+    const title = document.getElementById('pfTitle').value.trim();
+    const desc  = document.getElementById('pfDesc').value.trim();
+    const url   = document.getElementById('pfUrl').value.trim();
+
+    if (!title || !url) {
+        showStatus('err', '⚠️ من فضلك املأ اسم التطبيق ورابط التحميل.');
+        return;
+    }
+
+    let validUrl;
+    try { validUrl = new URL(url); }
+    catch { showStatus('err', '⚠️ رابط التحميل غير صالح.'); return; }
+    if (!['http:','https:'].includes(validUrl.protocol)) {
+        showStatus('err', '⚠️ الرابط لازم يبدأ بـ http:// أو https://'); return;
+    }
+
+    if (!compressedBase64) {
+        showStatus('err', '⚠️ من فضلك ارفع أيقونة للتطبيق.');
+        return;
+    }
+
+    pfSubmitBtn.disabled = true;
+    showStatus('busy', '⏳ جاري النشر...');
+
+    try {
+        const newRef = push(ref(db, 'apks'));
+        await set(newRef, {
+            title,
+            description: desc,
+            category: activeCat,
+            url,
+            author: currentUser.email.split('@')[0],
+            authorUid: currentUser.uid,
+            authorEmail: currentUser.email,
+            icon: compressedBase64,
+            status: 'approved',
+            timestamp: Date.now(),
+            likes: 0,
+            rating: 0,
+            votes: 0
+        });
+
+        showStatus('ok', '✅ تم نشر تطبيقك بنجاح! هو ظاهر دلوقتي في قائمة التطبيقات.');
+        document.getElementById('pfForm').reset();
+        pfPreviewWrap.classList.remove('show');
+        compressedBase64 = null;
+        activeCat = 'game';
+        document.querySelectorAll('.pf-cat-btn').forEach(b=>b.classList.remove('active'));
+        document.querySelector('.pf-cat-btn[data-cat="game"]').classList.add('active');
+    } catch (err) {
+        showStatus('err', '⚠️ حصل خطأ أثناء الإرسال: ' + err.message);
+    } finally {
+        pfSubmitBtn.disabled = false;
+    }
+});
+
+} catch (err) {
+    document.getElementById('loadError').classList.add('show');
+    document.getElementById('loadError').innerHTML =
+        '⚠️ حصل خطأ في تحميل الصفحة: ' + (err && err.message ? err.message : err) +
+        '<br>افتح Console (F12) وشوف تفاصيل أكتر.';
+}
+</script>
+
+</body>
+</html>

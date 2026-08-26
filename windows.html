@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CCRAFT SPACE Games</title>
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ============================================================
+   Windows 11 Desktop
+   ============================================================ */
+body {
+    font-family: 'Segoe UI', 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #0f1b4c 0%, #1a0a3c 40%, #0c2454 100%);
+    min-height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    direction: ltr;
+}
+
+/* Wallpaper particle bg */
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(100,180,255,0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(180,100,255,0.08) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+/* ---- Desktop Icons ---- */
+.desktop { position: fixed; inset: 0; bottom: 48px; padding: 20px; }
+
+.desktop-icon {
+    display: inline-flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 8px; border-radius: 8px; cursor: pointer;
+    width: 80px; margin: 6px;
+    transition: background 0.15s;
+    vertical-align: top;
+}
+
+.desktop-icon:hover { background: rgba(255,255,255,0.12); }
+.desktop-icon:active { background: rgba(255,255,255,0.2); }
+
+.di-icon { font-size: 2.4rem; line-height: 1; }
+.di-label { font-size: 0.7rem; color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.8); text-align: center; line-height: 1.3; }
+
+/* ---- Taskbar ---- */
+.taskbar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 48px;
+    background: rgba(32,32,32,0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    gap: 4px;
+    z-index: 100;
+}
+
+.taskbar-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 36px; border-radius: 6px;
+    cursor: pointer; font-size: 1.2rem;
+    transition: background 0.15s;
+    position: relative;
+}
+
+.taskbar-btn:hover { background: rgba(255,255,255,0.1); }
+.taskbar-btn.active::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+    width: 16px; height: 3px; background: #60a5fa; border-radius: 2px;
+}
+
+.taskbar-clock {
+    position: absolute; right: 12px;
+    color: white; font-size: 0.72rem; text-align: right;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   Windows — النوافذ
+   ============================================================ */
+.win {
+    position: fixed;
+    background: rgba(32,32,32,0.92);
+    backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 200;
+    min-width: 280px;
+    min-height: 200px;
+    animation: winOpen 0.2s cubic-bezier(0.22,1,0.36,1);
+    transition: box-shadow 0.2s;
+}
+
+@keyframes winOpen {
+    from { opacity:0; transform:scale(0.95) translateY(8px); }
+    to   { opacity:1; transform:scale(1)    translateY(0); }
+}
+
+.win.active { box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08); }
+
+/* Title Bar */
+.win-titlebar {
+    height: 36px;
+    background: rgba(40,40,40,0.95);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center;
+    padding: 0 12px;
+    cursor: move;
+    flex-shrink: 0;
+    touch-action: none;
+}
+
+.win-icon  { font-size: 1rem; margin-left: 8px; }
+.win-title { flex: 1; font-size: 0.78rem; color: rgba(255,255,255,0.85); font-weight: 500; }
+
+.win-controls { display: flex; gap: 2px; }
+
+.wc-btn {
+    width: 28px; height: 24px; border: none; border-radius: 4px;
+    cursor: pointer; font-size: 0.7rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s; color: white;
+}
+
+.wc-min { background: transparent; }
+.wc-min:hover { background: rgba(255,255,255,0.12); }
+.wc-max { background: transparent; }
+.wc-max:hover { background: rgba(255,255,255,0.12); }
+.wc-cls { background: transparent; }
+.wc-cls:hover { background: #c42b1c; }
+
+/* Window Body */
+.win-body {
+    flex: 1; overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+}
+
+.win-body canvas {
+    display: block;
+    width: 100% !important;
+    image-rendering: pixelated;
+}
+
+/* Resize Handle */
+.win-resize {
+    position: absolute; bottom: 0; right: 0;
+    width: 16px; height: 16px;
+    cursor: se-resize;
+    z-index: 10;
+    touch-action: none;
+}
+
+.win-resize::after {
+    content: '';
+    position: absolute; bottom: 3px; right: 3px;
+    width: 8px; height: 8px;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    border-right:  2px solid rgba(255,255,255,0.3);
+}
+
+/* ============================================================
+   Game Controls — Touch Gamepad
+   ============================================================ */
+.gamepad {
+    display: none;
+    position: fixed; bottom: 60px; left: 0; right: 0;
+    pointer-events: none;
+    z-index: 300;
+    padding: 10px 20px;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.gamepad.show { display: flex; }
+
+/* D-Pad */
+.dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
+    gap: 3px;
+    pointer-events: all;
+}
+
+.dpad-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; color: white; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.1s;
+    touch-action: none;
+}
+
+.dpad-btn:active, .dpad-btn.pressed { background: rgba(96,165,250,0.4); border-color: rgba(96,165,250,0.7); }
+
+/* Action Buttons */
+.action-btns {
+    display: grid;
+    grid-template-columns: repeat(2, 44px);
+    grid-template-rows: repeat(2, 44px);
+    gap: 6px;
+    pointer-events: all;
+}
+
+.action-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 800; color: white;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.1s;
+    touch-action: none;
+}
+
+.action-btn.red  { background: rgba(239,68,68,0.3);  border-color: rgba(239,68,68,0.6); }
+.action-btn.blue { background: rgba(59,130,246,0.3); border-color: rgba(59,130,246,0.6); }
+.action-btn.grn  { background: rgba(34,197,94,0.3);  border-color: rgba(34,197,94,0.6); }
+.action-btn.ylw  { background: rgba(251,191,36,0.3); border-color: rgba(251,191,36,0.6); }
+.action-btn:active { filter: brightness(1.4); transform: scale(0.92); }
+
+/* Mobile jump btn */
+.jump-btn {
+    position: fixed; bottom: 70px; right: 24px;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: rgba(96,165,250,0.3); border: 2px solid rgba(96,165,250,0.6);
+    display: none; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: white; cursor: pointer;
+    z-index: 301; touch-action: none;
+    pointer-events: all;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.jump-btn.show { display: flex; }
+
+/* ============================================================
+   Notification Toast
+   ============================================================ */
+.toast {
+    position: fixed; top: 20px; right: 20px;
+    background: rgba(40,40,40,0.95); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+    padding: 12px 18px; color: white; font-size: 0.82rem;
+    z-index: 999; transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    max-width: 280px; display: flex; align-items: center; gap: 10px;
+}
+
+.toast.show { transform: translateX(0); }
+
+</style>
+</head>
+<body>
+
+<!-- Desktop Icons -->
+<div class="desktop" id="desktop">
+    <div class="desktop-icon" onclick="openWin('snake')">
+        <div class="di-icon">🐍</div>
+        <div class="di-label">Snake</div>
+    </div>
+    <div class="desktop-icon" onclick="openWin('breakout')">
+        <div class="di-icon">🧱</div>
+        <div class="di-label">Breakout</div>
+    </div>
+    <div class="desktop-icon" onclick="openWin('dodge')">
+        <div class="di-icon">💫</div>
+        <div class="di-label">Dodge!</div>
+    </div>
+    <div class="desktop-icon" onclick="openWin('runner')">
+        <div class="di-icon">🏃</div>
+        <div class="di-label">Runner</div>
+    </div>
+    <div class="desktop-icon" onclick="openWin('tetris')">
+        <div class="di-icon">🟦</div>
+        <div class="di-label">Tetris</div>
+    </div>
+</div>
+
+<!-- Windows -->
+<div class="win" id="win-snake"    data-title="🐍 Snake"    style="left:60px;top:60px;width:340px;height:400px"></div>
+<div class="win" id="win-breakout" data-title="🧱 Breakout" style="left:120px;top:80px;width:360px;height:440px"></div>
+<div class="win" id="win-dodge"    data-title="💫 Dodge!"   style="left:180px;top:100px;width:340px;height:400px"></div>
+<div class="win" id="win-runner"   data-title="🏃 Runner"   style="left:80px;top:120px;width:380px;height:300px"></div>
+<div class="win" id="win-tetris"   data-title="🟦 Tetris"   style="left:200px;top:60px;width:280px;height:500px"></div>
+
+<!-- Taskbar -->
+<div class="taskbar" id="taskbar">
+    <div class="taskbar-btn" onclick="toggleStartMenu()">🪟</div>
+    <div class="taskbar-btn" id="tb-snake"    onclick="openWin('snake')">🐍</div>
+    <div class="taskbar-btn" id="tb-breakout" onclick="openWin('breakout')">🧱</div>
+    <div class="taskbar-btn" id="tb-dodge"    onclick="openWin('dodge')">💫</div>
+    <div class="taskbar-btn" id="tb-runner"   onclick="openWin('runner')">🏃</div>
+    <div class="taskbar-btn" id="tb-tetris"   onclick="openWin('tetris')">🟦</div>
+    <div class="taskbar-clock" id="clock"></div>
+</div>
+
+<!-- Mobile Gamepad -->
+<div class="gamepad" id="gamepad">
+    <div class="dpad">
+        <div></div>
+        <div class="dpad-btn" id="dpad-up"    ontouchstart="padPress('up')"    ontouchend="padRelease('up')">▲</div>
+        <div></div>
+        <div class="dpad-btn" id="dpad-left"  ontouchstart="padPress('left')"  ontouchend="padRelease('left')">◀</div>
+        <div class="dpad-btn" id="dpad-down"  ontouchstart="padPress('down')"  ontouchend="padRelease('down')">▼</div>
+        <div class="dpad-btn" id="dpad-right" ontouchstart="padPress('right')" ontouchend="padRelease('right')">▶</div>
+        <div></div><div></div><div></div>
+    </div>
+    <div class="action-btns">
+        <div></div>
+        <div class="action-btn ylw" ontouchstart="padAction('Y')" ontouchend="padActionUp('Y')">Y</div>
+        <div class="action-btn red" ontouchstart="padAction('X')" ontouchend="padActionUp('X')">X</div>
+        <div class="action-btn grn" ontouchstart="padAction('A')" ontouchend="padActionUp('A')">A</div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+    <span id="toastIcon">🎮</span>
+    <span id="toastMsg">مرحباً!</span>
+</div>
+
+<script>
+// ============================================================
+// Utilities
+// ============================================================
+
+const isMobile = 'ontouchstart' in window;
+
+function showToast(msg, icon='🎮', dur=2500) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent  = msg;
+    document.getElementById('toastIcon').textContent = icon;
+    t.classList.add('show');
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.classList.remove('show'), dur);
+}
+
+// Clock
+function updateClock() {
+    const now = new Date();
+    const t = now.toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit' });
+    const d = now.toLocaleDateString('ar-EG', { month:'short', day:'numeric' });
+    document.getElementById('clock').innerHTML = `${t}<br>${d}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Active game
+let activeGame = null;
+
+// ============================================================
+// Window Manager
+// ============================================================
+
+let zTop = 200;
+const openWindows = {};
+
+function openWin(id) {
+    const win = document.getElementById(`win-${id}`);
+    if (!win) return;
+
+    if (win.style.display !== 'none' && win.style.display !== '') {
+        bringToFront(win);
+        return;
+    }
+
+    // Build window structure if empty
+    if (!win.querySelector('.win-titlebar')) buildWin(win, id);
+
+    win.style.display = 'flex';
+    bringToFront(win);
+    openWindows[id] = true;
+
+    document.getElementById(`tb-${id}`)?.classList.add('active');
+
+    // Start game
+    if (!win._gameStarted) {
+        win._gameStarted = true;
+        setTimeout(() => startGame(id), 50);
+    }
+
+    // Show gamepad on mobile
+    if (isMobile) {
+        document.getElementById('gamepad').classList.add('show');
+        activeGame = id;
+    }
+
+    showToast(`تم فتح ${win.dataset.title}`, '🎮');
+}
+
+function buildWin(win, id) {
+    const title = win.dataset.title;
+    win.innerHTML = `
+        <div class="win-titlebar" data-id="${id}">
+            <div class="win-title">${title}</div>
+            <div class="win-controls">
+                <div class="wc-btn wc-min" onclick="minimizeWin('${id}')">─</div>
+                <div class="wc-btn wc-max" onclick="maximizeWin('${id}')">□</div>
+                <div class="wc-btn wc-cls" onclick="closeWin('${id}')">✕</div>
+            </div>
+        </div>
+        <div class="win-body" id="body-${id}"></div>
+        <div class="win-resize" data-id="${id}"></div>
+    `;
+    makeDraggable(win.querySelector('.win-titlebar'), win);
+    makeResizable(win.querySelector('.win-resize'), win);
+}
+
+function closeWin(id) {
+    const win = document.getElementById(`win-${id}`);
+    win.style.animation = 'none';
+    win.style.opacity = '0';
+    win.style.transform = 'scale(0.95)';
+    win.style.transition = 'opacity 0.15s, transform 0.15s';
+    setTimeout(() => {
+        win.style.display = 'none';
+        win.style.opacity = '';
+        win.style.transform = '';
+        win.style.transition = '';
+        win.style.animation = '';
+    }, 150);
+    delete openWindows[id];
+    document.getElementById(`tb-${id}`)?.classList.remove('active');
+    stopGame(id);
+    if (activeGame === id) {
+        activeGame = null;
+        if (!Object.keys(openWindows).length) {
+            document.getElementById('gamepad').classList.remove('show');
+        }
+    }
+}
+
+function minimizeWin(id) {
+    const win = document.getElementById(`win-${id}`);
+    win.style.display = 'none';
+    document.getElementById(`tb-${id}`)?.classList.remove('active');
+}
+
+let maximizedWins = {};
+function maximizeWin(id) {
+    const win = document.getElementById(`win-${id}`);
+    if (maximizedWins[id]) {
+        const s = maximizedWins[id];
+        win.style.cssText += `left:${s.left};top:${s.top};width:${s.width};height:${s.height};`;
+        delete maximizedWins[id];
+    } else {
+        maximizedWins[id] = { left: win.style.left, top: win.style.top, width: win.style.width, height: win.style.height };
+        win.style.left = '0'; win.style.top = '0';
+        win.style.width = '100vw'; win.style.height = 'calc(100vh - 48px)';
+    }
+    setTimeout(() => resizeGame(id), 60);
+}
+
+function bringToFront(win) {
+    zTop++;
+    win.style.zIndex = zTop;
+    document.querySelectorAll('.win').forEach(w => w.classList.remove('active'));
+    win.classList.add('active');
+}
+
+// ============================================================
+// Drag & Resize
+// ============================================================
+
+function makeDraggable(handle, win) {
+    let ox=0, oy=0;
+
+    function start(x, y) {
+        ox = x - win.offsetLeft;
+        oy = y - win.offsetTop;
+        bringToFront(win);
+    }
+    function move(x, y) {
+        win.style.left = (x - ox) + 'px';
+        win.style.top  = Math.max(0, y - oy) + 'px';
+    }
+
+    handle.addEventListener('mousedown', e => {
+        if (e.target.classList.contains('wc-btn')) return;
+        e.preventDefault();
+        start(e.clientX, e.clientY);
+        const mm = e2 => move(e2.clientX, e2.clientY);
+        const mu = () => { removeEventListener('mousemove', mm); removeEventListener('mouseup', mu); };
+        addEventListener('mousemove', mm);
+        addEventListener('mouseup', mu);
+    });
+
+    handle.addEventListener('touchstart', e => {
+        if (e.target.classList.contains('wc-btn')) return;
+        e.preventDefault();
+        const t = e.touches[0];
+        start(t.clientX, t.clientY);
+        const tm = e2 => { const t2 = e2.touches[0]; move(t2.clientX, t2.clientY); };
+        const te = () => { removeEventListener('touchmove', tm); removeEventListener('touchend', te); };
+        addEventListener('touchmove', tm, { passive: false });
+        addEventListener('touchend', te);
+    }, { passive: false });
+}
+
+function makeResizable(handle, win) {
+    let sw=0, sh=0, sx=0, sy=0;
+
+    function start(x, y) {
+        sw = win.offsetWidth; sh = win.offsetHeight; sx = x; sy = y;
+        bringToFront(win);
+    }
+    function resize(x, y) {
+        win.style.width  = Math.max(240, sw + x - sx) + 'px';
+        win.style.height = Math.max(160, sh + y - sy) + 'px';
+    }
+
+    handle.addEventListener('mousedown', e => {
+        e.preventDefault();
+        start(e.clientX, e.clientY);
+        const mm = e2 => resize(e2.clientX, e2.clientY);
+        const mu = () => { removeEventListener('mousemove', mm); removeEventListener('mouseup', mu); resizeGame(win.id.replace('win-','')); };
+        addEventListener('mousemove', mm);
+        addEventListener('mouseup', mu);
+    });
+
+    handle.addEventListener('touchstart', e => {
+        e.preventDefault();
+        const t = e.touches[0];
+        start(t.clientX, t.clientY);
+        const tm = e2 => { const t2 = e2.touches[0]; resize(t2.clientX, t2.clientY); };
+        const te = () => { removeEventListener('touchmove', tm); removeEventListener('touchend', te); resizeGame(win.id.replace('win-','')); };
+        addEventListener('touchmove', tm, { passive: false });
+        addEventListener('touchend', te);
+    }, { passive: false });
+}
+
+// ============================================================
+// Gamepad
+// ============================================================
+
+const padState = { up:false, down:false, left:false, right:false };
+
+window.padPress = function(dir) {
+    padState[dir] = true;
+    document.getElementById(`dpad-${dir}`)?.classList.add('pressed');
+};
+
+window.padRelease = function(dir) {
+    padState[dir] = false;
+    document.getElementById(`dpad-${dir}`)?.classList.remove('pressed');
+};
+
+window.padAction = function(btn) {
+    if (activeGame === 'runner') runnerJump();
+    if (activeGame === 'breakout' && btn === 'A') { /* fire */ }
+};
+
+window.padActionUp = function(btn) {};
+
+// Keyboard events
+document.addEventListener('keydown', e => {
+    if (e.key==='ArrowUp'   || e.key==='w') padState.up    = true;
+    if (e.key==='ArrowDown' || e.key==='s') padState.down  = true;
+    if (e.key==='ArrowLeft' || e.key==='a') padState.left  = true;
+    if (e.key==='ArrowRight'|| e.key==='d') padState.right = true;
+    if (e.key===' ') { e.preventDefault(); if (activeGame==='runner') runnerJump(); }
+});
+
+document.addEventListener('keyup', e => {
+    if (e.key==='ArrowUp'   || e.key==='w') padState.up    = false;
+    if (e.key==='ArrowDown' || e.key==='s') padState.down  = false;
+    if (e.key==='ArrowLeft' || e.key==='a') padState.left  = false;
+    if (e.key==='ArrowRight'|| e.key==='d') padState.right = false;
+});
+
+// ============================================================
+// Game Registry
+// ============================================================
+
+const gameLoops = {};
+
+function stopGame(id) {
+    if (gameLoops[id]) {
+        cancelAnimationFrame(gameLoops[id]);
+        delete gameLoops[id];
+    }
+}
+
+function resizeGame(id) {
+    const body  = document.getElementById(`body-${id}`);
+    if (!body) return;
+    const canvas = body.querySelector('canvas');
+    if (!canvas) return;
+    canvas.width  = body.clientWidth;
+    canvas.height = body.clientHeight;
+}
+
+function startGame(id) {
+    const body = document.getElementById(`body-${id}`);
+    if (!body) return;
+    activeGame = id;
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = body.clientWidth  || 340;
+    canvas.height = body.clientHeight || 360;
+    body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    const games = { snake: gameSnake, breakout: gameBreakout, dodge: gameDodge, runner: gameRunner, tetris: gameTetris };
+    if (games[id]) games[id](canvas, ctx, id);
+}
+
+// ============================================================
+// GAME 1 — SNAKE 🐍
+// ============================================================
+function gameSnake(canvas, ctx, id) {
+    const SZ = 20;
+    let snake, dir, food, score, speed, loop;
+
+    function init() {
+        snake  = [{x:6,y:6},{x:5,y:6},{x:4,y:6}];
+        dir    = {x:1,y:0};
+        score  = 0; speed = 120;
+        placeFood();
+    }
+
+    function placeFood() {
+        const cols = Math.floor(canvas.width/SZ);
+        const rows = Math.floor(canvas.height/SZ);
+        food = { x: Math.floor(Math.random()*cols), y: Math.floor(Math.random()*rows) };
+    }
+
+    function draw() {
+        const cols = Math.floor(canvas.width/SZ);
+        const rows = Math.floor(canvas.height/SZ);
+
+        // Bg
+        ctx.fillStyle = '#0a0e1a';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // Grid
+        ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+        ctx.lineWidth = 1;
+        for (let x=0;x<canvas.width;x+=SZ) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
+        for (let y=0;y<canvas.height;y+=SZ) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
+
+        // Food glow
+        ctx.shadowColor = '#f87171'; ctx.shadowBlur = 16;
+        ctx.fillStyle = '#f87171';
+        ctx.beginPath(); ctx.arc(food.x*SZ+SZ/2, food.y*SZ+SZ/2, SZ/2-2, 0, Math.PI*2); ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Snake
+        snake.forEach((s,i) => {
+            const t = 1 - i/snake.length;
+            ctx.fillStyle = `hsl(${140+i*2},${70+t*20}%,${35+t*25}%)`;
+            ctx.shadowColor = i===0 ? '#4ade80' : 'transparent';
+            ctx.shadowBlur  = i===0 ? 12 : 0;
+            ctx.beginPath();
+            ctx.roundRect(s.x*SZ+1, s.y*SZ+1, SZ-2, SZ-2, 4);
+            ctx.fill();
+        });
+        ctx.shadowBlur = 0;
+
+        // Score
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.font = 'bold 13px Segoe UI';
+        ctx.fillText(`Score: ${score}`, 8, 18);
+    }
+
+    let last = 0;
+    function tick(ts) {
+        if (ts - last < speed) { gameLoops[id] = requestAnimationFrame(tick); return; }
+        last = ts;
+
+        // Direction from gamepad
+        if (activeGame===id) {
+            if (padState.up    && dir.y===0) dir={x:0,y:-1};
+            if (padState.down  && dir.y===0) dir={x:0,y:1};
+            if (padState.left  && dir.x===0) dir={x:-1,y:0};
+            if (padState.right && dir.x===0) dir={x:1,y:0};
+        }
+
+        const head = { x: snake[0].x+dir.x, y: snake[0].y+dir.y };
+        const cols  = Math.floor(canvas.width/SZ);
+        const rows  = Math.floor(canvas.height/SZ);
+
+        // Wall wrap
+        head.x = (head.x+cols)%cols; head.y = (head.y+rows)%rows;
+
+        // Self collision
+        if (snake.some(s=>s.x===head.x&&s.y===head.y)) { draw(); showGameOver(ctx,canvas,score,'Snake'); init(); gameLoops[id]=requestAnimationFrame(tick); return; }
+
+        snake.unshift(head);
+        if (head.x===food.x&&head.y===food.y) { score++; placeFood(); speed=Math.max(60,speed-3); }
+        else snake.pop();
+
+        draw();
+        gameLoops[id] = requestAnimationFrame(tick);
+    }
+
+    init();
+    gameLoops[id] = requestAnimationFrame(tick);
+}
+
+// ============================================================
+// GAME 2 — BREAKOUT 🧱
+// ============================================================
+function gameBreakout(canvas, ctx, id) {
+    let ball, paddle, bricks, score, lives;
+
+    function init() {
+        ball    = { x: canvas.width/2, y: canvas.height-80, vx: 3, vy: -4, r: 8 };
+        paddle  = { x: canvas.width/2-40, y: canvas.height-30, w: 80, h: 12, speed: 7 };
+        score   = 0; lives = 3;
+        bricks  = [];
+        const cols=8, rows=5;
+        const bw = (canvas.width-20)/cols - 4;
+        const colors = ['#f87171','#fb923c','#fbbf24','#4ade80','#60a5fa'];
+        for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
+            bricks.push({ x: 10+c*(bw+4), y: 40+r*22, w:bw, h:16, alive:true, color:colors[r%colors.length] });
+        }
+    }
+
+    // Touch paddle drag
+    let touchX = null;
+    canvas.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, {passive:true});
+    canvas.addEventListener('touchmove',  e => {
+        if (touchX===null) return;
+        const dx = e.touches[0].clientX - touchX;
+        touchX = e.touches[0].clientX;
+        paddle.x = Math.max(0, Math.min(canvas.width-paddle.w, paddle.x+dx*1.5));
+    }, {passive:true});
+
+    function tick() {
+        ctx.fillStyle = '#080c1a';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // Paddle from keyboard/dpad
+        if (padState.left||padState.right) {
+            if (padState.left)  paddle.x = Math.max(0, paddle.x - paddle.speed);
+            if (padState.right) paddle.x = Math.min(canvas.width-paddle.w, paddle.x + paddle.speed);
+        }
+
+        // Ball move
+        ball.x += ball.vx; ball.y += ball.vy;
+
+        // Walls
+        if (ball.x<ball.r||ball.x>canvas.width-ball.r)   ball.vx *= -1;
+        if (ball.y<ball.r) ball.vy *= -1;
+
+        // Paddle
+        if (ball.y+ball.r>paddle.y && ball.x>paddle.x && ball.x<paddle.x+paddle.w && ball.vy>0) {
+            ball.vy *= -1;
+            ball.vx = ((ball.x-(paddle.x+paddle.w/2))/paddle.w)*6;
+        }
+
+        // Floor
+        if (ball.y>canvas.height) {
+            lives--;
+            if (lives<=0) { showGameOver(ctx,canvas,score,'Breakout'); init(); }
+            else { ball.x=canvas.width/2; ball.y=canvas.height-80; ball.vx=3; ball.vy=-4; }
+        }
+
+        // Bricks
+        bricks.forEach(b => {
+            if (!b.alive) return;
+            if (ball.x+ball.r>b.x && ball.x-ball.r<b.x+b.w && ball.y+ball.r>b.y && ball.y-ball.r<b.y+b.h) {
+                b.alive=false; score+=10; ball.vy*=-1;
+            }
+            ctx.shadowColor = b.color; ctx.shadowBlur = 6;
+            ctx.fillStyle = b.color;
+            ctx.beginPath(); ctx.roundRect(b.x,b.y,b.w,b.h,4); ctx.fill();
+        });
+        ctx.shadowBlur = 0;
+
+        if (bricks.every(b=>!b.alive)) init();
+
+        // Paddle
+        const pg = ctx.createLinearGradient(paddle.x,paddle.y,paddle.x+paddle.w,paddle.y);
+        pg.addColorStop(0,'#6366f1'); pg.addColorStop(1,'#8b5cf6');
+        ctx.fillStyle = pg;
+        ctx.shadowColor='#8b5cf6'; ctx.shadowBlur=12;
+        ctx.beginPath(); ctx.roundRect(paddle.x,paddle.y,paddle.w,paddle.h,6); ctx.fill();
+        ctx.shadowBlur=0;
+
+        // Ball
+        ctx.shadowColor='#60a5fa'; ctx.shadowBlur=16;
+        ctx.fillStyle='#93c5fd';
+        ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2); ctx.fill();
+        ctx.shadowBlur=0;
+
+        // HUD
+        ctx.fillStyle='rgba(255,255,255,0.75)'; ctx.font='bold 12px Segoe UI';
+        ctx.fillText(`Score:${score}  ❤️${lives}`,8,20);
+
+        gameLoops[id] = requestAnimationFrame(tick);
+    }
+
+    init();
+    gameLoops[id] = requestAnimationFrame(tick);
+}
+
+// ============================================================
+// GAME 3 — DODGE 💫
+// ============================================================
+function gameDodge(canvas, ctx, id) {
+    let player, bullets, score, frame, speed;
+
+    function init() {
+        player  = { x: canvas.width/2, y: canvas.height-60, w:24, h:24, speed:4 };
+        bullets = []; score=0; frame=0; speed=2;
+    }
+
+    // Touch drag player
+    canvas.addEventListener('touchmove', e => {
+        const r = canvas.getBoundingClientRect();
+        player.x = e.touches[0].clientX - r.left;
+        player.y = e.touches[0].clientY - r.top;
+        e.preventDefault();
+    }, {passive:false});
+
+    function tick() {
+        frame++;
+
+        ctx.fillStyle='#070b18';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // Spawn bullets
+        if (frame%Math.max(15, 50-score/5)===0) {
+            bullets.push({ x: Math.random()*(canvas.width-20)+10, y:-10, r:7, speed:speed+Math.random()*2, color:`hsl(${Math.random()*360},80%,60%)` });
+        }
+        speed = 2 + frame/400;
+
+        // Move player by dpad
+        if (padState.left)  player.x = Math.max(player.w/2, player.x-player.speed);
+        if (padState.right) player.x = Math.min(canvas.width-player.w/2, player.x+player.speed);
+        if (padState.up)    player.y = Math.max(player.h/2, player.y-player.speed);
+        if (padState.down)  player.y = Math.min(canvas.height-player.h/2, player.y+player.speed);
+
+        // Bullets
+        bullets = bullets.filter(b => b.y < canvas.height+20);
+        bullets.forEach(b => {
+            b.y += b.speed;
+            ctx.shadowColor=b.color; ctx.shadowBlur=14;
+            ctx.fillStyle=b.color;
+            ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill();
+            ctx.shadowBlur=0;
+
+            // Collision
+            const dx=player.x-b.x, dy=player.y-b.y;
+            if (Math.sqrt(dx*dx+dy*dy)<b.r+12) {
+                showGameOver(ctx,canvas,score,'Dodge'); init();
+            }
+        });
+
+        // Player (spaceship)
+        ctx.shadowColor='#818cf8'; ctx.shadowBlur=20;
+        ctx.fillStyle='#818cf8';
+        ctx.beginPath();
+        ctx.moveTo(player.x, player.y-14);
+        ctx.lineTo(player.x-12, player.y+12);
+        ctx.lineTo(player.x, player.y+6);
+        ctx.lineTo(player.x+12, player.y+12);
+        ctx.closePath(); ctx.fill();
+        ctx.shadowBlur=0;
+
+        score = Math.floor(frame/6);
+        ctx.fillStyle='rgba(255,255,255,0.75)'; ctx.font='bold 12px Segoe UI';
+        ctx.fillText(`Score: ${score}`,8,20);
+
+        gameLoops[id] = requestAnimationFrame(tick);
+    }
+
+    init();
+    gameLoops[id] = requestAnimationFrame(tick);
+}
+
+// ============================================================
+// GAME 4 — RUNNER 🏃
+// ============================================================
+
+let runnerJumpFn = null;
+function runnerJump() { if (runnerJumpFn) runnerJumpFn(); }
+
+function gameRunner(canvas, ctx, id) {
+    let player, obstacles, score, frame, speed, vy, onGround;
+    const GROUND = canvas.height - 50;
+
+    function init() {
+        player    = { x:60, y:GROUND-32, w:22, h:32 };
+        obstacles = []; score=0; frame=0; speed=4; vy=0; onGround=true;
+    }
+
+    // Jump function
+    runnerJumpFn = () => { if (onGround) { vy=-11; onGround=false; } };
+
+    // Tap canvas to jump
+    canvas.addEventListener('touchstart', () => runnerJumpFn(), {passive:true});
+    canvas.addEventListener('mousedown',  () => runnerJumpFn());
+
+    function tick() {
+        frame++;
+        const gh = canvas.height - 50;
+
+        ctx.fillStyle='#090e1c';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // Ground
+        const gg = ctx.createLinearGradient(0,gh,0,canvas.height);
+        gg.addColorStop(0,'#1e293b'); gg.addColorStop(1,'#0f172a');
+        ctx.fillStyle=gg;
+        ctx.fillRect(0,gh,canvas.width,canvas.height-gh);
+
+        // Player physics
+        if (!onGround) { vy+=0.55; player.y+=vy; }
+        if (player.y>=gh-player.h) { player.y=gh-player.h; vy=0; onGround=true; }
+
+        // Jump by dpad up
+        if (padState.up && onGround) runnerJumpFn();
+
+        // Spawn obstacles
+        if (frame%Math.max(40,120-score/2)===0) {
+            const h = 20+Math.random()*30;
+            obstacles.push({ x:canvas.width+10, y:gh-h, w:18, h:h, speed:speed+Math.random() });
+        }
+        speed = 4 + frame/300;
+
+        obstacles = obstacles.filter(o=>o.x>-30);
+        obstacles.forEach(o => {
+            o.x -= o.speed;
+            ctx.shadowColor='#f87171'; ctx.shadowBlur=8;
+            ctx.fillStyle='#f87171';
+            ctx.beginPath(); ctx.roundRect(o.x,o.y,o.w,o.h,3); ctx.fill();
+            ctx.shadowBlur=0;
+            if (player.x+player.w-4>o.x&&player.x+4<o.x+o.w&&player.y+player.h>o.y) {
+                showGameOver(ctx,canvas,score,'Runner'); init();
+            }
+        });
+
+        // Player (character)
+        ctx.shadowColor='#4ade80'; ctx.shadowBlur=16;
+        ctx.fillStyle='#4ade80';
+        ctx.beginPath(); ctx.roundRect(player.x,player.y,player.w,player.h,5); ctx.fill();
+        // Eyes
+        ctx.shadowBlur=0; ctx.fillStyle='#0f172a';
+        ctx.beginPath(); ctx.arc(player.x+15,player.y+8,3,0,Math.PI*2); ctx.fill();
+        ctx.shadowBlur=0;
+
+        score = Math.floor(frame/5);
+        ctx.fillStyle='rgba(255,255,255,0.75)'; ctx.font='bold 12px Segoe UI';
+        ctx.fillText(`Score: ${score}`,8,20);
+
+        gameLoops[id] = requestAnimationFrame(tick);
+    }
+
+    init();
+    gameLoops[id] = requestAnimationFrame(tick);
+}
+
+// ============================================================
+// GAME 5 — TETRIS 🟦
+// ============================================================
+function gameTetris(canvas, ctx, id) {
+    const COLS=10, ROWS=18;
+    let CW, CH;
+    const PIECES = [
+        [[1,1,1,1]],
+        [[1,1],[1,1]],
+        [[1,1,1],[0,1,0]],
+        [[1,1,1],[1,0,0]],
+        [[1,1,1],[0,0,1]],
+        [[1,1,0],[0,1,1]],
+        [[0,1,1],[1,1,0]],
+    ];
+    const COLORS = ['#22d3ee','#fbbf24','#a78bfa','#f97316','#60a5fa','#4ade80','#f87171'];
+
+    let board, cur, curX, curY, curColor, score, dropTimer;
+
+    function init() {
+        board  = Array.from({length:ROWS}, ()=>Array(COLS).fill(0));
+        score  = 0; dropTimer=0;
+        spawnPiece();
+    }
+
+    function spawnPiece() {
+        const idx = Math.floor(Math.random()*PIECES.length);
+        cur      = PIECES[idx].map(r=>[...r]);
+        curColor = COLORS[idx];
+        curX = Math.floor((COLS-cur[0].length)/2);
+        curY = 0;
+        if (collide()) { showGameOver(ctx,canvas,score,'Tetris'); init(); }
+    }
+
+    function collide(dx=0,dy=0,piece=cur) {
+        for (let r=0;r<piece.length;r++) for (let c=0;c<piece[r].length;c++) {
+            if (!piece[r][c]) continue;
+            const nx=curX+c+dx, ny=curY+r+dy;
+            if (nx<0||nx>=COLS||ny>=ROWS) return true;
+            if (ny>=0&&board[ny][nx]) return true;
+        }
+        return false;
+    }
+
+    function lock() {
+        cur.forEach((r,ri)=>r.forEach((v,ci)=>{ if(v) board[curY+ri][curX+ci]=curColor; }));
+        // Clear lines
+        let cleared=0;
+        for (let r=ROWS-1;r>=0;r--) {
+            if (board[r].every(c=>c)) { board.splice(r,1); board.unshift(Array(COLS).fill(0)); cleared++; r++; }
+        }
+        score += [0,100,300,500,800][cleared]||0;
+        spawnPiece();
+    }
+
+    function rotate() {
+        const rot = cur[0].map((_,i)=>cur.map(r=>r[i]).reverse());
+        if (!collide(0,0,rot)) { cur=rot; }
+    }
+
+    let lastDrop = 0;
+    const DROP_INTERVAL = 600;
+    let prevLeft=false, prevRight=false, prevUp=false;
+
+    // Touch swipe
+    let tx=null, ty=null;
+    canvas.addEventListener('touchstart', e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+    canvas.addEventListener('touchend', e=>{
+        if (tx===null) return;
+        const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+        if (Math.abs(dx)>Math.abs(dy)) { if(dx<-20)moveLeft(); else if(dx>20)moveRight(); }
+        else { if(dy>20){if(!collide(0,1))curY++;} else if(dy<-20)rotate(); }
+        tx=ty=null;
+    },{passive:true});
+
+    function moveLeft()  { if(!collide(-1,0)) curX--; }
+    function moveRight() { if(!collide(1,0))  curX++; }
+
+    function tick(ts) {
+        CW = Math.floor(canvas.width/COLS);
+        CH = Math.floor((canvas.height-30)/ROWS);
+
+        // Dpad
+        if (padState.left  && !prevLeft)  moveLeft();
+        if (padState.right && !prevRight) moveRight();
+        if (padState.up    && !prevUp)    rotate();
+        prevLeft=padState.left; prevRight=padState.right; prevUp=padState.up;
+
+        // Auto drop
+        if (ts - lastDrop > (padState.down ? 80 : DROP_INTERVAL)) {
+            lastDrop = ts;
+            if (!collide(0,1)) curY++;
+            else lock();
+        }
+
+        // Draw
+        ctx.fillStyle='#060912'; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // Board
+        board.forEach((row,r)=>row.forEach((v,c)=>{
+            if (!v) { ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.strokeRect(c*CW,30+r*CH,CW,CH); return; }
+            ctx.shadowColor=v; ctx.shadowBlur=8;
+            ctx.fillStyle=v; ctx.beginPath(); ctx.roundRect(c*CW+1,30+r*CH+1,CW-2,CH-2,2); ctx.fill();
+            ctx.shadowBlur=0;
+        }));
+
+        // Current piece
+        cur.forEach((row,r)=>row.forEach((v,c)=>{
+            if (!v) return;
+            ctx.shadowColor=curColor; ctx.shadowBlur=12;
+            ctx.fillStyle=curColor; ctx.beginPath(); ctx.roundRect((curX+c)*CW+1,30+(curY+r)*CH+1,CW-2,CH-2,2); ctx.fill();
+            ctx.shadowBlur=0;
+        }));
+
+        ctx.fillStyle='rgba(255,255,255,0.75)'; ctx.font='bold 12px Segoe UI';
+        ctx.fillText(`Score: ${score}`,8,20);
+
+        gameLoops[id] = requestAnimationFrame(tick);
+    }
+
+    init();
+    gameLoops[id] = requestAnimationFrame(tick);
+}
+
+// ============================================================
+// Game Over Screen
+// ============================================================
+function showGameOver(ctx, canvas, score, name) {
+    ctx.fillStyle='rgba(0,0,0,0.75)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.textAlign='center';
+    ctx.fillStyle='#f87171'; ctx.font='bold 22px Segoe UI';
+    ctx.fillText('Game Over!', canvas.width/2, canvas.height/2-20);
+    ctx.fillStyle='rgba(255,255,255,0.8)'; ctx.font='14px Segoe UI';
+    ctx.fillText(`${name} — Score: ${score}`, canvas.width/2, canvas.height/2+10);
+    ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='11px Segoe UI';
+    ctx.fillText('Restarting...', canvas.width/2, canvas.height/2+32);
+    ctx.textAlign='start';
+}
+
+// ============================================================
+// Init message
+// ============================================================
+if (isMobile) {
+    showToast('اضغط على أيقونة للعب 🎮', '📱', 4000);
+} else {
+    showToast('انقر نقر مزدوج للفتح، WASD للتحكم', '⌨️', 4000);
+}
+
+// Open snake by default on desktop
+if (!isMobile) setTimeout(() => openWin('snake'), 300);
+
+</script>
+</body>
+</html>

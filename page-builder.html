@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | منشئ الصفحات</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+:root {
+    --s0:#07080f; --s1:#0d0f1e; --s2:#111422; --s3:#161929;
+    --border:rgba(255,255,255,0.06); --glow:rgba(139,92,246,0.18);
+    --hi:#f0f0ff; --mid:#7878a0; --lo:#3e3e58;
+    --red:#f87171; --green:#4ade80; --yellow:#fbbf24;
+    --tr:all 0.18s cubic-bezier(0.4,0,0.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Tajawal',sans-serif;background:var(--s0);color:var(--hi);min-height:100vh;}
+
+/* ═══ AUTH WALL ═══ */
+#authWall{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 60% 60% at 30% 30%,rgba(139,92,246,0.1) 0%,transparent 70%),var(--s0);padding:20px;}
+.auth-box{background:rgba(13,15,30,0.9);border:1px solid var(--glow);border-radius:22px;
+  padding:40px 36px;width:100%;max-width:380px;text-align:center;backdrop-filter:blur(16px);
+  box-shadow:0 32px 64px rgba(0,0,0,0.5);animation:popIn 0.5s cubic-bezier(0.22,1,0.36,1) both;position:relative;overflow:hidden;}
+@keyframes popIn{from{opacity:0;transform:scale(0.93) translateY(16px)}to{opacity:1;transform:none}}
+.auth-box::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.6),transparent);}
+.auth-box .ab-icon{font-size:2.8rem;margin-bottom:12px;display:block;filter:drop-shadow(0 0 14px rgba(139,92,246,0.5));}
+.auth-box h1{font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,#a78bfa,#00f2fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
+.auth-box p{color:var(--mid);font-size:0.82rem;margin-bottom:24px;}
+.auth-box button{width:100%;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;border-radius:12px;padding:13px;font-size:0.9rem;font-weight:800;font-family:'Tajawal',sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(124,58,237,0.4);transition:var(--tr);}
+.auth-box button:hover{box-shadow:0 12px 28px rgba(124,58,237,0.55);transform:translateY(-1px);}
+
+/* ═══ BUILDER LAYOUT ═══ */
+#builderApp{display:none;min-height:100vh;}
+.builder-layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 54px);}
+
+/* ═══ TOPBAR ═══ */
+.builder-topbar{height:54px;background:rgba(7,8,15,0.9);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;
+  padding:0 20px;gap:12px;position:sticky;top:0;z-index:100;}
+.bt-logo{font-size:0.9rem;font-weight:900;background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.bt-spacer{flex:1;}
+.bt-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:9px;
+  padding:6px 14px;font-size:0.78rem;font-weight:800;color:var(--hi);
+  cursor:pointer;font-family:'Tajawal',sans-serif;margin:0;transition:var(--tr);}
+.bt-btn:hover{border-color:rgba(139,92,246,0.35);background:rgba(139,92,246,0.08);transform:none;filter:none;}
+.bt-btn.primary{background:linear-gradient(135deg,#7c3aed,#5b21b6);border:none;
+  box-shadow:0 4px 14px rgba(124,58,237,0.35);}
+.bt-btn.primary:hover{box-shadow:0 6px 20px rgba(124,58,237,0.5);}
+.bt-btn.danger{background:rgba(248,113,113,0.1);color:var(--red);border-color:rgba(248,113,113,0.2);}
+.bt-btn.danger:hover{background:var(--red);color:white;}
+
+/* ═══ SIDEBAR (Controls) ═══ */
+.builder-sidebar{background:var(--s1);border-left:1px solid var(--border);
+  overflow-y:auto;padding:16px;}
+.builder-sidebar::-webkit-scrollbar{width:3px;}
+.builder-sidebar::-webkit-scrollbar-thumb{background:var(--glow);border-radius:2px;}
+
+.panel-sec{margin-bottom:20px;}
+.ps-title{font-size:0.62rem;font-weight:900;color:var(--lo);text-transform:uppercase;
+  letter-spacing:2px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.ps-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* Field */
+.field{margin-bottom:10px;}
+.field label{display:block;font-size:0.68rem;font-weight:800;color:var(--mid);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;}
+.field input,.field textarea,.field select{width:100%;background:rgba(0,0,0,0.3);
+  border:1px solid var(--border);border-radius:9px;padding:9px 11px;color:var(--hi);
+  font-family:'Tajawal',sans-serif;font-size:0.85rem;outline:none;transition:var(--tr);direction:rtl;margin:0;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(139,92,246,0.4);box-shadow:0 0 0 3px rgba(139,92,246,0.08);}
+.field input::placeholder,.field textarea::placeholder{color:var(--lo);}
+.field textarea{resize:vertical;min-height:70px;}
+.field select option{background:#1a1a2e;}
+
+/* Color picker row */
+.color-row{display:flex;gap:6px;align-items:center;}
+.color-row input[type=color]{width:36px;height:32px;border:1px solid var(--border);border-radius:7px;background:none;cursor:pointer;padding:2px;}
+.color-presets{display:flex;gap:4px;flex-wrap:wrap;}
+.cp{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:var(--tr);}
+.cp:hover{transform:scale(1.2);border-color:rgba(255,255,255,0.4);}
+.cp.sel{border-color:white;}
+
+/* Tabs */
+.tab-row{display:flex;gap:4px;margin-bottom:12px;}
+.tab-btn{flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.03);
+  color:var(--lo);font-size:0.72rem;font-weight:800;cursor:pointer;font-family:'Tajawal',sans-serif;margin:0;transition:var(--tr);}
+.tab-btn.active{background:rgba(139,92,246,0.12);color:#a78bfa;border-color:rgba(139,92,246,0.25);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* ═══ BUTTONS SECTION ═══ */
+.btn-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+.btn-item{background:var(--s2);border:1px solid var(--border);border-radius:10px;
+  padding:9px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:var(--tr);}
+.btn-item:hover{border-color:rgba(139,92,246,0.25);}
+.btn-item.selected{border-color:rgba(139,92,246,0.45);background:rgba(139,92,246,0.08);}
+.bi-icon{font-size:1rem;flex-shrink:0;}
+.bi-text{flex:1;font-size:0.8rem;font-weight:700;color:var(--hi);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bi-actions{display:flex;gap:4px;}
+.bi-del{background:none;border:none;color:var(--lo);cursor:pointer;font-size:0.9rem;padding:0;margin:0;transition:var(--tr);}
+.bi-del:hover{color:var(--red);transform:none;filter:none;}
+
+.add-btn-btn{width:100%;background:rgba(139,92,246,0.08);border:1px dashed rgba(139,92,246,0.25);
+  border-radius:10px;padding:10px;color:#a78bfa;font-size:0.82rem;font-weight:800;
+  cursor:pointer;font-family:'Tajawal',sans-serif;margin:0;transition:var(--tr);}
+.add-btn-btn:hover{background:rgba(139,92,246,0.14);border-color:rgba(139,92,246,0.4);}
+
+/* ═══ PREVIEW ═══ */
+.builder-preview{background:var(--s0);overflow-y:auto;display:flex;flex-direction:column;}
+.preview-header{padding:12px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;font-size:0.75rem;color:var(--lo);background:var(--s1);flex-shrink:0;}
+.preview-dots{display:flex;gap:5px;}
+.pd{width:10px;height:10px;border-radius:50%;}
+.pd:nth-child(1){background:#ff5f57;} .pd:nth-child(2){background:#febc2e;} .pd:nth-child(3){background:#28c840;}
+.preview-url{flex:1;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:6px;
+  padding:4px 10px;font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--lo);}
+.preview-frame{flex:1;overflow-y:auto;}
+
+/* ═══ RENDERED PAGE ═══ */
+.rp-hero{padding:48px 24px 32px;text-align:center;position:relative;overflow:hidden;}
+.rp-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--page-accent-dim,rgba(139,92,246,0.1)) 0%,transparent 70%);pointer-events:none;}
+.rp-avatar{width:100px;height:100px;border-radius:50%;margin:0 auto 16px;overflow:hidden;
+  border:3px solid rgba(139,92,246,0.3);box-shadow:0 0 32px rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;background:var(--s2);position:relative;z-index:1;}
+.rp-avatar img{width:100%;height:100%;object-fit:cover;}
+.rp-avatar .rp-av-init{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.rp-name{font-size:1.8rem;font-weight:900;margin-bottom:6px;position:relative;z-index:1;}
+.rp-bio{font-size:0.9rem;line-height:1.7;max-width:500px;margin:0 auto 20px;position:relative;z-index:1;color:var(--mid);}
+.rp-badges-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;position:relative;z-index:1;}
+.rp-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:50px;
+  font-size:0.72rem;font-weight:800;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);color:#a78bfa;}
+.rp-social-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+.rp-soc-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:50px;
+  font-size:0.78rem;font-weight:800;text-decoration:none;transition:var(--tr);border:1px solid rgba(255,255,255,0.1);}
+.rp-soc-btn:hover{transform:translateY(-2px);filter:brightness(1.15);}
+
+/* Content blocks */
+.rp-content{padding:0 24px 32px;max-width:700px;margin:0 auto;}
+.rp-block{margin-bottom:20px;}
+.rp-block-title{font-size:0.72rem;font-weight:800;color:var(--lo);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.rp-block-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* Custom buttons grid */
+.rp-btns-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rp-cust-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;
+  border-radius:12px;font-size:0.85rem;font-weight:800;cursor:pointer;
+  text-decoration:none;border:none;font-family:'Tajawal',sans-serif;transition:var(--tr);}
+.rp-cust-btn:hover{transform:translateY(-2px);filter:brightness(1.1);}
+
+/* Skills */
+.rp-skills{display:flex;flex-wrap:wrap;gap:7px;}
+.rp-skill{background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:700;color:var(--hi);}
+
+/* Scripts from user */
+.rp-script-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+.rp-sc{background:var(--s2);border:1px solid var(--border);border-radius:14px;padding:14px;
+  cursor:pointer;transition:var(--tr);}
+.rp-sc:hover{border-color:rgba(139,92,246,0.3);transform:translateY(-3px);}
+.rp-sc-title{font-size:0.88rem;font-weight:800;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rp-sc-meta{font-size:0.7rem;color:var(--lo);}
+
+/* Themes */
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;}
+.theme-btn{border-radius:9px;padding:10px 6px;border:2px solid transparent;cursor:pointer;
+  text-align:center;font-size:0.65rem;font-weight:800;font-family:'Tajawal',sans-serif;transition:var(--tr);}
+.theme-btn.sel{border-color:white;}
+.theme-btn:hover{transform:scale(1.05);}
+
+/* ═══ TOAST ═══ */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);
+  background:var(--s2);border:1px solid var(--glow);border-radius:50px;
+  padding:9px 20px;font-size:0.8rem;font-weight:800;color:var(--hi);
+  z-index:999;transition:transform 0.32s cubic-bezier(0.175,0.885,0.32,1.275);
+  box-shadow:0 6px 20px rgba(0,0,0,0.4);pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ═══ MODAL ═══ */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-ov.open{display:flex;}
+.modal-box{background:var(--s2);border:1px solid var(--glow);border-radius:18px;
+  padding:24px;width:100%;max-width:440px;animation:popIn 0.3s ease both;position:relative;}
+.modal-box::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.5),transparent);}
+.modal-box h3{font-size:0.95rem;font-weight:900;color:var(--hi);margin-bottom:16px;}
+.modal-actions{display:flex;gap:8px;margin-top:12px;}
+
+/* Code editor */
+.code-editor-wrap{position:relative;}
+.code-editor{width:100%;background:#04050e;border:1px solid rgba(0,242,254,0.12);border-radius:10px;
+  padding:12px 14px;color:#8be9fd;font-family:'Fira Code',monospace;font-size:0.78rem;
+  line-height:1.7;direction:ltr;text-align:left;resize:vertical;min-height:180px;outline:none;margin:0;}
+.code-editor:focus{border-color:rgba(0,242,254,0.3);}
+.code-line-count{position:absolute;top:12px;right:10px;font-size:0.6rem;font-family:'Fira Code',monospace;color:var(--lo);}
+
+/* ═══ PAGES GALLERY (Homepage) ═══ */
+.pages-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.page-card{background:var(--s2);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;cursor:pointer;transition:var(--tr);animation:popIn 0.4s ease both;}
+.page-card:hover{border-color:rgba(139,92,246,0.3);transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,0.4);}
+.pc-banner{height:80px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;flex-shrink:0;}
+.pc-body{padding:12px 14px;}
+.pc-name{font-size:0.88rem;font-weight:800;color:var(--hi);margin-bottom:3px;}
+.pc-meta{font-size:0.7rem;color:var(--lo);}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:860px){.builder-layout{grid-template-columns:1fr;} .builder-sidebar{order:2;max-height:50vh;}}
+@media(max-width:540px){.rp-btns-grid{flex-direction:column;} .rp-script-cards{grid-template-columns:1fr;}}
+
+</style>
+</head>
+<body>
+
+<!-- Auth Wall -->
+<div id="authWall">
+    <div class="auth-box">
+        <span class="ab-icon">🌐</span>
+        <h1>منشئ الصفحات</h1>
+        <p>سجّل دخولك عشان تنشئ صفحتك الشخصية</p>
+        <button id="googleLoginBtn">🔐 تسجيل الدخول</button>
+    </div>
+</div>
+
+<!-- Builder App -->
+<div id="builderApp">
+    <div class="builder-topbar">
+        <div class="bt-logo">🌐 منشئ الصفحات</div>
+        <div class="bt-spacer"></div>
+        <button class="bt-btn" onclick="location.href='index.html'">← الرئيسية</button>
+        <button class="bt-btn" id="previewBtn">👁️ معاينة</button>
+        <button class="bt-btn primary" id="savePageBtn">💾 حفظ ونشر</button>
+    </div>
+
+    <div class="builder-layout">
+
+        <!-- Controls Sidebar -->
+        <div class="builder-sidebar">
+
+            <!-- Tabs -->
+            <div class="tab-row">
+                <button class="tab-btn active" data-tab="profile">👤 ملفي</button>
+                <button class="tab-btn" data-tab="buttons">🔘 أزرار</button>
+                <button class="tab-btn" data-tab="style">🎨 التصميم</button>
+            </div>
+
+            <!-- TAB: PROFILE -->
+            <div class="tab-content active" id="tab-profile">
+
+                <div class="panel-sec">
+                    <div class="ps-title">🖼️ الصورة والاسم</div>
+                    <div class="field">
+                        <label>الاسم المعروض</label>
+                        <input type="text" id="cfg-name" placeholder="اسمك..." maxlength="40">
+                    </div>
+                    <div class="field">
+                        <label>رابط الصورة (اختياري)</label>
+                        <input type="url" id="cfg-avatar" placeholder="https://...">
+                    </div>
+                    <div class="field">
+                        <label>نبذة عنك</label>
+                        <textarea id="cfg-bio" placeholder="اكتب شيئاً عن نفسك..." maxlength="300"></textarea>
+                    </div>
+                </div>
+
+                <div class="panel-sec">
+                    <div class="ps-title">🔗 روابط التواصل</div>
+                    <div class="field"><label>تلجرام</label><input type="text" id="cfg-telegram" placeholder="@username"></div>
+                    <div class="field"><label>يوتيوب</label><input type="url"  id="cfg-youtube"  placeholder="https://youtube.com/..."></div>
+                    <div class="field"><label>تويتر / X</label><input type="text" id="cfg-twitter" placeholder="@username"></div>
+                    <div class="field"><label>رابط آخر</label><input type="url" id="cfg-other" placeholder="https://..."><input type="text" id="cfg-other-label" placeholder="اسم الرابط" style="margin-top:5px"></div>
+                </div>
+
+                <div class="panel-sec">
+                    <div class="ps-title">🛠️ مهاراتك</div>
+                    <div class="field"><label>المهارات (مفصولة بـ , )</label><input type="text" id="cfg-skills" placeholder="Lua, Python, Roblox..."></div>
+                </div>
+
+                <div class="panel-sec">
+                    <div class="ps-title">📜 سكربتاتك</div>
+                    <div class="field" style="font-size:0.78rem;color:var(--lo);padding:8px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.14);border-radius:8px">
+                        سكربتاتك تظهر تلقائياً من بروفايلك على CCRAFT SPACE ✅
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB: BUTTONS -->
+            <div class="tab-content" id="tab-buttons">
+                <div class="panel-sec">
+                    <div class="ps-title">🔘 أزراركم</div>
+                    <div class="btn-list" id="btnList"></div>
+                    <button class="add-btn-btn" onclick="openAddBtn()">+ إضافة زر</button>
+                </div>
+                <div class="panel-sec">
+                    <div class="ps-title">💡 نصيحة</div>
+                    <div style="font-size:0.72rem;color:var(--lo);line-height:1.6;padding:10px;background:rgba(0,0,0,0.2);border-radius:8px">
+                        يمكنك إضافة أزرار للتواصل أو روابط خارجية. كل زر له أيقونة، نص، لون ورابط.
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: STYLE -->
+            <div class="tab-content" id="tab-style">
+
+                <div class="panel-sec">
+                    <div class="ps-title">🎨 الثيم</div>
+                    <div class="theme-grid" id="themeGrid"></div>
+                </div>
+
+                <div class="panel-sec">
+                    <div class="ps-title">🌈 اللون الرئيسي</div>
+                    <div class="color-row">
+                        <input type="color" id="cfg-accent" value="#8b5cf6">
+                        <div class="color-presets" id="colorPresets"></div>
+                    </div>
+                </div>
+
+                <div class="panel-sec">
+                    <div class="ps-title">✍️ الخط</div>
+                    <div class="field">
+                        <select id="cfg-font">
+                            <option value="Tajawal">Tajawal (عربي)</option>
+                            <option value="Cairo">Cairo (عربي)</option>
+                            <option value="Fira Code">Fira Code (كود)</option>
+                            <option value="Segoe UI">Segoe UI</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="panel-sec">
+                    <div class="ps-title">💻 كود مخصص (متقدم)</div>
+                    <div class="field" style="font-size:0.7rem;color:var(--lo);margin-bottom:6px">
+                        ⚠️ CSS مخصص فقط — يُحقق أمانه تلقائياً
+                    </div>
+                    <div class="code-editor-wrap">
+                        <textarea class="code-editor" id="cfg-custom-css" placeholder="/* CSS مخصص هنا */&#10;.rp-name { color: gold; }"></textarea>
+                        <div class="code-line-count" id="cssLineCount">0 سطر</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Preview -->
+        <div class="builder-preview">
+            <div class="preview-header">
+                <div class="preview-dots"><div class="pd"></div><div class="pd"></div><div class="pd"></div></div>
+                <div class="preview-url" id="previewUrl">ccraftspace.ddnsking.com/pages/...</div>
+                <span style="font-size:0.65rem;color:var(--lo)">معاينة مباشرة</span>
+            </div>
+            <div class="preview-frame" id="previewFrame"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Add Button Modal -->
+<div class="modal-ov" id="btnModal">
+    <div class="modal-box">
+        <h3 id="btnModalTitle">➕ إضافة زر</h3>
+        <div class="field"><label>أيقونة الزر</label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px" id="iconPicker"></div>
+            <input type="text" id="btn-icon" placeholder="أو اكتب إيموجي مخصص" maxlength="4">
+        </div>
+        <div class="field"><label>نص الزر</label><input type="text" id="btn-text" placeholder="اضغط هنا" maxlength="30"></div>
+        <div class="field"><label>رابط الزر</label><input type="url" id="btn-url" placeholder="https://..."></div>
+        <div class="field"><label>لون الزر</label>
+            <div class="color-row">
+                <input type="color" id="btn-color" value="#8b5cf6">
+                <div class="color-presets" id="btnColorPresets"></div>
+            </div>
+        </div>
+        <div class="field"><label>حجم الزر</label>
+            <select id="btn-size">
+                <option value="sm">صغير</option>
+                <option value="md" selected>متوسط</option>
+                <option value="lg">كبير</option>
+                <option value="full">عرض كامل</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;border-radius:10px;padding:10px 20px;font-weight:800;font-family:Tajawal,sans-serif;cursor:pointer;flex:1" id="saveBtnBtn">💾 إضافة</button>
+            <button style="background:rgba(255,255,255,0.04);color:var(--mid);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-weight:800;font-family:Tajawal,sans-serif;cursor:pointer" onclick="closeBtnModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Sanitize CSS style tag -->
+<style id="customCssTag"></style>
+
+<script type="module">
+import { GoogleAuthProvider, get, getAuth, getDatabase, initializeApp, onAuthStateChanged, ref, set, signInWithPopup } from "./supabase-config.js";
+
+
+
+
+import { buildAvatar, DEFAULT_CHAR } from './avatar.js';
+
+
+const app=initializeApp(fc), db=getDatabase(app), auth=getAuth(app);
+
+let currentUser=null, pageButtons=[], editBtnIdx=-1;
+
+/* ═══ XSS PROTECTION ═══ */
+function sanitizeText(str){
+    return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;').replace(/\//g,'&#x2F;');
+}
+
+function sanitizeUrl(url){
+    if(!url)return'#';
+    const cleaned=(url||'').trim();
+    // Block javascript:, data:, vbscript: URLs
+    if(/^(javascript:|data:|vbscript:|file:)/i.test(cleaned))return'#';
+    // Allow only http, https, tel, mailto, tg
+    if(/^(https?:|mailto:|tel:|tg:)/i.test(cleaned)||cleaned.startsWith('@')){
+        return cleaned.replace(/[<>"']/g,'');
+    }
+    return'#';
+}
+
+function sanitizeCSS(css){
+    if(!css)return'';
+    // Remove dangerous CSS — expression(), url() with dangerous content, @import, behaviours
+    return css
+        .replace(/expression\s*\(/gi,'')
+        .replace(/-moz-binding/gi,'')
+        .replace(/behavior\s*:/gi,'')
+        .replace(/@import/gi,'')
+        .replace(/javascript:/gi,'')
+        .replace(/<script/gi,'')
+        .replace(/url\(\s*['"]?\s*(javascript|data|vbscript)/gi,'url(#')
+        .slice(0, 8000); // limit length
+}
+
+function sanitizePageData(data){
+    return {
+        name:       sanitizeText(data.name),
+        bio:        sanitizeText(data.bio),
+        avatar:     sanitizeUrl(data.avatar),
+        telegram:   data.telegram?(data.telegram.startsWith('@')?data.telegram.replace(/[^a-zA-Z0-9_@]/g,''):'#'):'',
+        youtube:    sanitizeUrl(data.youtube),
+        twitter:    data.twitter?(data.twitter.startsWith('@')?data.twitter.replace(/[^a-zA-Z0-9_@]/g,''):'#'):'',
+        other:      sanitizeUrl(data.other),
+        otherLabel: sanitizeText(data.otherLabel),
+        skills:     (data.skills||'').split(',').map(s=>sanitizeText(s.trim())).filter(Boolean).join(','),
+        accent:     /^#[0-9a-fA-F]{3,8}$/.test(data.accent||'')?data.accent:'#8b5cf6',
+        font:       ['Tajawal','Cairo','Fira Code','Segoe UI'].includes(data.font)?data.font:'Tajawal',
+        theme:      ['dark','space','ocean','sunset','forest','neon'].includes(data.theme)?data.theme:'dark',
+        customCss:  sanitizeCSS(data.customCss),
+        buttons:    (data.buttons||[]).map(b=>({
+            icon:  sanitizeText(b.icon),
+            text:  sanitizeText(b.text),
+            url:   sanitizeUrl(b.url),
+            color: /^#[0-9a-fA-F]{3,8}$/.test(b.color||'')?b.color:'#8b5cf6',
+            size:  ['sm','md','lg','full'].includes(b.size)?b.size:'md',
+        })),
+    };
+}
+
+/* ═══ THEMES ═══ */
+const THEMES={
+    dark:   {bg:'#07080f', card:'#111422', text:'#f0f0ff', label:'🌑 داكن'},
+    space:  {bg:'#040714', card:'#0c0e24', text:'#e0e8ff', label:'🚀 فضاء'},
+    ocean:  {bg:'#020b14', card:'#091828', text:'#e0f4ff', label:'🌊 محيط'},
+    sunset: {bg:'#140a04', card:'#24100a', text:'#fff0e0', label:'🌅 غروب'},
+    forest: {bg:'#040e06', card:'#091a0c', text:'#e0ffe8', label:'🌲 غابة'},
+    neon:   {bg:'#02030a', card:'#0a0b1a', text:'#f0f0ff', label:'💜 نيون'},
+};
+
+const COLORS=['#8b5cf6','#00f2fe','#f87171','#4ade80','#fbbf24','#f472b6','#60a5fa','#a78bfa','#34d399','#fb923c'];
+const ICONS =['🔗','📢','💬','🎮','📺','🐦','📁','🌐','⚡','🎯','💎','🏆','🚀','🎨','🎵','👾'];
+
+const BSIZES={sm:'padding:7px 14px;font-size:0.75rem',md:'padding:10px 20px;font-size:0.85rem',lg:'padding:13px 28px;font-size:0.95rem',full:'padding:12px 20px;font-size:0.9rem;width:100%'};
+
+/* ═══ INIT ═══ */
+function initThemeGrid(){
+    const g=document.getElementById('themeGrid');g.innerHTML='';
+    Object.entries(THEMES).forEach(([k,t])=>{
+        const btn=document.createElement('button');
+        btn.className='theme-btn';
+        btn.dataset.theme=k;
+        btn.style.cssText=`background:${t.bg};color:${t.text};border-color:${t.card}`;
+        btn.innerHTML=t.label;
+        btn.onclick=()=>{
+            document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('sel'));
+            btn.classList.add('sel');
+            document.getElementById('cfg-theme-val').value=k;
+            renderPreview();
+        };
+        g.appendChild(btn);
+    });
+    // Hidden theme value
+    const inp=document.createElement('input');inp.type='hidden';inp.id='cfg-theme-val';inp.value='dark';
+    g.after(inp);
+}
+
+function initColorPresets(){
+    ['colorPresets','btnColorPresets'].forEach(id=>{
+        const c=document.getElementById(id);if(!c)return;c.innerHTML='';
+        COLORS.forEach(col=>{
+            const cp=document.createElement('div');cp.className='cp';cp.style.background=col;
+            cp.onclick=()=>{
+                const inputId=id==='colorPresets'?'cfg-accent':'btn-color';
+                document.getElementById(inputId).value=col;
+                if(id==='colorPresets')renderPreview();
+            };
+            c.appendChild(cp);
+        });
+    });
+}
+
+function initIconPicker(){
+    const c=document.getElementById('iconPicker');c.innerHTML='';
+    ICONS.forEach(ic=>{
+        const btn=document.createElement('button');
+        btn.style.cssText='background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 9px;cursor:pointer;font-size:1rem;transition:0.15s;';
+        btn.textContent=ic;
+        btn.onmouseenter=()=>btn.style.background='rgba(139,92,246,0.2)';
+        btn.onmouseleave=()=>btn.style.background='rgba(255,255,255,0.06)';
+        btn.onclick=()=>document.getElementById('btn-icon').value=ic;
+        c.appendChild(btn);
+    });
+}
+
+/* ═══ AUTH ═══ */
+document.getElementById('googleLoginBtn').onclick=async()=>{
+    const provider=new GoogleAuthProvider();
+    try{const result=await signInWithPopup(auth,provider);currentUser=result.user;}
+    catch(e){toast('❌ فشل تسجيل الدخول: '+e.message);}
+};
+
+onAuthStateChanged(auth,async user=>{
+    if(user){
+        currentUser=user;
+        document.getElementById('authWall').style.display='none';
+        document.getElementById('builderApp').style.display='block';
+        initThemeGrid();initColorPresets();initIconPicker();
+        await loadPageData();
+        setupListeners();
+        renderPreview();
+    }else{
+        document.getElementById('authWall').style.display='flex';
+        document.getElementById('builderApp').style.display='none';
+    }
+});
+
+/* ═══ LOAD ═══ */
+async function loadPageData(){
+    const snap=await get(ref(db,`userPages/${currentUser.uid}`));
+    if(!snap.exists())return;
+    const d=snap.val();
+    const set=(id,val)=>{const el=document.getElementById(id);if(el&&val!==undefined)el.value=val;};
+    set('cfg-name',d.name);set('cfg-avatar',d.avatar);set('cfg-bio',d.bio);
+    set('cfg-telegram',d.telegram);set('cfg-youtube',d.youtube);set('cfg-twitter',d.twitter);
+    set('cfg-other',d.other);set('cfg-other-label',d.otherLabel);set('cfg-skills',d.skills);
+    set('cfg-accent',d.accent||'#8b5cf6');set('cfg-font',d.font||'Tajawal');
+    set('cfg-custom-css',d.customCss||'');
+    if(d.theme){const el=document.getElementById('cfg-theme-val');if(el)el.value=d.theme;document.querySelectorAll('.theme-btn').forEach(b=>{b.classList.toggle('sel',b.dataset.theme===d.theme);});}
+    pageButtons=d.buttons||[];
+    renderBtnList();
+    document.getElementById('previewUrl').textContent=`ccraftspace.ddnsking.com/page/${currentUser.uid.slice(0,8)}`;
+}
+
+/* ═══ SAVE ═══ */
+document.getElementById('savePageBtn').onclick=async()=>{
+    if(!currentUser){toast('❌ يجب تسجيل الدخول أولاً');return;}
+    const raw=getPageConfig();
+    const clean=sanitizePageData(raw);
+    await set(ref(db,`userPages/${currentUser.uid}`),{
+        ...clean,
+        uid:currentUser.uid,
+        email:currentUser.email,
+        displayName:currentUser.displayName||'',
+        updatedAt:Date.now(),
+    });
+    toast('✅ تم حفظ الصفحة ونشرها!');
+};
+
+function getPageConfig(){
+    return {
+        name:      document.getElementById('cfg-name')?.value||currentUser.displayName||'',
+        bio:       document.getElementById('cfg-bio')?.value||'',
+        avatar:    document.getElementById('cfg-avatar')?.value||'',
+        telegram:  document.getElementById('cfg-telegram')?.value||'',
+        youtube:   document.getElementById('cfg-youtube')?.value||'',
+        twitter:   document.getElementById('cfg-twitter')?.value||'',
+        other:     document.getElementById('cfg-other')?.value||'',
+        otherLabel:document.getElementById('cfg-other-label')?.value||'رابط آخر',
+        skills:    document.getElementById('cfg-skills')?.value||'',
+        accent:    document.getElementById('cfg-accent')?.value||'#8b5cf6',
+        font:      document.getElementById('cfg-font')?.value||'Tajawal',
+        theme:     document.getElementById('cfg-theme-val')?.value||'dark',
+        customCss: document.getElementById('cfg-custom-css')?.value||'',
+        buttons:   pageButtons,
+    };
+}
+
+/* ═══ LISTENERS ═══ */
+function setupListeners(){
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+        });
+    });
+
+    // Live update on input
+    const inputs=['cfg-name','cfg-bio','cfg-avatar','cfg-telegram','cfg-youtube','cfg-twitter','cfg-other','cfg-other-label','cfg-skills','cfg-accent','cfg-font'];
+    inputs.forEach(id=>document.getElementById(id)?.addEventListener('input',renderPreview));
+
+    // CSS line count
+    document.getElementById('cfg-custom-css')?.addEventListener('input',e=>{
+        const lines=e.target.value.split('\n').length;
+        document.getElementById('cssLineCount').textContent=`${lines} سطر`;
+        renderPreview();
+    });
+
+    // Preview button
+    document.getElementById('previewBtn').onclick=()=>{
+        const uid=currentUser?.uid;
+        if(uid)window.open(`user-page.html?uid=${uid}`,'_blank');
+    };
+}
+
+/* ═══ RENDER PREVIEW ═══ */
+async function renderPreview(){
+    const cfg=sanitizePageData(getPageConfig());
+    const theme=THEMES[cfg.theme]||THEMES.dark;
+    const accent=cfg.accent||'#8b5cf6';
+    const accentDim=accent+'22';
+
+    // Build social links
+    let socialHtml='';
+    if(cfg.telegram){const u=cfg.telegram.startsWith('@')?`https://t.me/${cfg.telegram.slice(1)}`:sanitizeUrl(cfg.telegram);socialHtml+=`<a class="rp-soc-btn" href="${u}" target="_blank" style="background:rgba(0,136,204,0.15);color:#00aacc;border-color:rgba(0,136,204,0.25)">📢 تلجرام</a>`;}
+    if(cfg.youtube)socialHtml+=`<a class="rp-soc-btn" href="${sanitizeUrl(cfg.youtube)}" target="_blank" style="background:rgba(255,0,0,0.12);color:#ff5555;border-color:rgba(255,0,0,0.2)">📺 يوتيوب</a>`;
+    if(cfg.twitter){const u=cfg.twitter.startsWith('@')?`https://x.com/${cfg.twitter.slice(1)}`:sanitizeUrl(cfg.twitter);socialHtml+=`<a class="rp-soc-btn" href="${u}" target="_blank" style="background:rgba(29,155,240,0.12);color:#1d9bf0;border-color:rgba(29,155,240,0.2)">🐦 X</a>`;}
+    if(cfg.other&&cfg.other!=='#')socialHtml+=`<a class="rp-soc-btn" href="${sanitizeUrl(cfg.other)}" target="_blank" style="background:rgba(255,255,255,0.06);color:var(--hi,#f0f0ff);border-color:rgba(255,255,255,0.12)">🔗 ${cfg.otherLabel||'رابط'}</a>`;
+
+    // Skills
+    const skillsArr=cfg.skills?cfg.skills.split(',').filter(Boolean):[];
+    const skillsHtml=skillsArr.length?`<div class="rp-skills">${skillsArr.map(s=>`<div class="rp-skill">${s}</div>`).join('')}</div>`:'';
+
+    // Buttons
+    const btnsHtml=cfg.buttons.length?`<div class="rp-btns-grid">${cfg.buttons.map(b=>{
+        const sz=BSIZES[b.size]||BSIZES.md;
+        const c=b.color||accent;
+        return `<a class="rp-cust-btn" href="${sanitizeUrl(b.url)}" target="_blank" style="background:${c}22;color:${c};border:1px solid ${c}44;${sz}">${b.icon||'🔗'} ${b.text}</a>`;
+    }).join('')}</div>`:'';
+
+    // Load user scripts
+    let scriptsHtml='';
+    if(currentUser){
+        try{
+            const snap=await get(ref(db,'scripts'));
+            if(snap.exists()){
+                const scripts=Object.entries(snap.val()).filter(([,s])=>s.authorUid===currentUser.uid||s.authorEmail===currentUser.email).slice(0,4);
+                if(scripts.length){
+                    scriptsHtml=`<div class="rp-script-cards">${scripts.map(([id,s])=>`
+                        <div class="rp-sc" onclick="location.href='script.html?id=${id}'" style="background:${theme.card}">
+                            <div class="rp-sc-title">${sanitizeText(s.title||'بدون عنوان')}</div>
+                            <div class="rp-sc-meta">📁 ${sanitizeText(s.category||'—')} · 👍 ${s.likes||0}</div>
+                        </div>`).join('')}</div>`;
+                }
+            }
+        }catch{}
+    }
+
+    // Avatar
+    let avatarContent='';
+    if(cfg.avatar&&cfg.avatar!=='#'){avatarContent=`<img src="${sanitizeUrl(cfg.avatar)}" onerror="this.style.display='none'">`;} 
+    else{try{const sn=await get(ref(db,`users/${currentUser.uid}/avatar`));const ch=sn.exists()?{...DEFAULT_CHAR,...sn.val()}:DEFAULT_CHAR;avatarContent=buildAvatar(ch,100);}catch{avatarContent=`<div class="rp-av-init">${(cfg.name||'؟').charAt(0)}</div>`;}}
+
+    const safeCss=sanitizeCSS(cfg.customCss);
+
+    const html=`
+<div style="background:${theme.bg};color:${theme.text};font-family:'${cfg.font}',Tajawal,sans-serif;min-height:100%;--page-accent:${accent};--page-accent-dim:${accentDim}">
+  <style>
+    .rp-name{background:linear-gradient(135deg,${accent},${accent}aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .rp-badge{background:${accentDim};border-color:${accent}44;color:${accent};}
+    .rp-block-title{color:${accent}88;}
+    ${safeCss?`/* Custom CSS */\n${safeCss}`:''}
+  </style>
+  <div class="rp-hero" style="--page-accent-dim:${accentDim}">
+    <div class="rp-avatar">${avatarContent}</div>
+    <h1 class="rp-name">${cfg.name||'اسمك هنا'}</h1>
+    <p class="rp-bio">${cfg.bio||'أضف نبذة عنك...'}</p>
+    ${socialHtml?`<div class="rp-social-row">${socialHtml}</div>`:''}
+  </div>
+  <div class="rp-content">
+    ${btnsHtml?`<div class="rp-block"><div class="rp-block-title">🔘 روابطي</div>${btnsHtml}</div>`:''}
+    ${skillsHtml?`<div class="rp-block"><div class="rp-block-title">🛠️ مهاراتي</div>${skillsHtml}</div>`:''}
+    ${scriptsHtml?`<div class="rp-block"><div class="rp-block-title">📜 سكربتاتي على CCRAFT</div>${scriptsHtml}</div>`:''}
+  </div>
+</div>`;
+
+    document.getElementById('previewFrame').innerHTML=html;
+}
+
+/* ═══ BUTTONS ═══ */
+function renderBtnList(){
+    const c=document.getElementById('btnList');c.innerHTML='';
+    if(!pageButtons.length){c.innerHTML='<div style="text-align:center;color:var(--lo);font-size:0.78rem;padding:12px">لا توجد أزرار بعد</div>';return;}
+    pageButtons.forEach((b,i)=>{
+        const div=document.createElement('div');div.className='btn-item';
+        div.innerHTML=`<span class="bi-icon">${sanitizeText(b.icon)||'🔗'}</span><span class="bi-text">${sanitizeText(b.text)}</span><div class="bi-actions"><button class="bi-del" title="تعديل" onclick="editBtn(${i})">✏️</button><button class="bi-del" title="حذف" onclick="deleteBtn(${i})">🗑️</button></div>`;
+        c.appendChild(div);
+    });
+    renderPreview();
+}
+
+window.openAddBtn=function(){
+    editBtnIdx=-1;
+    document.getElementById('btnModalTitle').textContent='➕ إضافة زر';
+    document.getElementById('btn-icon').value='';
+    document.getElementById('btn-text').value='';
+    document.getElementById('btn-url').value='';
+    document.getElementById('btn-color').value='#8b5cf6';
+    document.getElementById('btn-size').value='md';
+    document.getElementById('btnModal').classList.add('open');
+};
+
+window.editBtn=function(i){
+    editBtnIdx=i;const b=pageButtons[i];
+    document.getElementById('btnModalTitle').textContent='✏️ تعديل الزر';
+    document.getElementById('btn-icon').value=b.icon||'';
+    document.getElementById('btn-text').value=b.text||'';
+    document.getElementById('btn-url').value=b.url||'';
+    document.getElementById('btn-color').value=b.color||'#8b5cf6';
+    document.getElementById('btn-size').value=b.size||'md';
+    document.getElementById('btnModal').classList.add('open');
+};
+
+window.deleteBtn=function(i){
+    if(!confirm('حذف هذا الزر؟'))return;
+    pageButtons.splice(i,1);renderBtnList();
+};
+
+window.closeBtnModal=function(){document.getElementById('btnModal').classList.remove('open');};
+
+document.getElementById('saveBtnBtn').onclick=()=>{
+    const text=document.getElementById('btn-text').value.trim();
+    if(!text){toast('❌ أدخل نص الزر');return;}
+    const btn={
+        icon: document.getElementById('btn-icon').value.trim()||'🔗',
+        text,
+        url:  document.getElementById('btn-url').value.trim()||'#',
+        color:document.getElementById('btn-color').value||'#8b5cf6',
+        size: document.getElementById('btn-size').value||'md',
+    };
+    if(editBtnIdx>=0)pageButtons[editBtnIdx]=btn;
+    else pageButtons.push(btn);
+    renderBtnList();
+    closeBtnModal();
+    toast('✅ تم '+(editBtnIdx>=0?'تعديل':'إضافة')+' الزر');
+};
+
+document.getElementById('btnModal').addEventListener('click',e=>{if(e.target===document.getElementById('btnModal'))closeBtnModal();});
+
+/* ═══ TOAST ═══ */
+function toast(msg,dur=2500){
+    const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+    clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | فحص أمان السكربتات</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+.sc-page { max-width: 640px; margin: 0 auto; padding: 0 20px 80px; }
+
+.sc-hero { text-align: center; padding: 40px 0 22px; }
+.sc-hero .hi { font-size: 2.6rem; display: block; margin-bottom: 10px; filter: drop-shadow(0 0 16px rgba(139,92,246,0.4)); }
+.sc-hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 900;
+    background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+.sc-hero p { color: var(--text-muted); font-size: 0.86rem; line-height: 1.75; max-width: 460px; margin: 0 auto; }
+
+.search-card {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 22px;
+    padding: 24px; margin-bottom: 20px; animation: fadeIn 0.4s ease both;
+}
+.search-row { display: flex; gap: 8px; }
+.search-row input {
+    flex: 1; min-width: 0; background: rgba(0,0,0,0.28); border: 1px solid var(--border-color);
+    border-radius: 14px; padding: 13px 16px; color: var(--text-main); font-family: 'Tajawal', sans-serif;
+    font-size: 0.9rem; outline: none; transition: var(--transition); direction: rtl;
+}
+.search-row input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139,92,246,0.12); }
+.search-row button {
+    flex-shrink: 0; background: var(--accent-gradient); color: white; border: none;
+    border-radius: 14px; padding: 13px 24px; font-family: 'Tajawal', sans-serif; font-weight: 800;
+    font-size: 0.88rem; cursor: pointer; margin: 0; transition: var(--transition);
+    box-shadow: 0 6px 16px rgba(139,92,246,0.3);
+}
+.search-row button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+.search-row button:disabled { opacity: 0.55; cursor: default; transform: none; }
+
+/* ---- Result ---- */
+.result-box { margin-top: 18px; padding: 18px; border-radius: 14px; display: none; animation: fadeIn 0.3s ease both; }
+.result-box.show { display: block; }
+.result-title { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.95rem; margin-bottom: 6px; }
+.result-detail { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; }
+
+.result-box.unsafe { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); }
+.result-box.unsafe .result-title { color: var(--danger); }
+.result-box.safe   { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.3); }
+.result-box.safe .result-title { color: var(--success); }
+.result-box.unknown { background: rgba(96,165,250,0.07); border: 1px solid rgba(96,165,250,0.25); }
+.result-box.unknown .result-title { color: #60a5fa; }
+
+.match-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.match-item {
+    background: rgba(0,0,0,0.2); border: 1px solid rgba(248,113,113,0.2); border-radius: 10px;
+    padding: 10px 14px; cursor: pointer; transition: var(--transition);
+}
+.match-item:hover { border-color: rgba(248,113,113,0.4); transform: none; filter: none; }
+.match-item .mi-name { font-size: 0.84rem; font-weight: 800; color: var(--text-main); }
+.match-item .mi-reason { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+
+/* ---- Request add script ---- */
+.request-card {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 22px;
+    padding: 22px; margin-bottom: 20px; text-align: center; animation: fadeIn 0.4s ease both;
+}
+.request-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px; }
+.request-btn {
+    background: transparent; color: var(--primary); border: 1.5px solid var(--primary);
+    border-radius: 14px; padding: 12px 22px; font-family: 'Tajawal', sans-serif; font-weight: 800;
+    font-size: 0.86rem; cursor: pointer; transition: var(--transition);
+}
+.request-btn:hover:not(:disabled) { background: var(--primary); color: white; transform: translateY(-2px); }
+.request-btn:disabled { opacity: 0.55; cursor: default; transform: none; }
+
+/* ---- Modal ---- */
+.modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    align-items: center; justify-content: center; z-index: 999; padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px;
+    padding: 24px; width: 100%; max-width: 420px; animation: fadeIn 0.25s ease both;
+}
+.modal-box h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 14px; }
+.modal-box label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; }
+.modal-box input, .modal-box textarea {
+    width: 100%; background: rgba(0,0,0,0.28); border: 1px solid var(--border-color);
+    border-radius: 12px; padding: 11px 14px; color: var(--text-main); font-family: 'Tajawal', sans-serif;
+    font-size: 0.86rem; outline: none; margin-bottom: 14px; direction: rtl; resize: vertical;
+}
+.modal-box input:focus, .modal-box textarea:focus { border-color: var(--primary); }
+.modal-actions { display: flex; gap: 10px; }
+.modal-actions button {
+    flex: 1; border: none; border-radius: 12px; padding: 12px; font-family: 'Tajawal', sans-serif;
+    font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: var(--transition);
+}
+.modal-send { background: var(--accent-gradient); color: white; }
+.modal-cancel { background: rgba(255,255,255,0.06); color: var(--text-main); }
+.modal-note { font-size: 0.74rem; color: var(--text-muted); margin-top: 4px; display: none; }
+.modal-note.show { display: block; }
+
+.footer-note {
+    margin-top: 26px; font-size: 0.76rem; color: var(--text-muted); text-align: center;
+    line-height: 1.8; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);
+    border-radius: 14px; padding: 14px 18px;
+}
+
+@media (max-width: 500px) {
+    .search-row { flex-direction: column; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <button onclick="location.href='scripts.html'">📜 السكربتات</button>
+    <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div class="sc-page">
+
+    <div class="sc-hero">
+        <span class="hi">🛡️</span>
+        <h1>فحص أمان السكربتات</h1>
+        <p> السكربت عشان تتأكد إذا كانت إدارة CCRAFT SPACE حذّرت منه قبل ما تحمّله أو تشغّله.</p>
+    </div>
+<h3>نصيحه علي السريع : سكربتات ماب mm2 االي تجمد التريد كلها تسرق
+سكربتات الي علي تيك توك بنسبه كبيره تسرق</h3>
+    
+    <div class="search-card">
+        <div class="search-row">
+            <input type="text" id="scriptInput" placeholder="السكربت..." autocomplete="off">
+            <button id="checkBtn">🔍 فحص</button>
+        </div>
+
+        <div class="result-box" id="result">
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-detail" id="resultDetail"></div>
+            <div class="match-list" id="matchList"></div>
+        </div>
+    </div>
+
+    <div class="request-card">
+        <p>مش لاقي السكربت اللي بتدور عليه؟ ابعت طلب لإدارة CCRAFT SPACE عشان يضيفوه أو يفحصوه.</p>
+        <button class="request-btn" id="openRequestBtn">➕ طلب إضافة سكربت</button>
+    </div>
+
+    <p class="footer-note">
+        نتيجة "لم يتم الإبلاغ عنه" معناها إن الإدارة لسه ما حذّرتش منه — مش شهادة أمان 100%.
+        دايمًا حمّل من مصادر موثوقة، وخلي عندك حماية على جهازك، وابلغ الإدارة لو شكيت في أي سكربت.
+    </p>
+
+</div>
+
+<div class="modal-overlay" id="requestModal">
+    <div class="modal-box">
+        <h3>➕ طلب إضافة سكربت</h3>
+        <label for="reqName">اسم السكربت</label>
+        <input type="text" id="reqName" placeholder="اكتب اسم السكربت هنا...">
+        <label for="reqNote">ملاحظة (اختياري)</label>
+        <textarea id="reqNote" rows="3" placeholder="لينك السكربت، سبب الشك، أو أي تفاصيل تانية..."></textarea>
+        <div class="modal-actions">
+            <button class="modal-send" id="sendRequestBtn">إرسال للإدارة</button>
+            <button class="modal-cancel" id="cancelRequestBtn">إلغاء</button>
+        </div>
+        <div class="modal-note" id="requestNote"></div>
+    </div>
+</div>
+
+<script type="module">
+import { get, getApp, getApps, getDatabase, initializeApp, push, ref, serverTimestamp, set } from "./supabase-config.js";
+
+
+
+
+
+
+const db  = getDatabase(app);
+
+let unsafeMap = {}; // key -> {originalName, reason, reportedAt}
+
+function normalize(name) {
+    return (name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+function toKey(normalizedName) {
+    return normalizedName.replace(/[.#$[\]/]/g, '_');
+}
+function escapeHTML(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function loadUnsafeList() {
+    const snap = await get(ref(db, 'unsafeScripts'));
+    unsafeMap = snap.exists() ? snap.val() : {};
+}
+
+function showResult(type, data, matches) {
+    const result = document.getElementById('result');
+    const title   = document.getElementById('resultTitle');
+    const detail  = document.getElementById('resultDetail');
+    const matchList = document.getElementById('matchList');
+
+    result.className = `result-box show ${type}`;
+    matchList.innerHTML = '';
+
+    if (type === 'unsafe') {
+        title.textContent = '⚠️ غير آمن — احذر';
+        detail.textContent = (data && data.reason) ? data.reason : 'تم الإبلاغ عن هذا السكربت من قبل إدارة CCRAFT SPACE.';
+    } else if (type === 'unknown' && matches && matches.length) {
+        title.textContent = `🔎 لقينا ${matches.length} سكربت شبيه محذّر منه`;
+        detail.textContent = 'اتأكد إن اللي هتحمّله مش نفس دول:';
+        matches.forEach(m => {
+            const item = document.createElement('div');
+            item.className = 'match-item';
+            item.innerHTML = `<div class="mi-name">⚠️ ${escapeHTML(m.originalName)}</div><div class="mi-reason">${escapeHTML(m.reason || 'تم الإبلاغ عنه')}</div>`;
+            matchList.appendChild(item);
+        });
+    } else {
+        title.textContent = 'ℹ️ لم يتم الإبلاغ عنه';
+        detail.textContent = 'مفيش بلاغات عليه من الإدارة لحد دلوقتي — لسه برضه خلي بالك ودايمًا افحص الكود لو تقدر.';
+    }
+}
+
+async function checkScript() {
+    const input = document.getElementById('scriptInput');
+    const btn   = document.getElementById('checkBtn');
+    const rawName = input.value;
+
+    if (!rawName.trim()) { input.focus(); return; }
+
+    btn.disabled = true; btn.textContent = '⏳ بيفحص...';
+
+    const normalized = normalize(rawName);
+    const key = toKey(normalized);
+
+    if (unsafeMap[key]) {
+        showResult('unsafe', unsafeMap[key]);
+    } else {
+        // بحث جزئي في كل الأسماء المسجلة كـ غير آمنة
+        const matches = Object.values(unsafeMap).filter(e => normalize(e.originalName || '').includes(normalized) || normalized.includes(normalize(e.originalName || '')));
+        showResult('unknown', null, matches);
+    }
+
+    btn.disabled = false; btn.textContent = '🔍 فحص';
+}
+
+/* ---- Request-to-add-script modal ---- */
+const modal        = document.getElementById('requestModal');
+const openBtn       = document.getElementById('openRequestBtn');
+const cancelBtn      = document.getElementById('cancelRequestBtn');
+const sendBtn        = document.getElementById('sendRequestBtn');
+const reqNameInput  = document.getElementById('reqName');
+const reqNoteInput  = document.getElementById('reqNote');
+const requestNote   = document.getElementById('requestNote');
+
+function openModal() {
+    modal.classList.add('show');
+    requestNote.className = 'modal-note';
+    requestNote.textContent = '';
+    reqNameInput.value = document.getElementById('scriptInput').value || '';
+    reqNoteInput.value = '';
+    reqNameInput.focus();
+}
+function closeModal() {
+    modal.classList.remove('show');
+}
+
+openBtn.addEventListener('click', openModal);
+cancelBtn.addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+async function sendRequest() {
+    const name = reqNameInput.value.trim();
+    const note = reqNoteInput.value.trim();
+
+    if (!name) { reqNameInput.focus(); return; }
+
+    sendBtn.disabled = true; sendBtn.textContent = '⏳ بيترسل...';
+
+    try {
+        const reqRef = push(ref(db, 'scriptRequests'));
+        await set(reqRef, {
+            scriptName: name,
+            note: note || null,
+            status: 'pending',
+            requestedAt: serverTimestamp()
+        });
+        requestNote.className = 'modal-note show';
+        requestNote.style.color = 'var(--success)';
+        requestNote.textContent = '✅ اتبعت الطلب للإدارة، هيتراجع قريب.';
+        setTimeout(closeModal, 1400);
+    } catch (err) {
+        requestNote.className = 'modal-note show';
+        requestNote.style.color = 'var(--danger)';
+        requestNote.textContent = '❌ حصل خطأ وإحنا بنبعت الطلب، جرّب تاني.';
+    }
+
+    sendBtn.disabled = false; sendBtn.textContent = 'إرسال للإدارة';
+}
+
+sendBtn.addEventListener('click', sendRequest);
+
+document.getElementById('checkBtn').addEventListener('click', checkScript);
+document.getElementById('scriptInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkScript(); });
+
+loadUnsafeList();
+</script>
+</body>
+</html>

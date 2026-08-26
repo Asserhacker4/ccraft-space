@@ -1,0 +1,12 @@
+{
+  "executor_name": "Ccraft space",
+  "status": "Online",
+  "key_system": "https://ccraft-space.github.io/getkey",
+  "scripts": [
+    {
+      "title": "Ccraft Admin v1",
+      "desc": "Best admin script",
+      "source": "https://ccraft-space.github.io/admin.lua"
+    }
+  ]
+}

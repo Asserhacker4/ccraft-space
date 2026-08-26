@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ترتيب المستخدمين</title>
+
+<style>
+body{
+font-family:Arial;
+background:#0d1117;
+color:white;
+padding:20px;
+}
+
+.user{
+background:#161b22;
+padding:15px;
+margin-bottom:12px;
+border-radius:10px;
+}
+
+.rank{
+font-size:20px;
+font-weight:bold;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🏆 ترتيب المستخدمين</h1>
+
+<div id="ranking"></div>
+
+<script type="module">
+import { get, getDatabase, initializeApp, ref } from "./supabase-config.js";
+
+
+
+
+
+
+
+const db = getDatabase(app);
+
+const rankingDiv = document.getElementById("ranking");
+
+async function loadRanking() {
+  const snap = await get(ref(db, 'users'));
+
+  if (!snap.exists()) {
+    rankingDiv.innerHTML = "لا يوجد مستخدمون";
+    return;
+  }
+
+  const users = Object.values(snap.val());
+
+  users.sort((a,b) => (b.points || 0) - (a.points || 0));
+
+  users.forEach((user,index) => {
+    const div = document.createElement("div");
+    div.className = "user";
+
+    div.innerHTML = `
+      <div class="rank">#${index+1}</div>
+      <h3>${user.name}</h3>
+      <p>النقاط: ${user.points || 0}</p>
+      <p>عدد السكربتات: ${user.scripts || 0}</p>
+    `;
+
+    rankingDiv.appendChild(div);
+  });
+}
+
+loadRanking();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCRAFT SPACE | تخطي الروابط</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #00ffff;
+            --bg: #0a0a0a;
+            --card-bg: #151515;
+            --text: #ffffff;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* خلفية النجوم المتحركة */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            background: #202020;
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: #000;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+
+        button:disabled {
+            background: #444;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            margin-top: 1.5rem;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .loading {
+            color: var(--secondary);
+            animation: pulse 1.5s infinite;
+        }
+
+        .error { color: #ff4d4d; border: 1px solid #ff4d4d; }
+        .success { color: #00ff00; border: 1px solid #00ff00; }
+
+        .result-box {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .key-display {
+            background: #202020;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed var(--secondary);
+            word-break: break-all;
+            margin-bottom: 10px;
+            font-family: monospace;
+            color: var(--secondary);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <h1>CCRAFT SPACE | Bypass</h1>
+        <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 1.5rem;">تخطي روابط PlatoRelay / LootLabs تلقائياً</p>
+        
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="ضع رابط LootLabs هنا...">
+        </div>
+
+        <button id="startBtn">ابدأ التخطي الآن</button>
+
+        <div id="statusBox" class="status"></div>
+
+        <div id="resultBox" class="result-box">
+            <div class="key-display" id="keyText">المفتاح سيظهر هنا</div>
+            <button onclick="copyKey()" style="background: var(--secondary); color: #000;">نسخ المفتاح</button>
+        </div>
+    </div>
+
+    <script>
+        // رابط قاعدة بيانات Firebase الخاصة بمشروع CCRAFT SPACE Scripts
+        const FIREBASE_DB_URL = "https://ccraft-space-scripts-default-rtdb.firebaseio.com";
+
+        const startBtn = document.getElementById('startBtn');
+        const statusBox = document.getElementById('statusBox');
+        const resultBox = document.getElementById('resultBox');
+        const keyText = document.getElementById('keyText');
+
+        startBtn.addEventListener('click', async () => {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) return alert('يرجى وضع الرابط أولاً!');
+
+            const requestId = 'req_' + Date.now();
+
+            startBtn.disabled = true;
+            statusBox.style.display = 'block';
+            statusBox.className = 'status loading';
+            statusBox.innerText = 'تم تسجيل الطلب، جاري التخطي عبر البوت... يرجى الانتظار';
+            resultBox.style.display = 'none';
+
+            try {
+                // 1. كتابة طلب التخطي في Realtime Database
+                const res = await fetch(`${FIREBASE_DB_URL}/requests/${requestId}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        url: url,
+                        status: 'pending',
+                        timestamp: Date.now()
+                    })
+                });
+
+                if (res.ok) {
+                    // 2. الانتظار والاستماع لوصول المفتاح من البوت
+                    listenForKey(requestId);
+                } else {
+                    statusBox.className = 'status error';
+                    statusBox.innerText = 'فشل في الاتصال بقاعدة البيانات. تأكد من إعدادات Firebase Rules.';
+                    startBtn.disabled = false;
+                }
+            } catch (err) {
+                statusBox.className = 'status error';
+                statusBox.innerText = 'حدث خطأ في الاتصال بالسيرفر.';
+                console.error(err);
+                startBtn.disabled = false;
+            }
+        });
+
+        function listenForKey(requestId) {
+            let attempts = 0;
+            const maxAttempts = 40; // ينتظر لمدة دقيقتين ونصف تقريباً
+
+            const interval = setInterval(async () => {
+                attempts++;
+                try {
+                    const response = await fetch(`${FIREBASE_DB_URL}/requests/${requestId}.json`);
+                    const data = await response.json();
+
+                    if (data && data.status === 'completed' && data.key) {
+                        clearInterval(interval);
+                        statusBox.className = 'status success';
+                        statusBox.innerText = 'تم التخطي بنجاح!';
+                        resultBox.style.display = 'block';
+                        keyText.innerText = data.key;
+                        startBtn.disabled = false;
+                    } else if (data && data.status === 'failed') {
+                        clearInterval(interval);
+                        statusBox.className = 'status error';
+                        statusBox.innerText = 'فشل التخطي: ' + (data.error || 'حدث خطأ أثناء استخراج المفتاح');
+                        startBtn.disabled = false;
+                    }
+                } catch (err) {
+                    console.error('Error fetching key:', err);
+                }
+
+                if (attempts >= maxAttempts) {
+                    clearInterval(interval);
+                    statusBox.className = 'status error';
+                    statusBox.innerText = 'انتهت المهلة بدون استلام المفتاح. يرجى إعادة المحاولة.';
+                    startBtn.disabled = false;
+                }
+            }, 4000);
+        }
+
+        function copyKey() {
+            const text = keyText.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('تم نسخ المفتاح بنجاح!');
+            });
+        }
+    </script>
+</body>
+</html>

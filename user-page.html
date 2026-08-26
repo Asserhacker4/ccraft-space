@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صفحة المستخدم | CCRAFT SPACE</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&family=Cairo:wght@400;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Tajawal',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ═══ PAGE RENDER ═══ */
+.page-wrap{min-height:100vh;}
+
+.rp-hero{padding:56px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+.rp-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--page-accent-dim,rgba(139,92,246,0.1)) 0%,transparent 70%);pointer-events:none;}
+.rp-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 80% 80%,var(--page-accent-dim2,rgba(0,242,254,0.05)) 0%,transparent 70%);pointer-events:none;}
+
+.rp-avatar{width:110px;height:110px;border-radius:50%;margin:0 auto 18px;overflow:hidden;
+  border:3px solid var(--page-accent-border,rgba(139,92,246,0.3));
+  box-shadow:0 0 0 6px var(--page-accent-dim,rgba(139,92,246,0.08)), 0 16px 48px rgba(0,0,0,0.4);
+  display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.rp-avatar img{width:100%;height:100%;object-fit:cover;}
+.rp-av-init{font-size:2.5rem;font-weight:900;background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+.rp-name{font-size:2rem;font-weight:900;margin-bottom:8px;position:relative;z-index:1;line-height:1.2;}
+.rp-bio{font-size:0.92rem;line-height:1.8;max-width:520px;margin:0 auto 22px;position:relative;z-index:1;opacity:0.75;}
+
+.rp-social-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;margin-bottom:8px;}
+.rp-soc-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:50px;
+  font-size:0.78rem;font-weight:800;text-decoration:none;transition:all 0.2s;border:1px solid rgba(255,255,255,0.1);}
+.rp-soc-btn:hover{transform:translateY(-2px);filter:brightness(1.15);}
+
+.rp-back-bar{position:fixed;top:0;left:0;right:0;z-index:50;padding:8px 16px;
+  background:rgba(0,0,0,0.6);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.05);
+  display:flex;align-items:center;gap:10px;}
+.rp-back-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  border-radius:8px;padding:5px 13px;font-size:0.76rem;font-weight:800;color:white;cursor:pointer;
+  font-family:'Tajawal',sans-serif;margin:0;text-decoration:none;transition:all 0.2s;}
+.rp-back-btn:hover{background:rgba(255,255,255,0.14);}
+.rp-powered{font-size:0.65rem;color:rgba(255,255,255,0.3);margin-right:auto;}
+.rp-powered a{color:rgba(139,92,246,0.7);text-decoration:none;}
+
+.rp-content{padding:0 24px 60px;max-width:700px;margin:0 auto;}
+.rp-block{margin-bottom:28px;animation:fadeInUp 0.5s ease both;}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.rp-block-title{font-size:0.68rem;font-weight:800;opacity:0.5;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.rp-block-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
+
+.rp-btns-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rp-cust-btn{display:inline-flex;align-items:center;gap:7px;border-radius:12px;font-size:0.85rem;
+  font-weight:800;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.rp-cust-btn:hover{transform:translateY(-2px);filter:brightness(1.12);}
+
+.rp-skills{display:flex;flex-wrap:wrap;gap:7px;}
+.rp-skill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+  border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:700;}
+
+.rp-script-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.rp-sc{border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px;cursor:pointer;transition:all 0.2s;}
+.rp-sc:hover{border-color:var(--page-accent-border,rgba(139,92,246,0.3));transform:translateY(-3px);}
+.rp-sc-title{font-size:0.88rem;font-weight:800;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rp-sc-meta{font-size:0.7rem;opacity:0.5;}
+
+.rp-ccraft-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;
+  border-radius:50px;font-size:0.72rem;font-weight:800;text-decoration:none;
+  background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);color:#a78bfa;
+  transition:all 0.2s;}
+.rp-ccraft-badge:hover{background:rgba(139,92,246,0.2);}
+
+/* Loading */
+#loadingState{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:#07080f;flex-direction:column;gap:16px;}
+.loading-spinner{width:40px;height:40px;border-radius:50%;border:3px solid rgba(139,92,246,0.2);border-top-color:#8b5cf6;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Not found */
+#notFound{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:#07080f;text-align:center;padding:20px;display:none;}
+</style>
+</head>
+<body>
+
+<div id="loadingState">
+    <div class="loading-spinner"></div>
+    <div style="color:#5a5a78;font-size:0.82rem">جارٍ تحميل الصفحة...</div>
+</div>
+
+<div id="notFound">
+    <div>
+        <div style="font-size:4rem;margin-bottom:16px">🌐</div>
+        <h1 style="font-size:1.4rem;font-weight:900;color:#f0f0ff;margin-bottom:8px">لا توجد صفحة</h1>
+        <p style="color:#5a5a78;margin-bottom:20px">هذا المستخدم لم ينشئ صفحته بعد</p>
+        <a href="index.html" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border-radius:12px;padding:11px 22px;text-decoration:none;font-weight:800;font-size:0.88rem">← العودة للرئيسية</a>
+    </div>
+</div>
+
+<div id="pageRoot" style="display:none">
+    <!-- Back bar -->
+    <div class="rp-back-bar">
+        <a class="rp-back-btn" href="index.html">← CCRAFT SPACE</a>
+        <span class="rp-powered">صفحة مدعومة من <a href="index.html">CCRAFT SPACE</a></span>
+    </div>
+
+    <div class="page-wrap" id="pageWrap" style="padding-top:42px">
+        <div class="rp-hero" id="pageHero"></div>
+        <div class="rp-content" id="pageContent"></div>
+    </div>
+</div>
+
+<style id="pageDynamicStyle"></style>
+
+<script type="module">
+import { get, getDatabase, initializeApp, ref } from "./supabase-config.js";
+
+
+
+import { buildAvatar, DEFAULT_CHAR } from './avatar.js';
+
+
+const app=initializeApp(fc), db=getDatabase(app);
+
+/* ═══ XSS PROTECTION (Client) ═══ */
+function esc(str){ return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;'); }
+
+function safeUrl(url){
+    if(!url||url==='#')return'#';
+    const u=url.trim();
+    if(/^(javascript:|data:|vbscript:|file:)/i.test(u))return'#';
+    return u.replace(/[<>"']/g,'');
+}
+
+function safeColor(c){return /^#[0-9a-fA-F]{3,8}$/.test(c||'')?c:'#8b5cf6';}
+function safeCss(css){
+    return (css||'').replace(/expression\s*\(/gi,'').replace(/-moz-binding/gi,'').replace(/behavior\s*:/gi,'').replace(/@import/gi,'').replace(/javascript:/gi,'').replace(/<script/gi,'').replace(/url\(\s*['"]?\s*(javascript|data|vbscript)/gi,'url(#').slice(0,8000);
+}
+
+const THEMES={
+    dark:   {bg:'#07080f',card:'#111422',text:'#f0f0ff'},
+    space:  {bg:'#040714',card:'#0c0e24',text:'#e0e8ff'},
+    ocean:  {bg:'#020b14',card:'#091828',text:'#e0f4ff'},
+    sunset: {bg:'#140a04',card:'#24100a',text:'#fff0e0'},
+    forest: {bg:'#040e06',card:'#091a0c',text:'#e0ffe8'},
+    neon:   {bg:'#02030a',card:'#0a0b1a',text:'#f0f0ff'},
+};
+
+const BSIZES={sm:'padding:7px 14px;font-size:0.75rem',md:'padding:10px 20px;font-size:0.85rem',lg:'padding:13px 28px;font-size:0.95rem',full:'padding:12px 20px;font-size:0.9rem;width:100%'};
+
+async function loadPage(){
+    const params=new URLSearchParams(location.search);
+    const uid=params.get('uid');
+    if(!uid){showNotFound();return;}
+
+    const snap=await get(ref(db,`userPages/${uid}`));
+    if(!snap.exists()){showNotFound();return;}
+
+    const raw=snap.val();
+    const d={
+        name:       esc(raw.name||'مستخدم CCRAFT'),
+        bio:        esc(raw.bio||''),
+        avatar:     safeUrl(raw.avatar),
+        telegram:   raw.telegram?esc(raw.telegram):'',
+        youtube:    safeUrl(raw.youtube),
+        twitter:    raw.twitter?esc(raw.twitter):'',
+        other:      safeUrl(raw.other),
+        otherLabel: esc(raw.otherLabel||'رابط'),
+        skills:     (raw.skills||'').split(',').map(s=>esc(s.trim())).filter(Boolean),
+        accent:     safeColor(raw.accent),
+        font:       ['Tajawal','Cairo','Fira Code','Segoe UI'].includes(raw.font)?raw.font:'Tajawal',
+        theme:      ['dark','space','ocean','sunset','forest','neon'].includes(raw.theme)?raw.theme:'dark',
+        customCss:  safeCss(raw.customCss),
+        buttons:    (raw.buttons||[]).map(b=>({icon:esc(b.icon||'🔗'),text:esc(b.text||''),url:safeUrl(b.url),color:safeColor(b.color),size:['sm','md','lg','full'].includes(b.size)?b.size:'md'})),
+        uid:        uid,
+    };
+
+    const theme=THEMES[d.theme]||THEMES.dark;
+    const accent=d.accent;
+    const accentDim=accent+'22';
+
+    // Set page meta
+    document.title=`${d.name} | CCRAFT SPACE`;
+
+    // Apply theme
+    document.getElementById('pageWrap').style.background=theme.bg;
+    document.getElementById('pageWrap').style.color=theme.text;
+    document.getElementById('pageWrap').style.fontFamily=`'${d.font}',Tajawal,sans-serif`;
+
+    // Dynamic CSS
+    document.getElementById('pageDynamicStyle').textContent=`
+        body{background:${theme.bg};}
+        .rp-name{background:linear-gradient(135deg,${accent},${accent}99);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .rp-block-title{color:${accent}88;}
+        ${d.customCss?`/* Custom */\n${d.customCss}`:''}
+    `;
+
+    document.getElementById('pageWrap').style.setProperty('--page-accent-dim',accentDim);
+    document.getElementById('pageWrap').style.setProperty('--page-accent-border',accent+'55');
+    document.getElementById('pageWrap').style.setProperty('--page-accent-dim2','rgba(0,242,254,0.05)');
+
+    // Avatar
+    let avatarInner='';
+    try{
+        if(d.avatar&&d.avatar!=='#'){
+            avatarInner=`<img src="${d.avatar}" alt="${d.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="rp-av-init" style="display:none">${d.name.charAt(0)}</div>`;
+        }else{
+            const sn=await get(ref(db,`users/${uid}/avatar`));
+            const ch=sn.exists()?{...DEFAULT_CHAR,...sn.val()}:DEFAULT_CHAR;
+            avatarInner=buildAvatar(ch,110);
+        }
+    }catch{avatarInner=`<div class="rp-av-init">${d.name.charAt(0)}</div>`;}
+
+    // Social links
+    let socialHtml='';
+    if(d.telegram){const u=d.telegram.startsWith('@')?`https://t.me/${d.telegram.slice(1)}`:d.telegram;socialHtml+=`<a class="rp-soc-btn" href="${safeUrl(u)}" target="_blank" rel="noopener" style="background:rgba(0,136,204,0.15);color:#00aacc;border-color:rgba(0,136,204,0.25)">📢 تلجرام</a>`;}
+    if(d.youtube&&d.youtube!=='#')socialHtml+=`<a class="rp-soc-btn" href="${d.youtube}" target="_blank" rel="noopener" style="background:rgba(255,0,0,0.12);color:#ff5555;border-color:rgba(255,0,0,0.2)">📺 يوتيوب</a>`;
+    if(d.twitter){const u=d.twitter.startsWith('@')?`https://x.com/${d.twitter.slice(1)}`:d.twitter;socialHtml+=`<a class="rp-soc-btn" href="${safeUrl(u)}" target="_blank" rel="noopener" style="background:rgba(29,155,240,0.12);color:#1d9bf0;border-color:rgba(29,155,240,0.2)">🐦 X</a>`;}
+    if(d.other&&d.other!=='#')socialHtml+=`<a class="rp-soc-btn" href="${d.other}" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.06);color:${theme.text};border-color:rgba(255,255,255,0.12)">🔗 ${d.otherLabel}</a>`;
+
+    // Hero
+    document.getElementById('pageHero').innerHTML=`
+        <div class="rp-avatar">${avatarInner}</div>
+        <h1 class="rp-name">${d.name}</h1>
+        ${d.bio?`<p class="rp-bio">${d.bio}</p>`:''}
+        ${socialHtml?`<div class="rp-social-row">${socialHtml}</div>`:''}
+        <div style="margin-top:12px">
+            <a class="rp-ccraft-badge" href="profile.html?uid=${uid}">🏅 بروفايل CCRAFT</a>
+        </div>
+    `;
+
+    // Content blocks
+    let contentHtml='';
+
+    // Buttons
+    if(d.buttons.length){
+        const btnsH=d.buttons.map(b=>{const sz=BSIZES[b.size]||BSIZES.md;const c=b.color;return`<a class="rp-cust-btn" href="${b.url}" target="_blank" rel="noopener" style="background:${c}22;color:${c};border:1px solid ${c}44;${sz}">${b.icon} ${b.text}</a>`;}).join('');
+        contentHtml+=`<div class="rp-block" style="animation-delay:0.05s"><div class="rp-block-title">🔘 روابطي</div><div class="rp-btns-grid">${btnsH}</div></div>`;
+    }
+
+    // Skills
+    if(d.skills.length){
+        contentHtml+=`<div class="rp-block" style="animation-delay:0.1s"><div class="rp-block-title">🛠️ مهاراتي</div><div class="rp-skills">${d.skills.map(s=>`<div class="rp-skill">${s}</div>`).join('')}</div></div>`;
+    }
+
+    // Scripts
+    try{
+        const sSnap=await get(ref(db,'scripts'));
+        if(sSnap.exists()){
+            const userEmail=raw.email||'';
+            const scripts=Object.entries(sSnap.val()).filter(([,s])=>s.authorUid===uid||s.authorEmail===userEmail).sort((a,x)=>(x[1].timestamp||0)-(a[1].timestamp||0)).slice(0,6);
+            if(scripts.length){
+                const cardsH=scripts.map(([id,s])=>`<div class="rp-sc" onclick="location.href='script.html?id=${id}'" style="background:${theme.card}"><div class="rp-sc-title">${esc(s.title||'بدون عنوان')}</div><div class="rp-sc-meta">📁 ${esc(s.category||'—')} · 👍 ${s.likes||0}</div></div>`).join('');
+                contentHtml+=`<div class="rp-block" style="animation-delay:0.15s"><div class="rp-block-title">📜 سكربتاتي على CCRAFT</div><div class="rp-script-cards">${cardsH}</div></div>`;
+            }
+        }
+    }catch{}
+
+    document.getElementById('pageContent').innerHTML=contentHtml;
+
+    // Show page
+    document.getElementById('loadingState').style.display='none';
+    document.getElementById('pageRoot').style.display='block';
+}
+
+function showNotFound(){
+    document.getElementById('loadingState').style.display='none';
+    document.getElementById('notFound').style.display='flex';
+}
+
+loadPage().catch(()=>showNotFound());
+</script>
+</body>
+</html>

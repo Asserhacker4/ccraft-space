@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCRAFT SPACE | قائمة سكربتات Roblox</title>
+  <meta name="application-name" content="CCRAFT SPACE">
+  <meta name="description" content="CCRAFT SPACE — أفضل منصة عربية لسكربتات Roblox.">
+  <meta name="robots" content="index, follow">
+<div class="gcse-search"></div>
+	
+<div class="gcse-search"></div>
+  <link rel="canonical" href="https://ccraftspace.ddnsking.com/scripts.html">
+  <meta property="og:site_name" content="CCRAFT SPACE">
+  <meta property="og:title"     content="CCRAFT SPACE | قائمة سكربتات Roblox">
+  <meta property="og:image"     content="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <meta property="og:image:secure_url" content="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <meta property="og:image:width"  content="512">
+  <meta property="og:image:height" content="512">
+  <meta property="og:type"  content="website">
+  <meta property="og:url"   content="https://ccraftspace.ddnsking.com/scripts.html">
+  <link rel="icon"            type="image/jpeg" href="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <link rel="shortcut icon"   type="image/jpeg" href="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <link rel="apple-touch-icon"                  href="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"CCRAFT SPACE",
+   "url":"https://ccraftspace.ddnsking.com/","image":"https://ccraftspace.ddnsking.com/cCraft.jpg"}
+  </script>
+  <script type="module" src="presence.js"></script>
+  <script>(function(s){s.dataset.zone='11585956',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+	
+<style>
+
+body { min-height: 100svh; }
+
+.scripts-page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    overflow-x: hidden;
+}
+
+.page-hero {
+    padding: 28px 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+
+.page-hero h1 {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    font-weight: 900;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-hero h1 svg { flex-shrink: 0; }
+
+.scripts-count-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 50px; padding: 7px 16px;
+    font-size: 0.82rem; color: var(--text-muted); font-weight: 700;
+}
+
+.scripts-count-pill .scp-num {
+    font-weight: 900; color: var(--primary); font-size: 0.95rem;
+}
+
+.search-section { margin-bottom: 22px; }
+
+.search-wrap {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.search-wrap .search-icon {
+    position: absolute; right: 16px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem; pointer-events: none;
+    color: var(--text-muted);
+    display: flex;
+}
+
+#searchScripts {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 14px 48px 14px 140px;
+    color: var(--text-main);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: var(--transition);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    direction: rtl;
+    box-sizing: border-box;
+}
+
+#searchScripts:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15), 0 2px 10px rgba(0,0,0,0.2);
+}
+
+#searchScripts::placeholder { color: var(--text-muted); opacity: 0.7; }
+
+.ai-search-btn {
+    position: absolute; left: 8px; top: 50%;
+    transform: translateY(-50%);
+    background: var(--accent-gradient);
+    color: white; border: none;
+    border-radius: 12px; padding: 8px 14px;
+    font-size: 0.75rem; font-weight: 800;
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+    margin: 0; transition: var(--transition);
+    display: flex; align-items: center; gap: 5px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(139,92,246,0.35);
+}
+
+.ai-search-btn:hover { transform: translateY(-50%) scale(1.04); filter: brightness(1.1); }
+.ai-search-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: translateY(-50%); }
+.ai-search-btn svg { flex-shrink: 0; }
+.ai-search-btn .spin { animation: iconSpin 0.9s linear infinite; }
+
+@keyframes iconSpin { to { transform: rotate(360deg); } }
+
+.ai-result-banner {
+    display: none;
+    background: rgba(139,92,246,0.07);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 10px; padding: 7px 14px;
+    margin-bottom: 12px;
+    font-size: 0.76rem; color: var(--text-muted);
+    animation: fadeIn 0.3s ease both;
+    line-height: 1.5;
+}
+
+.ai-result-banner.show { display: flex; align-items: center; gap: 8px; }
+.aib-icon { font-size: 0.9rem; flex-shrink: 0; display: flex; color: var(--primary); }
+.aib-text { flex: 1; }
+.aib-text strong { color: var(--text-main); }
+.aib-close { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0; margin: 0; font-size: 0.85rem; flex-shrink: 0; opacity: 0.6; display: flex; }
+.aib-close:hover { color: var(--danger); opacity: 1; transform: none; filter: none; }
+
+.filter-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-label {
+    font-size: 0.72rem; font-weight: 800; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0;
+}
+
+.filter-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-color);
+    border-radius: 50px; padding: 7px 16px;
+    font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+    margin: 0; transition: var(--transition); white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 6px;
+}
+
+.filter-btn svg { flex-shrink: 0; }
+
+.filter-btn:hover  { border-color: var(--border-hover); color: var(--text-main); transform: none; filter: none; }
+.filter-btn.active { background: var(--primary-dim); color: var(--primary); border-color: rgba(139,92,246,0.4); }
+
+.sort-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 10px; flex-wrap: wrap;
+}
+
+.sort-label { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; }
+
+.sort-select {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 10px; padding: 7px 12px;
+    color: var(--text-main); font-family: 'Tajawal', sans-serif;
+    font-size: 0.8rem; outline: none; cursor: pointer;
+}
+
+.results-info {
+    font-size: 0.78rem; color: var(--text-muted);
+    margin-right: auto;
+    display: inline-flex; align-items: center; gap: 5px;
+}
+
+.results-info span { color: var(--primary); font-weight: 800; }
+
+.scripts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.sc-thumb {
+    width: 100%; height: 140px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid var(--border-color);
+    transition: transform 0.3s ease;
+}
+
+.script-card:hover .sc-thumb { transform: scale(1.04); }
+
+.script-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.4s ease both;
+    position: relative;
+    cursor: pointer;
+}
+
+.script-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+}
+
+.script-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.script-card:hover::before { opacity: 1; }
+.script-card[data-cat="game"]  .sc-top-bar,
+.script-card[data-cat="game"]::before  { background: linear-gradient(90deg, #4ade80, #22c55e); }
+.script-card[data-cat="admin"] .sc-top-bar,
+.script-card[data-cat="admin"]::before { background: linear-gradient(90deg, #f87171, #ef4444); }
+.script-card[data-cat="ai"]    .sc-top-bar,
+.script-card[data-cat="ai"]::before    { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+.script-card::before                   { background: var(--accent-gradient); }
+
+/* ---- Crawlable full-card link overlay ---- */
+.sc-card-link {
+    position: absolute; inset: 0; z-index: 1;
+    text-indent: -9999px; overflow: hidden;
+}
+.sc-body, .sc-footer { position: relative; z-index: 2; }
+
+.sc-body { padding: 20px 20px 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+.sc-header { display: flex; align-items: flex-start; gap: 10px; }
+.sc-verified-badge { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.sc-verified-badge svg { display: block; }
+
+.sc-title {
+    font-size: 1rem; font-weight: 900; color: var(--text-main);
+    flex: 1; line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.sc-title mark { background: rgba(139,92,246,0.25); color: #c084fc; border-radius: 3px; padding: 0 2px; }
+
+.sc-new-badge {
+    background: var(--accent-gradient); color: white;
+    font-size: 0.58rem; font-weight: 900; padding: 3px 8px;
+    border-radius: 50px; flex-shrink: 0; align-self: flex-start;
+    margin-top: 2px;
+    display: inline-flex; align-items: center; gap: 3px;
+}
+
+.sc-ai-badge {
+    background: linear-gradient(135deg,rgba(139,92,246,0.2),rgba(0,242,254,0.12));
+    border: 1px solid rgba(139,92,246,0.35); color: #a78bfa;
+    font-size: 0.58rem; font-weight: 900; padding: 3px 8px;
+    border-radius: 50px; flex-shrink: 0; align-self: flex-start;
+    margin-top: 2px;
+    display: inline-flex; align-items: center; gap: 3px;
+}
+
+.sc-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.sc-cat {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--primary-dim); color: #b48bf8;
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 0.7rem; font-weight: 800;
+}
+
+.sc-map {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(0,242,254,0.08); border: 1px solid rgba(0,242,254,0.2);
+    color: var(--secondary);
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 0.7rem; font-weight: 800;
+}
+
+.sc-key-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3);
+    color: #fbbf24;
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 0.7rem; font-weight: 800;
+}
+
+.sc-tag-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(0,242,254,0.08); border: 1px solid rgba(0,242,254,0.2);
+    color: #67e8f9;
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 0.7rem; font-weight: 800;
+}
+
+.sc-code-snippet {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(139,92,246,0.15);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    color: #8be9fd;
+    direction: ltr;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sc-code-snippet svg { flex-shrink: 0; color: #8b5cf6; }
+
+.sc-preview-btn {
+    background: rgba(0,242,254,0.08);
+    border: 1px solid rgba(0,242,254,0.2);
+    color: var(--secondary);
+    border-radius: 10px;
+    padding: 7px 14px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    margin: 0;
+    transition: var(--transition);
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 6px;
+}
+
+.sc-preview-btn:hover { background: rgba(0,242,254,0.16); transform: none; filter: none; }
+.sc-preview-btn svg { transition: transform 0.25s ease; }
+.sc-preview-btn.open svg { transform: rotate(180deg); }
+
+.sc-code-full {
+    display: none;
+    background: #050810;
+    border: 1px solid rgba(139,92,246,0.15);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.76rem;
+    line-height: 1.7;
+    color: #8be9fd;
+    direction: ltr;
+    text-align: left;
+    white-space: pre-wrap;
+    max-height: 260px;
+    overflow-y: auto;
+    cursor: text;
+}
+
+.sc-code-full.open { display: block; animation: fadeIn 0.25s ease both; }
+
+.sc-code-full::-webkit-scrollbar { width: 5px; }
+.sc-code-full::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+.sc-code-full::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.3); border-radius: 3px; }
+
+.sc-stats {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.78rem; color: var(--text-muted);
+}
+
+.sc-stat { display: flex; align-items: center; gap: 4px; }
+.sc-stat svg { flex-shrink: 0; }
+
+/* ---- Rating stars: clear fill state + hover preview + submit pulse ---- */
+.sc-stars { display: flex; align-items: center; gap: 2px; }
+
+.sc-star {
+    cursor: pointer; display: flex; padding: 1px;
+    color: #3a3a4a;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.sc-star svg { display: block; }
+.sc-star:hover { transform: scale(1.22); }
+.sc-star.filled { color: #fbbf24; }
+.sc-stars[data-rated="true"] .sc-star { cursor: default; }
+.sc-stars[data-rated="true"] .sc-star:hover { transform: none; }
+
+/* preview fill on hover, up to the hovered star, only before rating — driven by JS (hover-fill class) so it works correctly regardless of RTL DOM order */
+.sc-star.hover-fill { color: #fbbf24; }
+
+.sc-star.just-rated { animation: starPop 0.4s ease; }
+@keyframes starPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.5) rotate(-8deg); }
+    100% { transform: scale(1); }
+}
+
+.sc-avg { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-right: 2px; }
+.sc-avg strong { color: var(--text-main); }
+
+.sc-footer {
+    display: flex; gap: 8px; padding: 12px 20px 16px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    flex-wrap: wrap;
+}
+
+.sc-btn {
+    flex: 1; min-width: 80px;
+    padding: 9px 12px; border-radius: 12px;
+    font-size: 0.78rem; font-weight: 800;
+    border: none; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0;
+    transition: var(--transition); display: flex;
+    align-items: center; justify-content: center; gap: 5px;
+    white-space: nowrap;
+}
+
+.sc-btn svg { flex-shrink: 0; }
+.sc-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.sc-btn:active { transform: scale(0.96); }
+
+.sc-btn.view { background: var(--accent-gradient); color: white; box-shadow: 0 4px 12px rgba(139,92,246,0.3); text-decoration: none; }
+.sc-btn.copy { background: rgba(0,242,254,0.1); color: var(--secondary); border: 1px solid rgba(0,242,254,0.2); }
+.sc-btn.like { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid var(--border-color); position: relative; overflow: visible; }
+.sc-btn.like.liked  { background: rgba(248,113,113,0.1); color: #f87171; border-color: rgba(248,113,113,0.3); }
+.sc-btn.report { background: rgba(248,113,113,0.06); color: var(--text-muted); border: 1px solid var(--border-color); }
+.sc-btn.report:hover { color: #f87171; border-color: rgba(248,113,113,0.3); }
+
+/* ---- Like button animation: heart pop + burst particles ---- */
+.sc-btn.like .like-icon { transition: transform 0.25s cubic-bezier(.17,.89,.32,1.49); }
+.sc-btn.like.pulse .like-icon { animation: heartPop 0.55s cubic-bezier(.17,.89,.32,1.49); }
+@keyframes heartPop {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(0.72); }
+    60%  { transform: scale(1.45); }
+    100% { transform: scale(1); }
+}
+
+.like-burst {
+    position: absolute; inset: 0; pointer-events: none; overflow: visible;
+}
+.like-burst span {
+    position: absolute; top: 50%; left: 50%; width: 5px; height: 5px;
+    border-radius: 50%; background: #f87171;
+    animation: burstFly 0.6s ease-out forwards;
+}
+@keyframes burstFly {
+    0%   { opacity: 1; transform: translate(-50%,-50%) scale(1) translate(0,0); }
+    100% { opacity: 0; transform: translate(-50%,-50%) scale(0.3) translate(var(--bx), var(--by)); }
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center; padding: 60px 20px;
+    color: var(--text-muted);
+    animation: fadeIn 0.4s ease both;
+}
+
+.empty-state .es-icon { display: flex; justify-content: center; margin-bottom: 14px; color: var(--text-muted); opacity: 0.5; }
+.empty-state h3 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; }
+.empty-state p  { font-size: 0.88rem; line-height: 1.7; }
+
+.loading-grid {
+    grid-column: 1 / -1;
+    display: flex; flex-direction: column; gap: 12px;
+}
+
+.skeleton {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 20px; padding: 20px; height: 180px;
+    animation: shimmer 1.5s ease infinite;
+}
+
+@keyframes shimmer {
+    0%,100% { opacity: 1; } 50% { opacity: 0.5; }
+}
+
+.ai-thinking {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; gap: 12px;
+    justify-content: center; padding: 40px;
+    color: var(--text-muted); font-size: 0.9rem;
+    font-weight: 700; animation: fadeIn 0.3s ease both;
+}
+
+.ai-dots { display: flex; gap: 5px; }
+.ai-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); animation: adb 1.2s ease infinite; }
+.ai-dots span:nth-child(2){animation-delay:.2s} .ai-dots span:nth-child(3){animation-delay:.4s}
+@keyframes adb { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-7px);opacity:1} }
+
+.all-scripts-index {
+    margin-top: 40px; padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+.asi-title {
+    font-size: 0.8rem; font-weight: 800; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px;
+    cursor: pointer; user-select: none;
+    list-style: none;
+    display: flex; align-items: center; gap: 6px;
+}
+.asi-title::-webkit-details-marker { display: none; }
+.asi-title::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-right: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+.all-scripts-index[open] .asi-title::before { transform: rotate(45deg); }
+.asi-title:hover { color: var(--text-main); }
+.asi-links {
+    display: flex; flex-wrap: wrap; gap: 6px 14px;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: 14px;
+}
+.asi-links a {
+    font-size: 0.76rem; color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+    transition: var(--transition);
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
+}
+.asi-links a:hover { color: var(--primary); border-bottom-color: var(--primary); }
+
+/* ---- Live search suggestions dropdown ---- */
+.search-suggest {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0; left: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    overflow: hidden;
+    z-index: 20;
+    display: none;
+}
+.search-suggest.show { display: block; animation: fadeIn 0.15s ease both; }
+.ss-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px;
+    font-size: 0.84rem; color: var(--text-muted);
+    cursor: pointer; transition: var(--transition);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.ss-item:last-child { border-bottom: none; }
+.ss-item:hover, .ss-item.active { background: rgba(139,92,246,0.08); color: var(--text-main); }
+.ss-item svg { flex-shrink: 0; color: var(--text-muted); }
+.ss-item b { color: var(--text-main); font-weight: 800; }
+.ss-item .ss-meta { margin-right: auto; font-size: 0.68rem; color: var(--text-muted); opacity: 0.7; }
+.ss-item mark { background: rgba(139,92,246,0.25); color: #c084fc; border-radius: 3px; padding: 0 2px; }
+
+@media (max-width: 640px) {
+    .scripts-grid { grid-template-columns: 1fr; }
+    #searchScripts { padding-left: 110px; }
+    .ai-search-btn span { display: none; }
+    .ai-search-btn { padding: 8px 10px; }
+    .page-hero { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+
+</style>
+</head>
+  
+<body>
+
+<header>
+  <button onclick="location.href='publish.html'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-left:5px"><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>نشر سكربت</button>
+  <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<script>
+// دالة عامة لفتح/قفل معاينة الكود الكاملة جوه الكارت (بتشتغل على الكروت الثابتة والحية)
+function toggleCodePreview(btn) {
+    const card = btn.closest('.script-card');
+    const full = card.querySelector('.sc-code-full');
+    if (!full) return;
+    const willOpen = !full.classList.contains('open');
+    full.classList.toggle('open');
+    btn.classList.toggle('open', willOpen);
+    const label = btn.querySelector('.spb-label');
+    if (label) label.textContent = willOpen ? 'إخفاء الكود' : 'معاينة سريعة';
+}
+</script>
+
+<div class="scripts-page">
+
+
+    <!-- Page Hero -->
+    <div class="page-hero">
+        <h1>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6M9 9h1"/></svg>
+            قائمة السكربتات
+        </h1>
+        <div class="scripts-count-pill">
+            إجمالي السكربتات: <span class="scp-num" id="scriptCount">—</span>
+        </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="search-section">
+
+        <!-- Search Box -->
+        <div class="search-wrap">
+            <span class="search-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span>
+            <input type="text" id="searchScripts" placeholder="ابحث عن اسم سكربت، قسم، ماب، أو تاج..." autocomplete="off">
+            <button class="ai-search-btn" id="aiSearchBtn" title="بحث ذكي بواسطة Nova AI">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M9 8V5a3 3 0 0 1 6 0v3"/><circle cx="9" cy="14" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1.2" fill="currentColor" stroke="none"/><path d="M2 13h2M20 13h2"/></svg>
+                <span>بحث ذكي</span>
+            </button>
+            <div class="search-suggest" id="searchSuggest"></div>
+        </div>
+
+        <!-- AI Banner -->
+        <div class="ai-result-banner" id="aiBanner">
+            <span class="aib-icon" id="aibIcon"></span>
+            <div class="aib-text" id="aiBannerText">—</div>
+            <button class="aib-close" onclick="closeAiBanner()" aria-label="إغلاق"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-row">
+            <span class="filter-label">القسم:</span>
+            <button class="filter-btn active" data-cat="all"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.3 6.9.9-5 4.8 1.3 6.9L12 17.6 5.9 20.9 7.2 14l-5-4.8 6.9-.9z"/></svg>الكل</button>
+            <button class="filter-btn" data-cat="game"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5.5"/><path d="M7 10v4M5 12h4"/><circle cx="16" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="18.5" cy="13" r="1" fill="currentColor" stroke="none"/></svg>Game</button>
+            <button class="filter-btn" data-cat="admin"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3.5v6c0 5-3.4 8.4-8 10.5-4.6-2.1-8-5.5-8-10.5v-6z"/></svg>Admin</button>
+            <button class="filter-btn" data-cat="ai"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M9 8V5a3 3 0 0 1 6 0v3"/><circle cx="9" cy="14" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1.2" fill="currentColor" stroke="none"/><path d="M2 13h2M20 13h2"/></svg>AI &amp; NPCs</button>
+            <button class="filter-btn" data-cat="سكربت من الادارة"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 3 5-7 5 7 4-3-2 11H5z"/></svg>من الإدارة</button>
+            <span class="filter-label" style="margin-right:auto"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2 2M19 4l2 2"/></svg>المفتاح:</span>
+            <button class="filter-btn active" data-key="all">الكل</button>
+            <button class="filter-btn" data-key="yes"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>بمفتاح</button>
+            <button class="filter-btn" data-key="no"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7-2.6"/></svg>بدون مفتاح</button>
+        </div>
+
+        <!-- تاجات ديناميكية -->
+        <div class="sort-row" id="tagsFilterRow" style="display:none;flex-wrap:wrap"></div>
+
+        <!-- Sort & Count -->
+        <div class="sort-row">
+            <span class="sort-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>ترتيب:</span>
+            <select class="sort-select" id="sortSelect">
+                <option value="newest">الأحدث أولاً</option>
+                <option value="oldest">الأقدم أولاً</option>
+                <option value="likes">الأكثر إعجاباً</option>
+                <option value="rating">الأعلى تقييماً</option>
+            </select>
+            <span class="results-info">عرض <span id="resultsCount">—</span> سكربت</span>
+        </div>
+
+    </div>
+
+
+	
+    <!-- Scripts Grid -->
+<div class="scripts-grid" id="scriptsList">
+</div>
+<div style="text-align:center;margin-top:18px">
+    <button type="button" id="loadMoreBtn" style="display:none;background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.3);border-radius:50px;padding:11px 28px;font-family:'Tajawal',sans-serif;font-weight:800;font-size:0.88rem;cursor:pointer;margin:0;transition:all 0.2s">عرض المزيد</button>
+</div>
+
+<!-- ============================================================
+     🗺️ فهرس كامل لكل السكربتات — روابط <a href> حقيقية لكل سكربت
+     دفعة واحدة (مش بس أول 8 زي كروت العرض المقسّمة بصفحات).
+     الهدف: لما جوجل يزحف scripts.html، يلاقي رابط حقيقي لكل سكربت
+     في نفس الصفحة من غير ما يحتاج يدوس "عرض المزيد" (زرار JS مش
+     بيتبعوش الزاحف). العرض بسيط ومضغوط، مفيد كمرجع سريع للزوار
+     كمان مش مخفي بصريًا.
+     ============================================================ -->
+<details class="all-scripts-index" id="allScriptsIndex" style="display:none">
+    <summary class="asi-title">فهرس كل السكربتات (اضغط للعرض)</summary>
+    <div class="asi-links" id="allScriptsLinksList"></div>
+</details>
+
+</div>
+
+<!-- بيانات ثابتة مولّدة تلقائيًا (كل السكربتات) — بتتحمّل فورًا قبل Firebase، لصالح السيو والزوار من غير جافاسكريبت كامل -->
+<script src="scripts-data.js"></script>
+<script type="module">
+import { supabase } from "./supabase-config.js";
+
+// ============================================================
+// طبقة تجريد: محاكاة Firebase API باستخدام Supabase
+// ============================================================
+const SUPABASE_URL = 'https://nthqrfsdshsreqdoksyv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_kHd5Y4bBnUDJxCFV-aKg-Q_T9XRJckN';
+const SB_HEADERS = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=representation'
+};
+
+// دوال مساعدة لـ Supabase تحاكي Firebase
+const db = {
+    async getScripts() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/scripts?select=*&order=timestamp.desc`, { headers: SB_HEADERS });
+            if (!res.ok) return {};
+            const rows = await res.json();
+            const obj = {};
+            rows.forEach(r => { obj[r.id] = r; });
+            return obj;
+        } catch { return {}; }
+    },
+    async getField(table, id, field) {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${encodeURIComponent(id)}&select=${field}`, { headers: SB_HEADERS });
+            if (!res.ok) return null;
+            const rows = await res.json();
+            return rows.length ? rows[0][field] : null;
+        } catch { return null; }
+    },
+    async setField(table, id, field, value) {
+        try {
+            await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${encodeURIComponent(id)}`, {
+                method: 'PATCH',
+                headers: SB_HEADERS,
+                body: JSON.stringify({ [field]: value })
+            });
+        } catch { /* تجاهل */ }
+    },
+    async getUnsafeNames() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/unsafe_scripts?select=original_name`, { headers: SB_HEADERS });
+            if (!res.ok) return [];
+            const rows = await res.json();
+            return rows.map(r => r.original_name);
+        } catch { return []; }
+    },
+    async getUserName(uid) {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${encodeURIComponent(uid)}&select=username`, { headers: SB_HEADERS });
+            if (!res.ok) return null;
+            const rows = await res.json();
+            return rows.length ? rows[0].username : null;
+        } catch { return null; }
+    },
+    async pushNotification(authorUid, data) {
+        try {
+            const id = 'n_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,7);
+            await fetch(`${SUPABASE_URL}/rest/v1/notifications`, {
+                method: 'POST',
+                headers: SB_HEADERS,
+                body: JSON.stringify({ id, user_id: authorUid, ...data })
+            });
+        } catch { /* تجاهل */ }
+    }
+};
+
+// مستخدم حالي (بسيط بدون Firebase Auth)
+let currentUser = null;
+try {
+    const savedUser = localStorage.getItem('ccraft_user');
+    if (savedUser) currentUser = JSON.parse(savedUser);
+} catch { currentUser = null; }
+
+// عنوان الباك إند بتاع Nova AI — نفس السيرفر المستخدم في nova.html
+const NOVA_URL = "https://ghgh62131r.pythonanywhere.com";
+
+let myUsernameCache = null;
+async function getMyDisplayName() {
+    if (!currentUser) return 'cCraft Space User';
+    if (myUsernameCache) return myUsernameCache;
+    try {
+        const snap = await get(ref(db, `users/${currentUser.uid}/username`));
+        myUsernameCache = (snap.exists() && snap.val()) ? snap.val() : 'cCraft Space User';
+    } catch { myUsernameCache = 'cCraft Space User'; }
+    return myUsernameCache;
+}
+
+/* ============================================================
+   🎨 مكتبة أيقونات SVG خفيفة (بديل الإيموجيز) — كل أيقونة
+   عبارة عن سطر واحد نظيف بنفس نمط الخط (stroke) ومتناسقة مع
+   هوية الموقع البنفسجي/السماوي.
+   ============================================================ */
+const ICONS = {
+    thumb:   '<path d="M7 10v11H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z"/><path d="M7 10l4-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.94 2.5l-1.6 6A2 2 0 0 1 16.9 21H7"/>',
+    eye:     '<path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3"/>',
+    user:    '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/>',
+    folder:  '<path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8A2 2 0 0 1 21 9.5V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    map:     '<path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/>',
+    code:    '<path d="M9 6L3 12l6 6M15 6l6 6-6 6"/>',
+    sparkle: '<path d="M12 3l1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6z"/>',
+    robot:   '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M9 8V5a3 3 0 0 1 6 0v3"/><circle cx="9" cy="14" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="1.2" fill="currentColor" stroke="none"/><path d="M2 13h2M20 13h2"/>',
+    heartOutline: '<path d="M12 20.5s-7.5-4.6-10-9.3C.4 8 2 4.5 5.6 4c2.1-.3 4 .7 6.4 3.1C14.4 4.7 16.3 3.7 18.4 4 22 4.5 23.6 8 22 11.2c-2.5 4.7-10 9.3-10 9.3z"/>',
+    heartFill:    '<path d="M12 20.5s-7.5-4.6-10-9.3C.4 8 2 4.5 5.6 4c2.1-.3 4 .7 6.4 3.1C14.4 4.7 16.3 3.7 18.4 4 22 4.5 23.6 8 22 11.2c-2.5 4.7-10 9.3-10 9.3z" fill="currentColor"/>',
+    flag:    '<path d="M5 21V4"/><path d="M5 4h13l-3 4.5L18 13H5"/>',
+    copy:    '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+    check:   '<path d="M20 6L9 17l-5-5"/>',
+    lock:    '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    unlock:  '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7-2.6"/>',
+    warning: '<path d="M12 3L2 20h20z"/><path d="M12 10v4"/><circle cx="12" cy="17" r="0.7" fill="currentColor" stroke="none"/>',
+    search:  '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>',
+    star:    '<path d="M12 2.5l2.9 6.3 6.9.9-5 4.8 1.3 6.9L12 17.6 5.9 20.9 7.2 14l-5-4.8 6.9-.9z"/>',
+    hash:    '<path d="M5 9h14M5 15h14M10 3L8 21M16 3l-2 18"/>',
+    clock:   '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    chevronDown: '<path d="M6 9l6 6 6-6"/>',
+};
+function ic(name, size=14, cls='') {
+    const body = ICONS[name] || '';
+    return `<svg class="${cls}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+}
+
+document.getElementById('aibIcon').innerHTML = ic('robot', 15);
+
+// 🔔 إرسال إشعار لصاحب السكربت (لايك) — ما بيبعتش لنفسه
+function notifyAuthor(authorUid, text) {
+    if (!authorUid || !currentUser || authorUid === currentUser.uid) return;
+    db.pushNotification(authorUid, { type: 'like', text, timestamp: Date.now() });
+}
+
+let allScripts   = [];
+let filteredIds  = null;
+let activeFilter = 'all';
+let activeSort   = 'newest';
+let activeKeyFilter = 'all';
+let activeTagFilter = null;
+
+const codeStore = new Map();
+
+async function incrementViews(id) {
+    try {
+        const current = await db.getField('scripts', id, 'views');
+        const newViews = (current || 0) + 1;
+        await db.setField('scripts', id, 'views', newViews);
+    } catch { /* تجاهل */ }
+}
+
+let unsafeNameSet = new Set();
+
+function normalizeScriptName(name) {
+    return (name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+async function loadUnsafeNames() {
+    try {
+        const names = await db.getUnsafeNames();
+        unsafeNameSet = new Set(names.map(n => normalizeScriptName(n)));
+    } catch { unsafeNameSet = new Set(); }
+}
+
+async function loadScripts() {
+    await loadUnsafeNames();
+    // تحميل السكربتات من Supabase
+    const data = await db.getScripts();
+
+    allScripts = Object.entries(data)
+        .map(([id,s]) => ({id,...s}))
+        .filter(s => s.id && s.title && s.title.trim()) // ✅ استبعاد السجلات التالفة
+        .filter(s => !unsafeNameSet.has(normalizeScriptName(s.title))); // 🚫 إخفاء السكربتات المُحذّر منها
+    document.getElementById('scriptCount').innerText = allScripts.length;
+
+    renderTagsFilter();
+    renderAllScriptsIndex();
+
+    const q = getQuery();
+    renderScripts(q);
+}
+
+/* ============================================================
+   🗺️ فهرس روابط كامل لكل السكربتات (مش مرتبط بالباجينيشن/الفلاتر)
+   — كل سكربت بياخد <a href="script.html?id=..."> حقيقي هنا، عشان
+   أي زاحف (Googlebot) يلاقي كل السكربتات في نفس صفحة scripts.html
+   من غير ما يحتاج يدوس "عرض المزيد".
+   ============================================================ */
+function renderAllScriptsIndex() {
+    const box = document.getElementById('allScriptsIndex');
+    const list = document.getElementById('allScriptsLinksList');
+    if (!allScripts.length) { box.style.display = 'none'; return; }
+    list.innerHTML = allScripts
+        .map(s => `<a href="script.html?id=${encodeURIComponent(s.id)}">${escHTML(s.title || 'سكربت')}</a>`)
+        .join('');
+    box.style.display = 'block';
+    injectScriptsItemListSchema();
+}
+
+/* ============================================================
+   🚀 JSON-LD ItemList — مش عنصر مرئي، مجرد بيانات منظمة قياسية
+   بتدّي جوجل قائمة صريحة بكل رابط سكربت في الصفحة دفعة واحدة.
+   ده بيسرّع الاكتشاف والفهرسة، ومش له علاقة بإخفاء محتوى عن حد.
+   ============================================================ */
+function injectScriptsItemListSchema() {
+    const old = document.getElementById('scriptsItemListSchema');
+    if (old) old.remove();
+
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": allScripts.map((s, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "url": `https://ccraftspace.ddnsking.com/script.html?id=${encodeURIComponent(s.id)}`,
+            "name": s.title || 'سكربت'
+        }))
+    };
+
+    const tag = document.createElement('script');
+    tag.type = 'application/ld+json';
+    tag.id = 'scriptsItemListSchema';
+    tag.textContent = JSON.stringify(schema);
+    document.head.appendChild(tag);
+}
+
+function getQuery() {
+    return new URLSearchParams(location.search).get('search')?.toLowerCase().trim() || '';
+}
+
+function sortScripts(arr) {
+    const s = [...arr];
+    if (activeSort === '__ai__' && window.__aiScoreMap) {
+        return s.sort((a,b)=>(window.__aiScoreMap[b.id]||0)-(window.__aiScoreMap[a.id]||0));
+    }
+    if (activeSort === 'newest')  return s.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    if (activeSort === 'oldest')  return s.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+    if (activeSort === 'likes')   return s.sort((a,b)=>(b.likes||0)-(a.likes||0));
+    if (activeSort === 'rating')  return s.sort((a,b)=>{
+        const ra = a.votes ? a.rating/a.votes : 0;
+        const rb = b.votes ? b.rating/b.votes : 0;
+        return rb - ra;
+    });
+    return s;
+}
+
+/* ============================================================
+   🏷️ فلتر التاجات الديناميكي
+   ============================================================ */
+function renderTagsFilter() {
+    const row = document.getElementById('tagsFilterRow');
+    const allTags = new Set();
+    allScripts.forEach(s => (s.tags||[]).forEach(t => allTags.add(t)));
+    if (!allTags.size) { row.style.display = 'none'; return; }
+    row.style.display = 'flex';
+    row.innerHTML = `<span class="sort-label">${ic('hash',13)}تاجات:</span>` +
+        [...allTags].map(t => `<button type="button" class="filter-btn" data-tag="${escHTML(t)}">#${escHTML(t)}</button>`).join('');
+    row.querySelectorAll('[data-tag]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const t = btn.dataset.tag;
+            if (activeTagFilter === t) {
+                activeTagFilter = null;
+                btn.classList.remove('active');
+            } else {
+                row.querySelectorAll('[data-tag]').forEach(b => b.classList.remove('active'));
+                activeTagFilter = t;
+                btn.classList.add('active');
+            }
+            renderScripts(document.getElementById('searchScripts').value.toLowerCase());
+        });
+    });
+}
+
+document.querySelectorAll('[data-key]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-key]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeKeyFilter = btn.dataset.key;
+        renderScripts(document.getElementById('searchScripts').value.toLowerCase());
+    });
+});
+
+const PAGE_SIZE = 8;
+let visibleCount = PAGE_SIZE;
+let currentResults = [];
+let lastQuery = '';
+
+function renderScripts(query = '') {
+    const list = document.getElementById('scriptsList');
+    list.innerHTML = '';
+    lastQuery = query;
+
+    let results = allScripts;
+
+    if (filteredIds) {
+        results = results.filter(s => filteredIds.includes(s.id));
+    }
+    if (activeFilter !== 'all') {
+        results = results.filter(s => (s.category||'') === activeFilter);
+    }
+    if (activeKeyFilter === 'yes') results = results.filter(s => s.hasKey || s.key);
+    if (activeKeyFilter === 'no')  results = results.filter(s => !s.hasKey && !s.key);
+    if (activeTagFilter) results = results.filter(s => Array.isArray(s.tags) && s.tags.includes(activeTagFilter));
+
+    if (query && !filteredIds) {
+        // 🧠 بحث فوري بالكتابة يستخدم نفس محرك التطابق التقريبي/المرادفات
+        // بتاع البحث الذكي، بدل مطابقة نصية بسيطة، فيرتب النتائج
+        // بالأصلح أولاً ويتحمل الأخطاء الإملائية البسيطة كمان.
+        const fuzzy = smartSearchLocal(query, results);
+        if (fuzzy.length) {
+            // الترتيب الافتراضي وقت البحث هو "الأصلح" — لكن لو المستخدم
+            // اختار ترتيب معيّن يدويًا (غير "الأحدث") بنحترم اختياره
+            results = activeSort === 'newest' ? fuzzy : sortScripts(fuzzy);
+        } else {
+            results = sortScripts(results.filter(s =>
+                (s.title||'').toLowerCase().includes(query) ||
+                (s.category||'').toLowerCase().includes(query) ||
+                (s.map||'').toLowerCase().includes(query) ||
+                (s.description||'').toLowerCase().includes(query) ||
+                (s.author||'').toLowerCase().includes(query) ||
+                (Array.isArray(s.tags) ? s.tags.join(' ').toLowerCase() : '').includes(query)
+            ));
+        }
+    } else if (!filteredIds) {
+        results = sortScripts(results);
+    }
+    if (filteredIds) results = sortScripts(results);
+
+    document.getElementById('resultsCount').innerText = results.length;
+
+    // 🔄 أي تغيير في البحث أو الفلاتر بيرجّع العدد الظاهر لأول 8 من جديد
+    currentResults = results;
+    visibleCount = PAGE_SIZE;
+
+    if (!results.length) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <span class="es-icon">${ic('search',44)}</span>
+                <h3>لا توجد نتائج</h3>
+                <p>جرّب كلمات مختلفة أو استخدم البحث الذكي ${ic('robot',13)}</p>
+            </div>`;
+        document.getElementById('loadMoreBtn').style.display = 'none';
+        return;
+    }
+
+    renderVisibleCards();
+}
+
+function renderVisibleCards() {
+    const list = document.getElementById('scriptsList');
+    list.innerHTML = '';
+
+    const now = Date.now();
+    const isAiSearch = !!filteredIds;
+    const slice = currentResults.slice(0, visibleCount);
+
+    slice.forEach((s, i) => {
+        const isNew      = (now - (s.timestamp||0)) < 3 * 24 * 3600 * 1000;
+        const isAiMatch  = isAiSearch;
+        const avg    = s.votes ? (s.rating / s.votes) : 0;
+        const liked  = !!localStorage.getItem(`liked_${s.id}`);
+        const rated  = !!localStorage.getItem(`rated_${s.id}`);
+
+        const card = document.createElement('div');
+        card.className = 'script-card';
+        card.dataset.cat = s.category || 'other';
+        card.style.animationDelay = `${Math.min(i * 0.04, 0.4)}s`;
+
+        const codeFull = escHTML(s.code || '-- لا يوجد كود');
+        const codeSnippet = escHTML((s.code || '').replace(/\s+/g, ' ').trim().slice(0, 70));
+        const titleHTML = lastQuery ? highlightMatch(s.title || 'بدون عنوان', lastQuery) : escHTML(s.title || 'بدون عنوان');
+
+        const hasKeyFlag = !!(s.hasKey || s.key);
+        const keyBadge = hasKeyFlag
+            ? `<span class="sc-key-badge">${ic('lock',12)}يتطلب مفتاح</span>`
+            : `<span class="sc-key-badge" style="background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.25);color:#4ade80">${ic('unlock',12)}بدون مفتاح</span>`;
+        const tagBadges = (s.tags||[]).map(t => `<span class="sc-tag-badge">#${escHTML(t)}</span>`).join('');
+
+        const scriptUrl = `script.html?id=${encodeURIComponent(s.id)}`;
+
+        card.innerHTML = `
+            <a href="${scriptUrl}" class="sc-card-link" aria-label="${escHTML(s.title || 'عرض السكربت')}">${escHTML(s.title || 'عرض السكربت')}</a>
+            ${s.image ? `<div style="overflow:hidden;border-radius:20px 20px 0 0"><img class="sc-thumb" src="${s.image}" alt="صورة السكربت" loading="lazy"></div>` : ''}
+            <div class="sc-body">
+                <div class="sc-header">
+                    <div class="sc-title">${titleHTML}</div>
+                    ${s.verified ? `<span class="sc-verified-badge" title="سكربت موثّق من الإدارة"><svg width="15" height="15" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="vg-${escHTML(s.id)}" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#00f2fe"/></linearGradient></defs><path d="M12 0l2.39 1.7 2.92-.2 1.29 2.6 2.6 1.29-.2 2.92L22.7 10.5 21 12l1.7 2.39-.2 2.92-2.6 1.29-1.29 2.6-2.92-.2L12 24l-2.39-1.7-2.92.2-1.29-2.6-2.6-1.29.2-2.92L1.3 13.5 3 12 1.3 9.61l.2-2.92 2.6-1.29 1.29-2.6 2.92.2L12 0z" fill="url(#vg-${escHTML(s.id)})"/><path d="M17 8.5l-6.2 7-3.3-3.2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>` : ''}
+                    ${isAiMatch ? `<span class="sc-ai-badge">${ic('robot',11)}AI</span>` : ''}
+                    ${isNew ? `<span class="sc-new-badge">${ic('sparkle',10)}جديد</span>` : ''}
+                </div>
+                <div class="sc-badges">
+                    <span class="sc-cat">${ic('folder',12)}${escHTML(s.category || '—')}</span>
+                    ${s.map ? `<span class="sc-map">${ic('map',12)}${escHTML(s.map)}</span>` : ''}
+                    ${keyBadge}
+                    ${tagBadges}
+                </div>
+                <div class="sc-stats">
+                    <span class="sc-stat">${ic('thumb',13)}<strong>${s.likes||0}</strong></span>
+                    <span class="sc-stat">${ic('eye',13)}<strong>${s.views||0}</strong></span>
+                    <span class="sc-stat">${ic('user',13)}${escHTML(s.author||'cCraft Space User')}</span>
+                    <span style="margin-right:auto"></span>
+                    <div class="sc-stars" data-id="${s.id}" data-rated="${rated}">
+                        ${[1,2,3,4,5].map(n=>`<span class="sc-star${n<=Math.round(avg)?' filled':''}" data-v="${n}">${ic('star',15)}</span>`).join('')}
+                        <span class="sc-avg">${s.votes ? `<strong>${avg.toFixed(1)}</strong> (${s.votes})` : '—'}</span>
+                    </div>
+                </div>
+                <div class="sc-code-snippet">${ic('code',13)}${codeSnippet}${(s.code || '').length > 70 ? '…' : ''}</div>
+                <button type="button" class="sc-preview-btn" onclick="event.stopPropagation(); toggleCodePreview(this)">${ic('eye',13)}<span class="spb-label">معاينة سريعة</span></button>
+                <pre class="sc-code-full" onclick="event.stopPropagation()">${codeFull}</pre>
+            </div>
+            <div class="sc-footer">
+                <a class="sc-btn view" href="${scriptUrl}" data-id="${s.id}">${ic('eye',14)}عرض</a>
+                <button class="sc-btn copy"   data-id="${s.id}">${ic('copy',14)}نسخ</button>
+                <button class="sc-btn like${liked?' liked':''}" data-id="${s.id}" ${liked?'disabled':''}>
+                    <span class="like-icon">${ic(liked?'heartFill':'heartOutline',14)}</span> <span class="lc">${s.likes||0}</span>
+                    <span class="like-burst"></span>
+                </button>
+                <button class="sc-btn report" data-id="${s.id}" title="إبلاغ">${ic('flag',14)}</button>
+            </div>
+        `;
+
+        codeStore.set(s.id, s.code || '');
+
+        // رابط الكارت الكامل (وزر عرض) — رابط <a> حقيقي عشان جوجل يقدر يزحف لصفحة كل سكربت،
+        // مع تسجيل عدد المشاهدات لحظة الضغط قبل ما التنقل يحصل
+        card.querySelector('.sc-card-link').addEventListener('click', () => incrementViews(s.id));
+        card.querySelector('.sc-btn.view').addEventListener('click', () => incrementViews(s.id));
+
+        card.querySelector('.sc-btn.copy').onclick = async e => {
+            e.stopPropagation();
+            const btn = e.currentTarget;
+            const id   = btn.dataset.id;
+            const raw  = codeStore.get(id) || '';
+            if (!raw) { alert('لا يوجد كود لهذا السكربت'); return; }
+            const code = withCopyWarning(raw, !!s.verified);
+            const restore = () => { btn.innerHTML = `${ic('copy',14)}نسخ`; btn.style.background=''; btn.style.color=''; };
+            try {
+                await navigator.clipboard.writeText(code);
+                btn.innerHTML = `${ic('check',14)}تم النسخ`;
+                btn.style.background = 'rgba(74,222,128,0.15)';
+                btn.style.color = 'var(--success)';
+                setTimeout(restore, 2200);
+            } catch {
+                const ta = document.createElement('textarea');
+                ta.value = code;
+                ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+                btn.innerHTML = `${ic('check',14)}تم`;
+                setTimeout(restore, 2000);
+            }
+        };
+
+        const likeBtn = card.querySelector('.sc-btn.like');
+        likeBtn.onclick = async e => {
+            e.stopPropagation();
+            if (liked || likeBtn.disabled) return;
+            // تحديث اللايكات في Supabase
+            const currentLikes = await db.getField('scripts', s.id, 'likes');
+            const newLikes = (currentLikes || 0) + 1;
+            await db.setField('scripts', s.id, 'likes', newLikes);
+            likeBtn.querySelector('.lc').innerText = newLikes;
+            likeBtn.classList.add('liked');
+            likeBtn.querySelector('.like-icon').innerHTML = ic('heartFill', 14);
+            likeBtn.disabled = true;
+            localStorage.setItem(`liked_${s.id}`, 'true');
+
+            // 💥 أنيميشن: نبضة قلب + رشّة جزيئات صغيرة حوالين الزرار
+            likeBtn.classList.add('pulse');
+            spawnLikeBurst(likeBtn.querySelector('.like-burst'));
+            setTimeout(() => likeBtn.classList.remove('pulse'), 600);
+
+            // 🔔 إشعار لصاحب السكربت باللايك (لو المستخدم مسجل دخول)
+            if (currentUser) {
+                const likerName = await getMyDisplayName();
+                notifyAuthor(s.authorUid, `${likerName} أعجب بسكربتك: ${s.title || 'سكربت'}`);
+            }
+        };
+
+        card.querySelector('.sc-btn.report').onclick = e => {
+            e.stopPropagation();
+            location.href = `report.html?id=${s.id}`;
+        };
+
+        const starsEl = card.querySelector('.sc-stars');
+        const starEls = [...starsEl.querySelectorAll('.sc-star')];
+
+        // ⭐ معاينة عند المرور بالماوس: تلوين كل النجوم لحد النجمة اللي تحتها الماوس (يتوقف تلقائيًا بعد التقييم)
+        starEls.forEach(star => {
+            star.addEventListener('mouseenter', () => {
+                if (starsEl.dataset.rated === 'true') return;
+                const v = parseInt(star.dataset.v);
+                starEls.forEach(st => st.classList.toggle('hover-fill', parseInt(st.dataset.v) <= v));
+            });
+        });
+        starsEl.addEventListener('mouseleave', () => {
+            starEls.forEach(st => st.classList.remove('hover-fill'));
+        });
+
+        starEls.forEach(star => {
+            star.addEventListener('click', async e => {
+                e.stopPropagation();
+                if (starsEl.dataset.rated === 'true') return;
+                const val = parseInt(star.dataset.v);
+                // تحديث التقييم في Supabase
+                const curRating = await db.getField('scripts', s.id, 'rating') || 0;
+                const curVotes  = await db.getField('scripts', s.id, 'votes')  || 0;
+                const newR = curRating + val;
+                const newV = curVotes + 1;
+                await fetch(`${SUPABASE_URL}/rest/v1/scripts?id=eq.${encodeURIComponent(s.id)}`, {
+                    method: 'PATCH',
+                    headers: SB_HEADERS,
+                    body: JSON.stringify({ rating: newR, votes: newV })
+                });
+                localStorage.setItem(`rated_${s.id}`, 'true');
+                starsEl.dataset.rated = 'true';
+                const newAvg = newR / newV;
+                starsEl.querySelectorAll('.sc-star').forEach((st,idx) => {
+                    st.classList.toggle('filled', idx+1 <= Math.round(newAvg));
+                    if (idx+1 <= val) { st.classList.add('just-rated'); setTimeout(()=>st.classList.remove('just-rated'), 450); }
+                });
+                starsEl.querySelector('.sc-avg').innerHTML = `<strong>${newAvg.toFixed(1)}</strong> (${newV})`;
+            });
+        });
+
+        list.appendChild(card);
+    });
+
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (visibleCount < currentResults.length) {
+        loadMoreBtn.style.display = 'inline-flex';
+        loadMoreBtn.style.alignItems = 'center';
+        loadMoreBtn.style.gap = '6px';
+        loadMoreBtn.innerHTML = `${ic('chevronDown',13)}عرض المزيد (${currentResults.length - visibleCount} متبقي)`;
+    } else {
+        loadMoreBtn.style.display = 'none';
+    }
+}
+
+// 💥 رشّة جزيئات صغيرة تتفرقع حوالين زرار اللايك لحظة الضغط عليه
+function spawnLikeBurst(container) {
+    if (!container) return;
+    container.innerHTML = '';
+    const n = 8;
+    for (let i = 0; i < n; i++) {
+        const p = document.createElement('span');
+        const angle = (Math.PI * 2 * i) / n + (Math.random()*0.4-0.2);
+        const dist  = 13 + Math.random()*7;
+        p.style.setProperty('--bx', `${Math.cos(angle)*dist}px`);
+        p.style.setProperty('--by', `${Math.sin(angle)*dist}px`);
+        p.style.background = i % 2 ? '#f87171' : '#fb923c';
+        container.appendChild(p);
+    }
+    setTimeout(() => { container.innerHTML = ''; }, 650);
+}
+
+document.getElementById('loadMoreBtn').addEventListener('click', () => {
+    visibleCount += PAGE_SIZE;
+    renderVisibleCards();
+});
+
+function escHTML(s) {
+    return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+const UNVERIFIED_WARNING = '--[[\n\tتحذير هذا السكربت ليس تم التحقق منه من قبل cCraft space يرجي الحظر منه\n]]\n\n';
+
+// يضيف تعليق تحذير أعلى الكود إذا كان السكربت غير موثّق — تعليق Lua فقط، لا يؤثر على تشغيل السكربت
+function withCopyWarning(code, verified) {
+    if (verified) return code;
+    return UNVERIFIED_WARNING + code;
+}
+
+/* ============================================================
+   🔎 محرك المطابقة التقريبية — أقوى من مجرد substring:
+   - تطابق كامل / بداية / احتواء (سريع، وزن عالي)
+   - تطابق على مستوى الكلمات (يدعم ترتيب مختلف للكلمات)
+   - Levenshtein distance محدود لتحمّل الأخطاء الإملائية البسيطة
+     (زي "سكريبت" بدل "سكربت" أو حرف زايد/ناقص)
+   - Subsequence fallback للحالات الصعبة
+   ============================================================ */
+function levenshtein(a, b, maxDist) {
+    if (Math.abs(a.length - b.length) > maxDist) return maxDist + 1;
+    const dp = Array.from({length: a.length+1}, (_,i)=>[i, ...Array(b.length).fill(0)]);
+    for (let j=0;j<=b.length;j++) dp[0][j]=j;
+    for (let i=1;i<=a.length;i++) {
+        let rowMin = Infinity;
+        for (let j=1;j<=b.length;j++) {
+            const cost = a[i-1]===b[j-1] ? 0 : 1;
+            dp[i][j] = Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
+            rowMin = Math.min(rowMin, dp[i][j]);
+        }
+        if (rowMin > maxDist) return maxDist + 1;
+    }
+    return dp[a.length][b.length];
+}
+
+function fuzzyScore(text, query) {
+    if (!text || !query) return 0;
+    text  = text.toLowerCase().trim();
+    query = query.toLowerCase().trim();
+
+    if (text === query)            return 100;
+    if (text.startsWith(query))    return 90;
+    if (text.includes(query))      return 80;
+
+    const tWords = text.split(/\s+/);
+    const qWords = query.split(/\s+/);
+    let wordScore = 0;
+    for (const qw of qWords) {
+        if (tWords.some(tw => tw === qw))          wordScore += 20;
+        else if (tWords.some(tw => tw.includes(qw))) wordScore += 12;
+        else if (tWords.some(tw => qw.includes(tw) && tw.length > 2)) wordScore += 6;
+        else if (qw.length >= 3 && tWords.some(tw => tw.length >= 3 && levenshtein(tw, qw, 2) <= (qw.length>=6?2:1))) wordScore += 10;
+    }
+    if (wordScore > 0) return Math.min(70, wordScore);
+
+    if (query.length >= 3) {
+        const dist = levenshtein(text.slice(0, query.length+2), query, 2);
+        if (dist <= 2) return Math.max(35, 55 - dist*10);
+    }
+
+    let qi = 0;
+    for (let ti = 0; ti < text.length && qi < query.length; ti++) {
+        if (text[ti] === query[qi]) qi++;
+    }
+    if (qi === query.length) return Math.max(5, Math.round(40 * qi / text.length));
+
+    return 0;
+}
+
+function normalizeAr(t) {
+    return (t||'')
+        .replace(/[أإآ]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        .toLowerCase()
+        .trim();
+}
+
+/* ============================================================
+   🔤 قاموس مرادفات عربي↔إنجليزي لأشهر مصطلحات سكربتات Roblox
+   — بيتطبّق على نص البحث نفسه (مش على عناوين السكربتات) عشان لو
+   حد كتب "سرقة بيض" يتحول لبحث يشمل "steal egg" كمان، فيطابق
+   سكربت اسمه فعليًا "Steal Egg" بالإنجليزي.
+   ده شبكة أمان محلية بس، مش بديل عن فهم Nova AI الدلالي.
+   ============================================================ */
+const SYNONYM_MAP = {
+    'سرقة': 'steal', 'سرقه': 'steal', 'اسرق': 'steal',
+    'بيض': 'egg', 'بيضة': 'egg', 'بيضه': 'egg',
+    'سرعة': 'speed', 'سرعه': 'speed',
+    'طيران': 'fly', 'طير': 'fly',
+    'قفز': 'jump',
+    'قتل': 'kill',
+    'اموال': 'money', 'فلوس': 'money', 'كاش': 'cash',
+    'مفاتيح': 'keys', 'مفتاح': 'key',
+    'زومبي': 'zombie',
+    'وحش': 'monster',
+    'قوة': 'strength', 'قوه': 'strength',
+    'اسلحة': 'weapons', 'سلاح': 'weapon',
+    'حماية': 'admin', 'ادمن': 'admin',
+    'لانهائي': 'infinite',
+    'اوتو': 'auto', 'تلقائي': 'auto',
+    'فارم': 'farm', 'زراعة': 'farm', 'زراعه': 'farm',
+    'كنز': 'treasure',
+    'قتال': 'fight', 'معركة': 'fight', 'معركه': 'fight'
+};
+
+// بيوسّع نص البحث (query) بس بالمرادفات الإنجليزية، عشان يطابق
+// عناوين إنجليزية زي "Steal Egg" لما حد يكتب "سرقة بيض"
+function expandWithSynonyms(text) {
+    if (!text) return text;
+    let expanded = text;
+    for (const [ar, en] of Object.entries(SYNONYM_MAP)) {
+        if (text.includes(ar)) expanded += ' ' + en;
+    }
+    return expanded;
+}
+
+function parseIntent(query) {
+    const q = query.toLowerCase();
+    const intent = { category: null, map: null, feature: null };
+
+    if (/game|جيم|لعب|سبيد|speed/.test(q))            intent.category = 'game';
+    if (/admin|ادمن|أدمن/.test(q))                      intent.category = 'admin';
+    if (/ai|ذكاء|npc/.test(q))                          intent.category = 'ai';
+
+    const maps = ['jailbreak','adopt me','bloxburg','arsenal','bedwars','doors',
+                  'da hood','brookhaven','pet sim','murder mystery'];
+    for (const m of maps) {
+        if (q.includes(m)) { intent.map = m; break; }
+    }
+
+    return intent;
+}
+
+/* ============================================================
+   🔍 البحث المحلي (يشتغل فورًا مع الكتابة + Fallback لو Nova
+   مش متاح) — بيرجّع مصفوفة النتائج المرتبة بالأصلح أولاً.
+   بياخد `pool` اختياري (مجموعة سكربتات جاهزة بعد الفلاتر) بدل
+   allScripts كاملة، عشان البحث الفوري يحترم الفلاتر النشطة.
+   ============================================================ */
+function smartSearchLocal(query, pool) {
+    const source = pool || allScripts;
+    if (!query || !source.length) return [];
+
+    // ✅ نوسّع نص البحث نفسه بالمرادفات (سرقة بيض -> سرقة بيض steal egg)
+    const qNorm   = expandWithSynonyms(normalizeAr(query));
+    const intent  = parseIntent(query);
+    const results = [];
+
+    for (const s of source) {
+        let score = 0;
+        const title    = normalizeAr(s.title);
+        const category = normalizeAr(s.category);
+        const map      = normalizeAr(s.map);
+        const desc     = normalizeAr(s.description);
+        const author   = normalizeAr(s.author);
+        const tags     = normalizeAr((s.tags||[]).join(' '));
+
+        score += fuzzyScore(title,    qNorm) * 3.0;
+        score += fuzzyScore(category, qNorm) * 1.5;
+        score += fuzzyScore(map,      qNorm) * 2.0;
+        score += fuzzyScore(desc,     qNorm) * 1.0;
+        score += fuzzyScore(author,   qNorm) * 0.5;
+        score += fuzzyScore(tags,     qNorm) * 1.5;
+
+        if (intent.category && (s.category||'').toLowerCase() === intent.category) score += 30;
+        if (intent.map      && map.includes(intent.map))  score += 25;
+
+        const likes  = s.likes  || 0;
+        const rating = s.votes  ? s.rating / s.votes : 0;
+        score += Math.min(15, likes  * 0.3);
+        score += Math.min(10, rating * 2);
+
+        if ((Date.now() - (s.timestamp||0)) < 7 * 86400000) score += 5;
+
+        if (score > 8) results.push({ ...s, _score: score });
+    }
+
+    return results.sort((a, b) => b._score - a._score);
+}
+
+/* ============================================================
+   🤖 البحث الذكي المدعوم من Nova AI
+   ----------------------------------------------------------------
+   بيبعت طلب البحث + قائمة مختصرة من السكربتات (من غير الكود) لباك
+   إند Nova، والموديل بيرجع الـ IDs المطابقة بأي ترتيب كلمات كتبها
+   المستخدم (مثلاً "سكربت كيبورد" و"كيبورد سكربت" بيدوا نفس النتيجة).
+   لو فشل الاتصال أو حصل rate limit، بيرجع تلقائيًا للبحث المحلي.
+   ============================================================ */
+async function novaSearch(query) {
+    const compactList = allScripts.map(s => ({
+        id: s.id,
+        title: s.title || '',
+        category: s.category || '',
+        map: s.map || '',
+        tags: s.tags || [],
+        description: s.description || ''
+    }));
+
+    const res = await fetch(`${NOVA_URL}/ai-search-scripts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, scripts: compactList })
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    console.log('%c[Nova Search] الرد الخام:', 'color:#8b5cf6;font-weight:bold', data);
+    console.log('%c[Nova Search] عدد السكربتات المرسلة:', 'color:#8b5cf6;font-weight:bold', compactList.length);
+
+    if (data.error === 'rate_limited') {
+        throw new Error('rate_limited');
+    }
+
+    const ids = Array.isArray(data.ids) ? data.ids : [];
+    // نحول الـ ids المرتبة لنفس شكل نتائج البحث المحلي (id + _score) عشان الترتيب يتحافظ عليه
+    return ids
+        .map(id => allScripts.find(s => s.id === id))
+        .filter(Boolean)
+        .map((s, idx) => ({ ...s, _score: ids.length - idx }));
+}
+
+function highlightMatch(text, query) {
+    if (!query || !text) return escHTML(text);
+    const safe = escHTML(text);
+    const words = query.trim().split(/\s+/).filter(w => w.length >= 2).map(w => w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+    if (!words.length) return safe;
+    const re = new RegExp(`(${words.join('|')})`, 'gi');
+    return safe.replace(re, '<mark>$1</mark>');
+}
+
+async function aiSearch() {
+    const query = document.getElementById('searchScripts').value.trim();
+    if (!query) return;
+    hideSuggestions();
+
+    const btn = document.getElementById('aiSearchBtn');
+    btn.disabled = true;
+    btn.innerHTML = `${ic('robot',15,'spin')}<span>جاري البحث</span>`;
+
+    const list = document.getElementById('scriptsList');
+    list.innerHTML = `<div class="ai-thinking">
+        <div class="ai-dots"><span></span><span></span><span></span></div>
+        <span>Nova بتحلل البحث...</span>
+    </div>`;
+
+    let results = [];
+    let usedFallback = false;
+
+    try {
+        results = await novaSearch(query);
+
+        // 🛟 Nova ردت بنجاح لكن ملقتش أي تطابق (ids: []) — قبل ما نستسلم
+        // ونقول "لا يوجد"، نجرب البحث المحلي (اللي بيفهم مرادفات زي
+        // سرقة=steal بيض=egg) كمحاولة أخيرة بدل عرض رسالة سلبية فورًا
+        if (results.length === 0) {
+            const localResults = smartSearchLocal(query);
+            if (localResults.length > 0) {
+                results = localResults;
+                usedFallback = true;
+            }
+        }
+    } catch (e) {
+        // فشل الاتصال بـ Nova (رفض، rate limit، أو مفيش إنترنت) -> نرجع للبحث المحلي
+        console.error('%c[Nova Search] فشل الاتصال:', 'color:#f87171;font-weight:bold', e);
+        usedFallback = true;
+        results = smartSearchLocal(query);
+    }
+
+    if (results.length > 0) {
+        filteredIds = results.map(s => s.id);
+        const scoreMap = Object.fromEntries(results.map(s => [s.id, s._score]));
+
+        const savedSort = activeSort;
+        activeSort = '__ai__';
+        window.__aiScoreMap = scoreMap;
+
+        const intent = parseIntent(query);
+        let bannerMsg = usedFallback
+            ? `<strong>${results.length}</strong> نتيجة (بحث محلي احتياطي)`
+            : `<strong>${results.length}</strong> نتيجة من Nova AI`;
+        if (intent.map)      bannerMsg += ` · ماب: ${intent.map}`;
+        if (intent.category) bannerMsg += ` · قسم: ${intent.category}`;
+
+        document.getElementById('aibIcon').innerHTML = ic('robot', 15);
+        showAiBanner(bannerMsg);
+        renderScripts(query);
+
+        activeSort = savedSort;
+        delete window.__aiScoreMap;
+
+    } else {
+        filteredIds = null;
+        document.getElementById('aibIcon').innerHTML = ic('warning', 15);
+        showAiBanner(`لا نتائج لـ "${escHTML(query)}" — عارض الكل`);
+        renderScripts('');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = `${ic('robot',15)}<span>بحث ذكي</span>`;
+}
+
+function showAiBanner(html) {
+    const banner = document.getElementById('aiBanner');
+    document.getElementById('aiBannerText').innerHTML = html;
+    banner.classList.add('show');
+}
+
+window.closeAiBanner = function() {
+    document.getElementById('aiBanner').classList.remove('show');
+    filteredIds = null;
+    renderScripts(document.getElementById('searchScripts').value.toLowerCase());
+};
+
+/* ============================================================
+   💡 اقتراحات فورية (autocomplete) — بتظهر تحت مربع البحث وانت
+   بتكتب، بتاخد أفضل 6 نتائج من نفس محرك المطابقة التقريبية،
+   وتتحكم فيها بالكيبورد (↑ ↓ Enter Esc)
+   ============================================================ */
+const suggestBox = document.getElementById('searchSuggest');
+let suggestIndex = -1;
+let suggestItems = [];
+
+function hideSuggestions() {
+    suggestBox.classList.remove('show');
+    suggestBox.innerHTML = '';
+    suggestIndex = -1;
+    suggestItems = [];
+}
+
+function renderSuggestions(query) {
+    if (!query) { hideSuggestions(); return; }
+    const results = smartSearchLocal(query).slice(0, 6);
+    if (!results.length) { hideSuggestions(); return; }
+
+    suggestItems = results;
+    suggestIndex = -1;
+    suggestBox.innerHTML = results.map((s, i) => `
+        <div class="ss-item" data-i="${i}">
+            ${ic('search',14)}
+            <span>${highlightMatch(s.title || 'سكربت', query)}</span>
+            <span class="ss-meta">${escHTML(s.category||'')}</span>
+        </div>`).join('');
+    suggestBox.classList.add('show');
+
+    suggestBox.querySelectorAll('.ss-item').forEach(item => {
+        item.addEventListener('click', () => selectSuggestion(parseInt(item.dataset.i)));
+    });
+}
+
+function selectSuggestion(i) {
+    const s = suggestItems[i];
+    if (!s) return;
+    const input = document.getElementById('searchScripts');
+    input.value = s.title || '';
+    updateURL(input.value.toLowerCase());
+    hideSuggestions();
+    filteredIds = null;
+    renderScripts(input.value.toLowerCase());
+}
+
+document.getElementById('searchScripts').addEventListener('input', e => {
+    const q = e.target.value.toLowerCase().trim();
+    updateURL(q);
+    if (!q) { filteredIds = null; closeAiBanner(); hideSuggestions(); renderScripts(''); return; }
+    renderScripts(q);
+    renderSuggestions(q);
+});
+
+document.getElementById('searchScripts').addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' && suggestItems.length) {
+        e.preventDefault();
+        suggestIndex = Math.min(suggestIndex + 1, suggestItems.length - 1);
+        updateSuggestHighlight();
+    } else if (e.key === 'ArrowUp' && suggestItems.length) {
+        e.preventDefault();
+        suggestIndex = Math.max(suggestIndex - 1, -1);
+        updateSuggestHighlight();
+    } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (suggestIndex >= 0 && suggestItems[suggestIndex]) {
+            selectSuggestion(suggestIndex);
+        } else {
+            aiSearch();
+        }
+    } else if (e.key === 'Escape') {
+        hideSuggestions();
+    }
+});
+
+function updateSuggestHighlight() {
+    suggestBox.querySelectorAll('.ss-item').forEach((el, i) => {
+        el.classList.toggle('active', i === suggestIndex);
+    });
+    const active = suggestBox.querySelector('.ss-item.active');
+    if (active) active.scrollIntoView({ block: 'nearest' });
+}
+
+document.addEventListener('click', e => {
+    if (!e.target.closest('.search-wrap')) hideSuggestions();
+});
+
+document.getElementById('aiSearchBtn').addEventListener('click', aiSearch);
+
+document.querySelectorAll('.filter-btn[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn[data-cat]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.cat;
+        renderScripts(document.getElementById('searchScripts').value.toLowerCase());
+    });
+});
+
+document.getElementById('sortSelect').addEventListener('change', e => {
+    activeSort = e.target.value;
+    renderScripts(document.getElementById('searchScripts').value.toLowerCase());
+});
+
+function updateURL(q) {
+    const url = new URL(location.href);
+    q ? url.searchParams.set('search',q) : url.searchParams.delete('search');
+    history.replaceState(null,'',url);
+}
+
+// ✅ رسم أولي فوري من البيانات الثابتة (لو موجودة) قبل ما Supabase يرد — بيضمن إن الزائر وبوتات الزحف يشوفوا محتوى حقيقي من أول لحظة
+function renderStaticFallback() {
+    try {
+        const data = window.__SCRIPTS_DATA__;
+        if (!data) return;
+        allScripts = Object.entries(data)
+            .map(([id,s]) => ({id,...s}))
+            .filter(s => s.id && s.title && s.title.trim());
+        document.getElementById('scriptCount').innerText = allScripts.length;
+        renderAllScriptsIndex();
+        renderScripts(getQuery());
+    } catch (e) { /* أي خطأ هنا لا يوقف تحميل الصفحة — Supabase هيكمل عادي بعد كده */ }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const q = new URLSearchParams(location.search).get('search') || '';
+    if (q) document.getElementById('searchScripts').value = q;
+    renderStaticFallback();
+    loadScripts();
+});
+
+</script>
+</body>
+</html>

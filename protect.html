@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>احمِ سكربتك | CCRAFT SPACE</title>
+  <meta name="description" content="احمِ سكربت Roblox بتاعك بنظام مفاتيح — CCRAFT SPACE">
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" type="image/jpeg" href="cCraft.jpg">
+  <link rel="stylesheet" href="styles.css">
+
+<style>
+body { min-height: 100svh; }
+
+.protect-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+}
+
+.pp-hero {
+    padding: 32px 0 20px;
+    text-align: center;
+}
+
+.pp-hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    font-weight: 900;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin: 0 0 8px;
+}
+
+.pp-hero p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.pp-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.pp-label {
+    font-size: 0.8rem; font-weight: 800; color: var(--text-muted);
+    margin-bottom: 8px; display: block;
+}
+
+.pp-input {
+    width: 100%;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--text-main);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.92rem;
+    outline: none;
+    box-sizing: border-box;
+    margin-bottom: 18px;
+    transition: var(--transition);
+}
+
+.pp-input:focus { border-color: var(--primary); }
+
+.pp-textarea {
+    width: 100%;
+    min-height: 260px;
+    background: #050810;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: #8be9fd;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    outline: none;
+    box-sizing: border-box;
+    direction: ltr;
+    text-align: left;
+    resize: vertical;
+    margin-bottom: 18px;
+    transition: var(--transition);
+}
+
+.pp-textarea:focus { border-color: var(--primary); }
+.pp-textarea::placeholder { color: #3a4a5a; }
+
+.pp-btn {
+    width: 100%;
+    background: var(--accent-gradient);
+    color: white; border: none;
+    border-radius: 14px; padding: 15px;
+    font-size: 0.95rem; font-weight: 900;
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+    margin: 0; transition: var(--transition);
+    box-shadow: 0 8px 24px rgba(139,92,246,0.35);
+}
+
+.pp-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.pp-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.pp-error {
+    display: none;
+    background: rgba(248,113,113,0.08);
+    border: 1px solid rgba(248,113,113,0.25);
+    color: #f87171;
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 0.85rem; margin-bottom: 16px;
+}
+.pp-error.show { display: block; }
+
+/* ---- نتيجة الحماية ---- */
+.pp-result { display: none; animation: fadeIn 0.4s ease both; }
+.pp-result.show { display: block; }
+
+.pp-success-badge {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.25);
+    border-radius: 14px; padding: 14px 18px;
+    color: #4ade80; font-weight: 800; font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.pp-field-box {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
+}
+
+.pp-field-box .lbl { font-size: 0.72rem; color: var(--text-muted); font-weight: 800; margin-bottom: 3px; }
+.pp-field-box .val {
+    font-family: 'Fira Code', monospace; font-size: 0.88rem;
+    color: var(--secondary); direction: ltr; text-align: left;
+    word-break: break-all;
+}
+
+.pp-copy-btn {
+    background: rgba(0,242,254,0.1); color: var(--secondary);
+    border: 1px solid rgba(0,242,254,0.2);
+    border-radius: 10px; padding: 8px 14px;
+    font-size: 0.76rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0;
+    flex-shrink: 0; transition: var(--transition);
+}
+.pp-copy-btn:hover { background: rgba(0,242,254,0.18); transform: none; filter: none; }
+
+.pp-loader-box {
+    background: #050810;
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem; line-height: 1.8;
+    color: #8be9fd; direction: ltr; text-align: left;
+    white-space: pre-wrap; word-break: break-all;
+    margin-bottom: 14px;
+    max-height: 300px; overflow-y: auto;
+}
+
+.pp-warn {
+    font-size: 0.78rem; color: var(--text-muted); line-height: 1.8;
+    background: rgba(251,191,36,0.06);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 10px; padding: 12px 16px;
+}
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<header>
+  <button onclick="location.href='index.html'">🏠 الصفحة الرئيسية</button>
+</header>
+
+<div class="protect-page">
+
+    <div class="pp-hero">
+        <h1>🔒 احمِ سكربتك</h1>
+        <p>الصق كود السكربت بتاعك تحت، وهنولّدلك لودر (كود آمن للنشر) ومفتاح خاص — الكود الحقيقي بيتخزن عندنا مشفّر ومايظهرش لحد.</p>
+    </div>
+
+    <div class="pp-card" id="formCard">
+        <label class="pp-label">اسم السكربت</label>
+        <input type="text" id="scriptTitle" class="pp-input" placeholder="مثال: Auto Farm - Blox Fruits">
+
+        <label class="pp-label">كود السكربت (Lua) — هيتخزن مشفّر ومحمي</label>
+        <textarea id="scriptCode" class="pp-textarea" placeholder="-- الصق كودك هنا"></textarea>
+
+        <div class="pp-error" id="ppError"></div>
+
+        <button type="button" class="pp-btn" id="protectBtn" onclick="protectScript()">🔐 احمِ السكربت الآن</button>
+    </div>
+
+    <div class="pp-result" id="resultBox">
+        <div class="pp-success-badge">✅ تم حماية السكربت بنجاح</div>
+
+        <div class="pp-card">
+            <div class="pp-field-box">
+                <div>
+                    <div class="lbl">معرّف السكربت (ID)</div>
+                    <div class="val" id="outScriptId">—</div>
+                </div>
+                <button type="button" class="pp-copy-btn" onclick="copyField('outScriptId', this)">📋 نسخ</button>
+            </div>
+
+            <div class="pp-field-box">
+                <div>
+                    <div class="lbl">مفتاحك الخاص (Key)</div>
+                    <div class="val" id="outKey">—</div>
+                </div>
+                <button type="button" class="pp-copy-btn" onclick="copyField('outKey', this)">📋 نسخ</button>
+            </div>
+
+            <label class="pp-label" style="margin-top:6px">📦 كود اللودر — ده اللي تنشره أو تديه للمستخدمين (مش الكود الحقيقي)</label>
+            <div class="pp-loader-box" id="outLoader">—</div>
+            <button type="button" class="pp-copy-btn" style="width:100%;justify-content:center;display:flex" onclick="copyField('outLoader', this)">📋 نسخ كود اللودر كامل</button>
+
+            <div class="pp-warn" style="margin-top:16px">
+                ⚠️ احتفظ بالمفتاح ده في مكان آمن. أي حد يحصل عليه هيقدر يشغّل السكربت. ده مفتاحك الشخصي للتجربة — عشان توزّع مفاتيح لمستخدمين تانيين هتحتاج لوحة تحكم منفصلة.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const BACKEND_URL = "https://ghgh62131r.pythonanywhere.com";
+
+function showError(msg) {
+    const box = document.getElementById('ppError');
+    box.innerText = msg;
+    box.classList.add('show');
+}
+function clearError() {
+    document.getElementById('ppError').classList.remove('show');
+}
+
+async function protectScript() {
+    clearError();
+    const title = document.getElementById('scriptTitle').value.trim();
+    const code  = document.getElementById('scriptCode').value.trim();
+
+    if (!code) { showError('لازم تلصق الكود الأول'); return; }
+
+    const btn = document.getElementById('protectBtn');
+    btn.disabled = true;
+    btn.innerText = '⏳ جارٍ الحماية...';
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/protect-script`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, code })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+            showError(data.message || 'حصل خطأ، حاول تاني');
+            return;
+        }
+
+        // ============================================================
+        // اللودر ده بيحسب مفتاح التشفير بنفسه (مش بياخده جاهز من
+        // السيرفر) — بمعادلة FNV1a32 + xorshift32 مطابقة تمامًا
+        // للسيرفر. الـ DERIVE_SALT ثابت ولازم يفضل متطابق مع
+        // DERIVE_SALT في get_script_endpoint.py.
+        // ملحوظة: بنستخدم مكتبة bit32 بدل العمليات المباشرة
+        // (&, ~, <<, >>) عشان تشتغل مع أي Executor حتى لو قديم.
+        // ============================================================
+        const loaderCode =
+`-- 🔒 CCRAFT SPACE PROTECTED SCRIPT LOADER
+local SCRIPT_ID = "${data.scriptId}"
+local YOUR_KEY  = "${data.key}"
+local DERIVE_SALT = "cCraftSpaceV1_9f3a"
+
+local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+
+-- فك Base64
+local b64chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+local function base64Decode(data)
+    data = data:gsub("[^" .. b64chars .. "=]", "")
+    local bytes = {}
+    local val, bits = 0, 0
+    for i = 1, #data do
+        local c = data:sub(i, i)
+        if c ~= "=" then
+            local idx = b64chars:find(c, 1, true) - 1
+            val = bit32.bor(bit32.lshift(val, 6), idx)
+            bits = bits + 6
+            if bits >= 8 then
+                bits = bits - 8
+                bytes[#bytes + 1] = string.char(bit32.band(bit32.rshift(val, bits), 0xFF))
+            end
+        end
+    end
+    return table.concat(bytes)
+end
+
+-- FNV-1a 32-bit hash (مطابق للسيرفر بالظبط)
+local function fnv1a32(str)
+    local h = 2166136261
+    for i = 1, #str do
+        h = bit32.bxor(h, string.byte(str, i))
+        h = bit32.band(h * 16777619, 0xFFFFFFFF)
+    end
+    return h
+end
+
+-- xorshift32 PRNG (مطابق للسيرفر بالظبط)
+local function xorshift32(state)
+    state = bit32.bxor(state, bit32.lshift(state, 13))
+    state = bit32.bxor(state, bit32.rshift(state, 17))
+    state = bit32.bxor(state, bit32.lshift(state, 5))
+    return bit32.band(state, 0xFFFFFFFF)
+end
+
+-- نولّد بايتات مفتاح التشفير من seed مشتق من SALT+KEY+SCRIPT_ID
+local function deriveKeyBytes(seedStr, length)
+    local seed = fnv1a32(seedStr)
+    if seed == 0 then seed = 1 end
+    local state = seed
+    local bytes = {}
+    for i = 1, length do
+        state = xorshift32(state)
+        bytes[i] = bit32.band(state, 0xFF)
+    end
+    return bytes
+end
+
+local function xorDecrypt(cipherBytes, keyBytes)
+    local out = {}
+    for i = 1, #cipherBytes do
+        local b = string.byte(cipherBytes, i)
+        local k = keyBytes[((i - 1) % #keyBytes) + 1]
+        out[i] = string.char(bit32.bxor(b, k))
+    end
+    return table.concat(out)
+end
+
+local success, result = pcall(function()
+    local encrypted = game:HttpGet(
+        "${BACKEND_URL}/get-script?id=" .. SCRIPT_ID ..
+        "&key=" .. YOUR_KEY .. "&hwid=" .. hwid
+    )
+    local cipherBytes = base64Decode(encrypted)
+    local seedStr = DERIVE_SALT .. ":" .. YOUR_KEY .. ":" .. SCRIPT_ID
+    local keyBytes = deriveKeyBytes(seedStr, 16)
+    return xorDecrypt(cipherBytes, keyBytes)
+end)
+
+if success then
+    loadstring(result)()
+else
+    warn("🔒 فشل الاتصال بسيرفر الحماية")
+end`;
+
+        document.getElementById('outScriptId').innerText = data.scriptId;
+        document.getElementById('outKey').innerText = data.key;
+        document.getElementById('outLoader').innerText = loaderCode;
+
+        document.getElementById('formCard').style.display = 'none';
+        document.getElementById('resultBox').classList.add('show');
+
+    } catch (e) {
+        showError('فشل الاتصال بالسيرفر، حاول تاني بعد شوية');
+    } finally {
+        btn.disabled = false;
+        btn.innerText = '🔐 احمِ السكربت الآن';
+    }
+}
+
+async function copyField(id, btn) {
+    const text = document.getElementById(id).innerText;
+    try {
+        await navigator.clipboard.writeText(text);
+        const old = btn.innerText;
+        btn.innerText = '✅ تم';
+        setTimeout(() => { btn.innerText = old; }, 1800);
+    } catch {
+        alert('انسخ يدويًا: ' + text);
+    }
+}
+</script>
+
+</body>
+</html>

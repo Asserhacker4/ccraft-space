@@ -1,0 +1,2607 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | لوحة الإدارة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+:root {
+    --sb-w: 258px;
+    --topbar-h: 56px;
+    --s0: #07080f;
+    --s1: #0d0f1e;
+    --s2: #111422;
+    --s3: #161929;
+    --bg: rgba(13,15,30,0.95);
+    --border: rgba(255,255,255,0.06);
+    --glow: rgba(139,92,246,0.18);
+    --accent: #8b5cf6;
+    --cyan: #00f2fe;
+    --hi: #f0f0ff;
+    --mid: #7878a0;
+    --lo: #3e3e58;
+    --red: #f87171;
+    --green: #4ade80;
+    --yellow: #fbbf24;
+    --tr: all 0.18s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Tajawal',sans-serif;background:var(--s0);color:var(--hi);min-height:100vh;overflow-x:hidden;}
+
+/* ═══ LOGIN ═══ */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 60% 60% at 30% 20%,rgba(139,92,246,0.1) 0%,transparent 70%),
+  radial-gradient(ellipse 50% 50% at 80% 80%,rgba(0,242,254,0.05) 0%,transparent 70%),var(--s0);padding:20px;}
+.login-box{background:rgba(13,15,30,0.92);border:1px solid var(--glow);border-radius:22px;
+  padding:44px 38px;width:100%;max-width:400px;text-align:center;
+  backdrop-filter:blur(20px);box-shadow:0 40px 80px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.05);
+  animation:loginIn 0.5s cubic-bezier(0.22,1,0.36,1) both;position:relative;overflow:hidden;}
+@keyframes loginIn{from{opacity:0;transform:translateY(20px) scale(0.97)}to{opacity:1;transform:none}}
+.login-box::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.6),transparent);}
+.login-box .lk{font-size:2.8rem;margin-bottom:12px;display:block;filter:drop-shadow(0 0 14px rgba(139,92,246,0.5));}
+.login-box h1{font-size:1.65rem;font-weight:900;background:linear-gradient(135deg,#a78bfa,#00f2fe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
+.login-box p{color:var(--mid);font-size:0.83rem;margin-bottom:24px;}
+.login-box input{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;color:var(--hi);font-family:'Tajawal',sans-serif;font-size:0.9rem;outline:none;
+  direction:rtl;transition:var(--tr);margin-bottom:9px;}
+.login-box input:focus{border-color:rgba(139,92,246,0.45);box-shadow:0 0 0 3px rgba(139,92,246,0.08);}
+.login-box input::placeholder{color:var(--lo);}
+#loginBtn{width:100%;margin-top:4px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;
+  border:none;border-radius:12px;padding:13px;font-size:0.92rem;font-weight:800;
+  font-family:'Tajawal',sans-serif;cursor:pointer;box-shadow:0 8px 22px rgba(124,58,237,0.4);transition:var(--tr);}
+#loginBtn:hover{box-shadow:0 12px 30px rgba(124,58,237,0.55);transform:translateY(-1px);}
+#loginError{color:var(--red);font-size:0.8rem;margin-top:10px;min-height:18px;}
+
+.login-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--lo);font-size:0.72rem;}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+
+#googleLoginBtn{width:100%;background:rgba(255,255,255,0.04);color:var(--hi);
+  border:1px solid var(--border);border-radius:12px;padding:12px;font-size:0.88rem;font-weight:700;
+  font-family:'Tajawal',sans-serif;cursor:pointer;transition:var(--tr);
+  display:flex;align-items:center;justify-content:center;gap:10px;}
+#googleLoginBtn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.16);transform:translateY(-1px);}
+#googleLoginBtn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+
+/* ═══ LAYOUT ═══ */
+#adminPanel{display:none;}
+.admin-layout{display:flex;min-height:100vh;}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:var(--sb-w);background:var(--s1);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;top:0;right:0;height:100vh;
+  z-index:50;overflow-y:auto;overflow-x:hidden;}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--glow);border-radius:2px;}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:11px;position:relative;}
+.sb-logo::after{content:'';position:absolute;bottom:0;left:18%;right:18%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,0.4),transparent);}
+.logo-icon{width:38px;height:38px;border-radius:11px;
+  background:linear-gradient(135deg,#7c3aed,#00bcd4);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;
+  box-shadow:0 4px 14px rgba(124,58,237,0.4);}
+.sb-logo-txt h2{font-size:0.85rem;font-weight:900;color:var(--hi);letter-spacing:0.5px;}
+.sb-logo-txt p{font-size:0.62rem;color:var(--lo);margin-top:1px;}
+.sb-nav{flex:1;padding:8px 9px;display:flex;flex-direction:column;gap:1px;}
+.nav-sec{font-size:0.56rem;font-weight:900;color:var(--lo);text-transform:uppercase;letter-spacing:2px;padding:10px 9px 4px;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:9px;
+  cursor:pointer;color:var(--mid);font-weight:700;font-size:0.84rem;
+  border:1px solid transparent;background:none;width:100%;text-align:right;
+  font-family:'Tajawal',sans-serif;margin:0;transition:var(--tr);position:relative;}
+.nav-item:hover{background:rgba(139,92,246,0.07);color:var(--hi);transform:none;filter:none;}
+.nav-item.active{background:linear-gradient(135deg,rgba(124,58,237,0.18),rgba(0,242,254,0.05));
+  color:#a78bfa;border-color:rgba(139,92,246,0.22);}
+.nav-item.active::before{content:'';position:absolute;right:0;top:20%;bottom:20%;
+  width:3px;background:linear-gradient(to bottom,#8b5cf6,#00f2fe);border-radius:2px 0 0 2px;}
+.nav-icon{font-size:0.9rem;flex-shrink:0;width:17px;text-align:center;}
+.nav-badge{margin-right:auto;background:#7c3aed;color:white;font-size:0.57rem;
+  font-weight:900;padding:2px 6px;border-radius:50px;min-width:17px;text-align:center;line-height:1.4;}
+.nav-badge.red{background:var(--red);}
+.sb-footer{padding:10px 9px;border-top:1px solid var(--border);}
+.admin-user-mini{display:flex;align-items:center;gap:9px;background:rgba(139,92,246,0.07);
+  border:1px solid rgba(139,92,246,0.14);border-radius:11px;padding:9px 11px;margin-bottom:7px;}
+.admin-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#00bcd4);
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.8rem;color:white;flex-shrink:0;}
+#adminLogoutBtn{width:100%;background:rgba(248,113,113,0.07);color:var(--red);
+  border:1px solid rgba(248,113,113,0.16);border-radius:9px;padding:8px;
+  font-size:0.8rem;font-weight:800;margin:0;font-family:'Tajawal',sans-serif;cursor:pointer;transition:var(--tr);}
+#adminLogoutBtn:hover{background:var(--red);color:white;transform:none;filter:none;}
+
+/* ═══ MAIN ═══ */
+.admin-main{flex:1;margin-right:var(--sb-w);max-width:calc(100vw - var(--sb-w));display:flex;flex-direction:column;}
+.topbar{position:sticky;top:0;z-index:40;height:var(--topbar-h);
+  background:rgba(7,8,15,0.88);border-bottom:1px solid var(--border);
+  backdrop-filter:blur(16px);display:flex;align-items:center;padding:0 26px;gap:14px;flex-shrink:0;}
+.topbar h1{font-size:1.1rem;font-weight:900;
+  background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.topbar-pill{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:50px;padding:4px 11px 4px 5px;margin-right:auto;}
+.main-content{flex:1;padding:22px 26px 80px;overflow-y:auto;}
+
+/* ═══ SECTIONS ═══ */
+.section{display:none;animation:secIn 0.3s cubic-bezier(0.22,1,0.36,1) both;}
+.section.active{display:block;}
+@keyframes secIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ═══ STAT CARDS ═══ */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-bottom:22px;}
+.stat-box{background:var(--s2);border:1px solid var(--border);border-radius:15px;
+  padding:17px 15px;position:relative;overflow:hidden;cursor:default;transition:var(--tr);}
+.stat-box::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0.7;}
+.stat-box:nth-child(1)::after{background:linear-gradient(90deg,#8b5cf6,#6d28d9);}
+.stat-box:nth-child(2)::after{background:linear-gradient(90deg,#00f2fe,#00bcd4);}
+.stat-box:nth-child(3)::after{background:linear-gradient(90deg,#f87171,#ef4444);}
+.stat-box:nth-child(4)::after{background:linear-gradient(90deg,#fbbf24,#f59e0b);}
+.stat-box:nth-child(5)::after{background:linear-gradient(90deg,#4ade80,#22c55e);}
+.stat-box:nth-child(6)::after{background:linear-gradient(90deg,#a78bfa,#8b5cf6);}
+.stat-box:hover{border-color:rgba(139,92,246,0.22);transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.3);}
+.s-icon{font-size:1.4rem;margin-bottom:7px;display:block;}
+.s-num{font-size:1.75rem;font-weight:900;display:block;color:var(--hi);line-height:1;margin-bottom:3px;}
+.s-label{color:var(--lo);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
+
+/* ═══ PANEL CARDS ═══ */
+.panel-card{background:var(--s2);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;}
+.pc-head{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.pc-title{font-size:0.68rem;font-weight:800;color:var(--lo);text-transform:uppercase;
+  letter-spacing:1.5px;flex:1;display:flex;align-items:center;gap:7px;}
+.pc-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+
+/* ═══ TABLE ═══ */
+.table-wrap{overflow-x:auto;}
+.data-table{width:100%;border-collapse:collapse;}
+.data-table thead tr{background:rgba(0,0,0,0.18);border-bottom:1px solid var(--border);}
+.data-table th{padding:9px 13px;text-align:right;font-size:0.62rem;font-weight:800;
+  color:var(--lo);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;}
+.data-table td{padding:11px 13px;font-size:0.84rem;color:var(--hi);
+  border-bottom:1px solid rgba(255,255,255,0.025);vertical-align:middle;}
+.data-table tr:hover td{background:rgba(139,92,246,0.035);}
+.data-table .empty-row td{text-align:center;color:var(--lo);padding:32px;}
+.t-title{font-weight:700;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.t-cat{background:rgba(139,92,246,0.1);color:#a78bfa;padding:2px 9px;border-radius:50px;
+  font-size:0.65rem;font-weight:800;white-space:nowrap;border:1px solid rgba(139,92,246,0.18);}
+.t-actions{display:flex;gap:4px;flex-wrap:wrap;}
+.t-btn{padding:4px 10px;border-radius:6px;font-size:0.7rem;font-weight:800;
+  border:1px solid transparent;cursor:pointer;font-family:'Tajawal',sans-serif;margin:0;transition:var(--tr);}
+.t-btn:hover{transform:translateY(-1px);}
+.t-btn.edit{background:rgba(0,242,254,0.07);color:#67e8f9;border-color:rgba(0,242,254,0.16);}
+.t-btn.del{background:rgba(248,113,113,0.07);color:var(--red);border-color:rgba(248,113,113,0.16);}
+.t-btn.view{background:rgba(139,92,246,0.07);color:#a78bfa;border-color:rgba(139,92,246,0.16);}
+.t-btn.ban{background:rgba(248,113,113,0.07);color:var(--red);border-color:rgba(248,113,113,0.16);}
+.t-btn.unban{background:rgba(74,222,128,0.07);color:var(--green);border-color:rgba(74,222,128,0.16);}
+.t-btn.pts{background:rgba(251,191,36,0.07);color:var(--yellow);border-color:rgba(251,191,36,0.16);}
+.t-btn.edit:hover{background:rgba(0,242,254,0.18);}
+.t-btn.del:hover{background:rgba(248,113,113,0.18);}
+.t-btn.view:hover{background:rgba(139,92,246,0.18);}
+.t-btn.ban:hover{background:rgba(248,113,113,0.18);}
+.t-btn.unban:hover{background:rgba(74,222,128,0.18);}
+.t-btn.pts:hover{background:rgba(251,191,36,0.18);}
+.banned-badge{background:rgba(248,113,113,0.1);color:var(--red);padding:2px 7px;
+  border-radius:50px;font-size:0.62rem;font-weight:800;border:1px solid rgba(248,113,113,0.18);}
+.t-icon{width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);background:rgba(255,255,255,0.03);}
+.status-pill{padding:2px 9px;border-radius:50px;font-size:0.62rem;font-weight:800;white-space:nowrap;border:1px solid transparent;}
+.status-pill.on{background:rgba(74,222,128,0.1);color:var(--green);border-color:rgba(74,222,128,0.18);}
+.status-pill.off{background:rgba(248,113,113,0.1);color:var(--red);border-color:rgba(248,113,113,0.18);}
+
+/* ═══ SEARCH BAR ═══ */
+.search-bar{display:flex;gap:7px;margin-bottom:11px;}
+.search-bar input{flex:1;margin:0;border-radius:11px;padding:9px 14px;font-size:0.85rem;
+  background:rgba(0,0,0,0.28);border:1px solid var(--border);color:var(--hi);
+  font-family:'Tajawal',sans-serif;outline:none;transition:var(--tr);}
+.search-bar input:focus{border-color:rgba(139,92,246,0.35);}
+.search-bar input::placeholder{color:var(--lo);}
+
+/* ═══ FIELD GROUPS ═══ */
+.field-group{display:flex;flex-direction:column;gap:5px;margin-bottom:11px;}
+.field-label{font-size:0.67rem;font-weight:800;color:var(--mid);text-transform:uppercase;letter-spacing:1px;}
+.field-group input,.field-group textarea,.field-group select{
+  background:rgba(0,0,0,0.28);border:1px solid var(--border);border-radius:11px;
+  padding:11px 13px;color:var(--hi);font-family:'Tajawal',sans-serif;
+  font-size:0.88rem;outline:none;transition:var(--tr);direction:rtl;margin:0;}
+.field-group input:focus,.field-group textarea:focus,.field-group select:focus{
+  border-color:rgba(139,92,246,0.38);box-shadow:0 0 0 3px rgba(139,92,246,0.07);}
+.field-group input::placeholder,.field-group textarea::placeholder{color:var(--lo);}
+.field-group textarea{resize:vertical;min-height:90px;}
+.field-group select option{background:#1a1a2e;}
+
+/* ═══ PUBLISH ═══ */
+.publish-layout{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start;}
+.pub-main,.pub-aside{display:flex;flex-direction:column;gap:13px;}
+
+.code-field{background:#040610!important;font-family:'Fira Code',monospace!important;
+  font-size:0.8rem!important;color:#8be9fd!important;min-height:200px!important;
+  border-color:rgba(0,242,254,0.1)!important;line-height:1.75!important;
+  direction:ltr!important;text-align:left!important;}
+.code-field:focus{border-color:rgba(0,242,254,0.28)!important;}
+
+.map-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px;}
+.map-mini-btn{background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:9px;padding:7px 5px;text-align:center;cursor:pointer;
+  font-size:0.65rem;font-weight:700;color:var(--mid);transition:var(--tr);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  font-family:'Tajawal',sans-serif;}
+.map-mini-btn:hover{border-color:rgba(139,92,246,0.3);color:var(--hi);}
+.map-mini-btn.selected{background:rgba(139,92,246,0.14);border-color:rgba(139,92,246,0.38);color:#a78bfa;}
+.map-mini-btn .mi-icon{font-size:1.1rem;}
+
+.img-upload-zone{border:2px dashed var(--border);border-radius:11px;padding:22px;
+  text-align:center;cursor:pointer;transition:var(--tr);background:rgba(0,0,0,0.18);
+  position:relative;overflow:hidden;}
+.img-upload-zone:hover{border-color:rgba(139,92,246,0.32);background:rgba(139,92,246,0.04);}
+.img-upload-zone.has-img{border-style:solid;border-color:rgba(139,92,246,0.3);padding:0;}
+.img-upload-zone img{width:100%;max-height:180px;object-fit:cover;border-radius:9px;display:none;}
+.img-upload-zone.has-img img{display:block;}
+.img-upload-zone.has-img .img-ph{display:none;}
+.ip-icon{font-size:1.8rem;display:block;margin-bottom:7px;}
+.ip-text{font-size:0.75rem;color:var(--lo);}
+.ip-limit{font-size:0.62rem;color:var(--lo);margin-top:3px;opacity:0.7;}
+
+.preview-card{background:var(--s3);border:1px solid var(--glow);border-radius:13px;padding:14px;}
+.preview-title{font-size:0.86rem;font-weight:800;color:var(--hi);margin-bottom:6px;}
+.preview-meta{font-size:0.7rem;color:var(--lo);display:flex;gap:8px;flex-wrap:wrap;}
+
+.char-counter{font-size:0.62rem;color:var(--lo);text-align:left;font-family:'Fira Code',monospace;}
+.char-counter.warn{color:var(--yellow);}
+
+.pub-submit-btn{width:100%;background:linear-gradient(135deg,#7c3aed,#5b21b6);
+  color:white;border:none;border-radius:13px;padding:13px;font-size:0.92rem;font-weight:900;
+  font-family:'Tajawal',sans-serif;cursor:pointer;
+  box-shadow:0 8px 22px rgba(124,58,237,0.35);transition:var(--tr);
+  display:flex;align-items:center;justify-content:center;gap:7px;}
+.pub-submit-btn:hover{box-shadow:0 12px 30px rgba(124,58,237,0.5);transform:translateY(-2px);}
+.pub-submit-btn:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+
+/* ═══ CONTROL CARDS ═══ */
+.control-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px;margin-bottom:14px;}
+.control-card{background:var(--s2);border:1px solid var(--border);border-radius:14px;padding:16px;transition:var(--tr);}
+.control-card:hover{border-color:rgba(139,92,246,0.18);}
+.control-card h4{font-size:0.65rem;font-weight:800;color:var(--lo);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.ctrl-row{display:flex;gap:6px;align-items:center;margin-bottom:7px;}
+.ctrl-row input,.ctrl-row select{flex:1;background:rgba(0,0,0,0.28);border:1px solid var(--border);
+  border-radius:9px;padding:8px 11px;color:var(--hi);font-family:'Tajawal',sans-serif;
+  font-size:0.83rem;outline:none;transition:var(--tr);margin:0;}
+.ctrl-row input:focus,.ctrl-row select:focus{border-color:rgba(139,92,246,0.32);}
+.ctrl-row input::placeholder{color:var(--lo);}
+.ctrl-btn{flex-shrink:0;border-radius:9px;padding:8px 13px;font-size:0.78rem;font-weight:800;
+  border:1px solid transparent;font-family:'Tajawal',sans-serif;cursor:pointer;transition:var(--tr);white-space:nowrap;margin:0;}
+.ctrl-btn.gold{background:rgba(251,191,36,0.1);color:var(--yellow);border-color:rgba(251,191,36,0.22);}
+.ctrl-btn.purple{background:rgba(139,92,246,0.1);color:#a78bfa;border-color:rgba(139,92,246,0.22);}
+.ctrl-btn.red{background:rgba(248,113,113,0.1);color:var(--red);border-color:rgba(248,113,113,0.22);}
+.ctrl-btn.green{background:rgba(74,222,128,0.08);color:var(--green);border-color:rgba(74,222,128,0.2);}
+.ctrl-btn.gold:hover{background:var(--yellow);color:#1a0a00;}
+.ctrl-btn.purple:hover{background:var(--accent);color:white;}
+.ctrl-btn.red:hover{background:var(--red);color:white;}
+.ctrl-btn.green:hover{background:var(--green);color:#0a1a0a;}
+
+/* ═══ SETTINGS ═══ */
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;}
+.setting-item{background:var(--s2);border:1px solid var(--border);border-radius:13px;
+  padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:var(--tr);}
+.setting-item:hover{border-color:rgba(139,92,246,0.18);}
+.si-label{font-size:0.86rem;font-weight:800;color:var(--hi);margin-bottom:2px;}
+.si-desc{font-size:0.68rem;color:var(--lo);}
+.toggle{position:relative;width:42px;height:22px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:#1a1a2e;border-radius:50px;cursor:pointer;transition:0.25s;border:1px solid rgba(255,255,255,0.06);}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:2px;bottom:2px;background:#3a3a52;border-radius:50%;transition:0.25s;}
+.toggle input:checked + .toggle-slider{background:rgba(124,58,237,0.28);border-color:rgba(124,58,237,0.45);}
+.toggle input:checked + .toggle-slider::before{background:#a78bfa;transform:translateX(20px);}
+
+/* ═══ CHAT ═══ */
+#chatContainer{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:4px;margin-bottom:4px;}
+#chatContainer::-webkit-scrollbar{width:3px;}
+#chatContainer::-webkit-scrollbar-thumb{background:var(--glow);border-radius:2px;}
+.chat-msg{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:11px;
+  padding:9px 11px;display:flex;align-items:flex-start;gap:8px;
+  transition:var(--tr);animation:secIn 0.3s ease both;}
+.chat-msg:hover{border-color:rgba(139,92,246,0.16);}
+.msg-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#00bcd4);
+  display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;color:white;flex-shrink:0;}
+.msg-body{flex:1;min-width:0;}
+.msg-user{font-size:0.72rem;font-weight:800;color:#a78bfa;margin-bottom:2px;}
+.msg-text{font-size:0.83rem;color:var(--hi);line-height:1.5;word-break:break-word;}
+.msg-time{font-size:0.6rem;color:var(--lo);margin-top:2px;}
+.msg-actions{display:flex;gap:3px;flex-shrink:0;}
+
+/* ═══ ANNOUNCE ═══ */
+.ann-item{background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.16);
+  border-radius:11px;padding:11px 15px;display:flex;justify-content:space-between;
+  align-items:flex-start;gap:9px;margin-bottom:7px;animation:secIn 0.3s ease both;}
+.ann-item p{color:var(--hi);font-size:0.85rem;margin:0;flex:1;}
+.ann-time{color:var(--lo);font-size:0.62rem;white-space:nowrap;font-family:'Fira Code',monospace;}
+
+/* ═══ REPORTS ═══ */
+.reports-filter{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;}
+.rf-tab{padding:5px 13px;border-radius:50px;border:1px solid var(--border);
+  background:rgba(255,255,255,0.03);color:var(--lo);font-size:0.73rem;font-weight:800;
+  cursor:pointer;font-family:'Tajawal',sans-serif;margin:0;transition:var(--tr);}
+.rf-tab:hover{border-color:rgba(139,92,246,0.22);color:var(--mid);transform:none;filter:none;}
+.rf-tab.active{background:rgba(139,92,246,0.1);color:#a78bfa;border-color:rgba(139,92,246,0.28);}
+.report-item{background:var(--s2);border:1px solid var(--border);border-radius:13px;
+  padding:15px;margin-bottom:9px;animation:secIn 0.3s ease both;transition:var(--tr);position:relative;}
+.report-item:hover{border-color:rgba(139,92,246,0.18);}
+.report-item.status-pending{border-right:3px solid var(--red);}
+.report-item.status-reviewed{border-right:3px solid var(--yellow);}
+.report-item.status-resolved{border-right:3px solid var(--green);}
+.ri-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
+.ri-reason{background:rgba(248,113,113,0.09);color:var(--red);border:1px solid rgba(248,113,113,0.18);
+  border-radius:50px;padding:2px 9px;font-size:0.65rem;font-weight:800;white-space:nowrap;}
+.ri-script{font-size:0.86rem;font-weight:800;color:var(--hi);flex:1;}
+.ri-meta{font-size:0.68rem;color:var(--lo);margin-bottom:9px;font-family:'Fira Code',monospace;}
+.ri-status{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:50px;font-size:0.62rem;font-weight:800;}
+.ri-status.pending{background:rgba(248,113,113,0.08);color:var(--red);}
+.ri-status.reviewed{background:rgba(251,191,36,0.08);color:var(--yellow);}
+.ri-status.resolved{background:rgba(74,222,128,0.08);color:var(--green);}
+.ri-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;}
+.ri-details{display:none;background:rgba(0,0,0,0.22);border:1px solid var(--border);
+  border-radius:8px;padding:9px 12px;font-size:0.8rem;color:var(--mid);margin-bottom:9px;line-height:1.6;}
+.ri-details.show{display:block;}
+.reply-box{display:none;margin-top:9px;background:rgba(139,92,246,0.05);
+  border:1px solid rgba(139,92,246,0.16);border-radius:9px;padding:11px;}
+.reply-box.show{display:block;}
+.reply-box textarea{width:100%;min-height:65px;background:rgba(0,0,0,0.28);
+  border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--hi);
+  font-family:'Tajawal',sans-serif;font-size:0.84rem;resize:vertical;outline:none;
+  direction:rtl;margin-bottom:7px;}
+.reply-box textarea:focus{border-color:rgba(139,92,246,0.32);}
+.ri-existing-reply{background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.16);
+  border-radius:8px;padding:8px 12px;font-size:0.8rem;color:var(--mid);margin-top:7px;line-height:1.6;}
+.ri-existing-reply strong{color:var(--green);display:block;margin-bottom:2px;}
+
+/* ═══ BAN LIST ═══ */
+.ban-reason-cell{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mid);font-size:0.78rem;}
+.ban-expiry{font-size:0.68rem;font-weight:800;padding:2px 8px;border-radius:50px;white-space:nowrap;}
+.ban-expiry.perm{background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.18);}
+.ban-expiry.temp{background:rgba(251,191,36,0.1);color:var(--yellow);border:1px solid rgba(251,191,36,0.22);}
+.ban-expiry.expired{background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.18);}
+.ban-count-pill{background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.18);
+  border-radius:50px;padding:2px 9px;font-size:0.68rem;font-weight:800;white-space:nowrap;}
+.link-warn{background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);color:var(--red);
+  border-radius:9px;padding:8px 11px;font-size:0.72rem;line-height:1.6;margin-bottom:12px;}
+.ban-history-item{border-bottom:1px solid var(--border);padding:9px 0;font-size:0.8rem;color:var(--mid);}
+.ban-history-item:last-child{border-bottom:none;}
+.ban-history-item b{color:var(--hi);}
+.email-block-row{display:flex;gap:7px;margin-bottom:12px;}
+.email-block-row input{flex:1;}
+
+/* ═══ LOG ═══ */
+.log-entry{display:flex;align-items:center;gap:9px;padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,0.025);font-size:0.8rem;}
+.log-entry:last-child{border-bottom:none;}
+.le-icon{font-size:0.9rem;flex-shrink:0;width:22px;text-align:center;}
+.le-text{flex:1;color:var(--mid);}
+.le-time{font-size:0.6rem;color:var(--lo);font-family:'Fira Code',monospace;white-space:nowrap;}
+
+/* ═══ MODAL ═══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:18px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--s2);border:1px solid rgba(139,92,246,0.28);border-radius:18px;
+  padding:24px;width:100%;max-width:500px;animation:secIn 0.3s ease both;
+  position:relative;overflow:hidden;}
+.modal-box::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,0.5),transparent);}
+.modal-box h3{font-size:0.95rem;font-weight:900;margin-bottom:16px;color:var(--hi);}
+.modal-actions{display:flex;gap:8px;margin-top:10px;}
+#saveEditBtn,#saveApkEditBtn{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;
+  border-radius:11px;padding:10px 22px;margin:0;cursor:pointer;font-family:'Tajawal',sans-serif;
+  font-weight:800;box-shadow:0 5px 16px rgba(124,58,237,0.3);transition:var(--tr);}
+#saveEditBtn:hover,#saveApkEditBtn:hover{box-shadow:0 8px 22px rgba(124,58,237,0.45);}
+#cancelEditBtn,#cancelApkEditBtn{background:rgba(255,255,255,0.04);color:var(--mid);border:1px solid var(--border);
+  border-radius:11px;padding:10px 16px;margin:0;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:800;}
+
+/* ═══ TOAST ═══ */
+.admin-toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(55px);
+  background:var(--s2);border:1px solid var(--glow);border-radius:50px;
+  padding:9px 20px;font-size:0.8rem;font-weight:800;color:var(--hi);
+  z-index:999;transition:transform 0.32s cubic-bezier(0.175,0.885,0.32,1.275);
+  box-shadow:0 6px 20px rgba(0,0,0,0.4);pointer-events:none;white-space:nowrap;}
+.admin-toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ═══ PRIMARY BUTTON ═══ */
+.btn-primary{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;
+  border-radius:11px;padding:11px 22px;font-family:'Tajawal',sans-serif;font-weight:800;
+  font-size:0.88rem;cursor:pointer;box-shadow:0 6px 18px rgba(124,58,237,0.32);transition:var(--tr);}
+.btn-primary:hover{box-shadow:0 8px 24px rgba(124,58,237,0.48);transform:translateY(-1px);}
+
+/* ═══ SAFETY (فحص الأمان) ═══ */
+.safety-hint { font-size: 0.78rem; color: var(--lo); margin-bottom: 14px; line-height: 1.7; }
+.safety-danger-note { font-size: 0.68rem; color: var(--red); margin-top: 4px; }
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){:root{--sb-w:210px;} .publish-layout{grid-template-columns:1fr;}}
+@media(max-width:640px){
+  .sidebar{display:none;} .admin-main{margin-right:0;max-width:100vw;}
+  .main-content{padding:14px 12px 60px;} .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .control-grid,.settings-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="loginScreen">
+    <div class="login-box">
+        <span class="lk">🛡️</span>
+        <h1>لوحة الإدارة</h1>
+        <p>CCRAFT SPACE — للأدمن فقط</p>
+        <input type="email"    id="email"    placeholder="البريد الإلكتروني">
+        <input type="password" id="password" placeholder="كلمة المرور">
+        <button id="loginBtn">⚡ دخول</button>
+        <div class="login-divider"><span>أو</span></div>
+        <button id="googleLoginBtn" type="button">
+            <svg width="18" height="18" viewBox="0 0 48 48" style="flex-shrink:0">
+                <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/>
+                <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4c-7.5 0-14 4.1-17.7 10.7z"/>
+                <path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.6C29.6 35 26.9 36 24 36c-5.2 0-9.6-3.4-11.2-8.1l-6.6 5.1C9.9 39.8 16.4 44 24 44z"/>
+                <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.7l6.6 5.6C39.9 37.3 44 31.4 44 24c0-1.3-.1-2.7-.4-3.5z"/>
+            </svg>
+            تسجيل الدخول بجوجل
+        </button>
+        <p id="loginError"></p>
+    </div>
+</div>
+
+<!-- ═══════════ ADMIN PANEL ═══════════ -->
+<div id="adminPanel">
+<div class="admin-layout">
+
+<aside class="sidebar">
+    <div class="sb-logo">
+        <div class="logo-icon">⚡</div>
+        <div class="sb-logo-txt"><h2>CCRAFT ADMIN</h2><p>Control Panel v2</p></div>
+    </div>
+    <nav class="sb-nav">
+        <div class="nav-sec">الرئيسية</div>
+        <button class="nav-item active" data-section="overview"><span class="nav-icon">📊</span> نظرة عامة</button>
+
+        <div class="nav-sec">المحتوى</div>
+        <button class="nav-item" data-section="scripts"><span class="nav-icon">📜</span> السكربتات <span class="nav-badge" id="scriptsBadge">0</span></button>
+        <button class="nav-item" data-section="apks"><span class="nav-icon">📱</span> تطبيقات APK <span class="nav-badge" id="apksBadge">0</span></button>
+        <button class="nav-item" data-section="publish"><span class="nav-icon">📤</span> نشر سكربت</button>
+        <button class="nav-item" data-section="script-requests"><span class="nav-icon">🧾</span> طلبات السكربتات <span class="nav-badge red" id="scriptReqBadge" style="display:none">0</span></button>
+        <button class="nav-item" data-section="sb-import"><span class="nav-icon">📥</span> استيراد ScriptBlox <span class="nav-badge red" id="sbImportBadge" style="display:none">0</span></button>
+
+        <div class="nav-sec">المجتمع</div>
+        <button class="nav-item" data-section="users"><span class="nav-icon">👥</span> المستخدمون <span class="nav-badge" id="usersBadge">0</span></button>
+        <button class="nav-item" data-section="points-ctrl"><span class="nav-icon">⭐</span> النقاط</button>
+        <button class="nav-item" data-section="codes"><span class="nav-icon">🎟️</span> أكواد النقاط <span class="nav-badge" id="codesBadge">0</span></button>
+        <button class="nav-item" data-section="badges-ctrl"><span class="nav-icon">🏅</span> البادجات</button>
+        <button class="nav-item" data-section="chat"><span class="nav-icon">💬</span> الشات</button>
+
+        <div class="nav-sec">الإدارة</div>
+        <button class="nav-item" data-section="safety"><span class="nav-icon">🛡️</span> فحص الأمان <span class="nav-badge" id="safetyBadge">0</span></button>
+        <button class="nav-item" data-section="reports"><span class="nav-icon">🚩</span> البلاغات <span class="nav-badge red" id="reportsBadge" style="display:none">0</span></button>
+        <button class="nav-item" data-section="ban-list"><span class="nav-icon">🚫</span> قائمة الحظر <span class="nav-badge red" id="banListBadge" style="display:none">0</span></button>
+        <button class="nav-item" data-section="verify-scripts"><span class="nav-icon">✅</span> التحقق من السكربتات <span class="nav-badge red" id="verifyBadge" style="display:none">0</span></button>
+        <button class="nav-item" data-section="announce"><span class="nav-icon">📢</span> الإعلانات</button>
+        <button class="nav-item" data-section="settings"><span class="nav-icon">⚙️</span> الإعدادات</button>
+        <button class="nav-item" data-section="log"><span class="nav-icon">📋</span> سجل الأنشطة</button>
+    </nav>
+    <div class="sb-footer">
+        <div class="admin-user-mini">
+            <div class="admin-avatar" id="sideAvatar">A</div>
+            <div style="min-width:0">
+                <div style="font-size:0.7rem;font-weight:800;color:var(--hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="sideEmail">—</div>
+                <div style="font-size:0.58rem;color:#a78bfa">✅ أدمن</div>
+            </div>
+        </div>
+        <button id="adminLogoutBtn">🚪 تسجيل خروج</button>
+    </div>
+</aside>
+
+<main class="admin-main">
+    <div class="topbar">
+        <h1 id="pageTitle">📊 نظرة عامة</h1>
+        <div class="topbar-pill">
+            <div class="admin-avatar" id="topAvatar" style="width:24px;height:24px;font-size:0.7rem">A</div>
+            <span style="color:var(--mid);font-size:0.76rem" id="topEmail">—</span>
+        </div>
+    </div>
+
+    <div class="main-content">
+
+    <!-- ─── OVERVIEW ─── -->
+    <div class="section active" id="sec-overview">
+        <div class="stats-grid">
+            <div class="stat-box"><span class="s-icon">📜</span><span class="s-num" id="st-scripts">0</span><span class="s-label">سكربت</span></div>
+            <div class="stat-box"><span class="s-icon">👥</span><span class="s-num" id="st-users">0</span><span class="s-label">مستخدم</span></div>
+            <div class="stat-box"><span class="s-icon">👍</span><span class="s-num" id="st-likes">0</span><span class="s-label">لايك</span></div>
+            <div class="stat-box"><span class="s-icon">⭐</span><span class="s-num" id="st-pts">0</span><span class="s-label">نقطة</span></div>
+            <div class="stat-box"><span class="s-icon">🏅</span><span class="s-num" id="st-badges">0</span><span class="s-label">بادج</span></div>
+            <div class="stat-box"><span class="s-icon">💬</span><span class="s-num" id="st-msgs">0</span><span class="s-label">رسالة</span></div>
+            <div class="stat-box"><span class="s-icon">📱</span><span class="s-num" id="st-apks">0</span><span class="s-label">تطبيق APK</span></div>
+            <div class="stat-box"><span class="s-icon">🛡️</span><span class="s-num" id="st-unsafe">0</span><span class="s-label">سكربت خطر</span></div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">📜 آخر السكربتات</div></div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>العنوان</th><th>القسم</th><th>المؤلف</th><th>👍</th></tr></thead><tbody id="recentBody"></tbody></table></div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">📱 آخر تطبيقات APK</div></div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>الاسم</th><th>القسم</th><th>الناشر</th><th>👍</th></tr></thead><tbody id="recentApksBody"></tbody></table></div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">👥 آخر المستخدمين</div></div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>المستخدم</th><th>النقاط</th><th>البادجات</th><th>السكربتات</th></tr></thead><tbody id="recentUsersBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── SCRIPTS ─── -->
+    <div class="section" id="sec-scripts">
+        <div class="search-bar"><input type="text" id="scriptSearch" placeholder="🔍 ابحث في السكربتات..."></div>
+        <div class="panel-card" style="padding:0;overflow:hidden">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>#</th><th>العنوان</th><th>القسم</th><th>المؤلف</th><th>👍</th><th>⭐</th><th>إجراءات</th></tr></thead><tbody id="fullScriptsBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── APKS ─── -->
+    <div class="section" id="sec-apks">
+        <div class="search-bar"><input type="text" id="apkSearch" placeholder="🔍 ابحث في تطبيقات APK..."></div>
+        <div class="panel-card" style="padding:0;overflow:hidden">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th></th><th>الاسم</th><th>القسم</th><th>الناشر</th><th>👍</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="apksBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── PUBLISH ─── -->
+    <div class="section" id="sec-publish">
+        <div class="publish-layout">
+            <div class="pub-main">
+                <div class="panel-card">
+                    <div class="pc-head"><div class="pc-title">✍️ معلومات السكربت</div></div>
+                    <div class="field-group"><label class="field-label">العنوان</label><input type="text" id="newTitle" placeholder="اسم السكربت..." maxlength="80"></div>
+                    <div class="field-group"><label class="field-label">الكود <span class="char-counter" id="codeCounter" style="font-size:0.6rem;margin-right:6px">0 حرف</span></label><textarea id="newCode" class="code-field" placeholder="-- الصق كود Lua هنا..."></textarea></div>
+                    <div class="field-group"><label class="field-label">الوصف</label><textarea id="newDesc" placeholder="وصف مختصر للسكربت..."></textarea></div>
+                    <div class="field-group"><label class="field-label">القسم</label>
+                        <select id="newCategory">
+                            <option value="">اختر القسم</option>
+                            <option value="game">🎮 Game Scripts</option>
+                            <option value="admin">🛡️ Admin Scripts</option>
+                            <option value="ai">🤖 AI & NPCs</option>
+                            <option value="سكربت من الادارة">👑 سكربت من الإدارة</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-card">
+                    <div class="pc-head"><div class="pc-title">🗺️ الماب</div></div>
+                    <div class="map-mini-grid" id="mapGrid">
+                        <div class="map-mini-btn no-map selected" data-map=""><span class="mi-icon">🌐</span>أي ماب</div>
+                        <div class="map-mini-btn" data-map="Jailbreak"><span class="mi-icon">🚔</span>Jailbreak</div>
+                        <div class="map-mini-btn" data-map="Adopt Me"><span class="mi-icon">🏡</span>Adopt Me</div>
+                        <div class="map-mini-btn" data-map="Bloxburg"><span class="mi-icon">🏗️</span>Bloxburg</div>
+                        <div class="map-mini-btn" data-map="Brookhaven"><span class="mi-icon">🌆</span>Brookhaven</div>
+                        <div class="map-mini-btn" data-map="Arsenal"><span class="mi-icon">🔫</span>Arsenal</div>
+                        <div class="map-mini-btn" data-map="Bedwars"><span class="mi-icon">🛏️</span>Bedwars</div>
+                        <div class="map-mini-btn" data-map="Doors"><span class="mi-icon">🚪</span>Doors</div>
+                        <div class="map-mini-btn" data-map="Da Hood"><span class="mi-icon">🏙️</span>Da Hood</div>
+                    </div>
+                    <input type="text" id="customMapInput" placeholder="أو اكتب اسم الماب يدوياً..." style="margin-top:7px;background:rgba(0,0,0,0.25);border:1px solid var(--border);border-radius:9px;padding:8px 12px;color:var(--hi);font-family:Tajawal,sans-serif;font-size:0.83rem;outline:none;width:100%;transition:var(--tr);">
+                </div>
+            </div>
+            <div class="pub-aside">
+                <div class="panel-card">
+                    <div class="pc-head"><div class="pc-title">🖼️ صورة السكربت</div></div>
+                    <div class="img-upload-zone" id="pubUploadZone">
+                        <img id="pubImgPreview" alt="preview">
+                        <div class="img-ph">
+                            <span class="ip-icon">🖼️</span>
+                            <p class="ip-text">اسحب أو اضغط للاختيار</p>
+                            <p class="ip-limit">PNG · JPG · حد أقصى 12MB</p>
+                        </div>
+                    </div>
+                    <input type="file" id="pubImgInput" accept="image/*" style="display:none">
+                    <div style="font-size:0.68rem;color:var(--lo);margin-top:5px" id="pubImgStatus"></div>
+                    <div id="pubImgActions" style="display:none;margin-top:6px;display:flex;gap:6px">
+                        <button class="t-btn edit" onclick="changePubImg()">🔄 تغيير</button>
+                        <button class="t-btn del"  onclick="removePubImg()">🗑️ حذف</button>
+                    </div>
+                </div>
+                <div class="panel-card preview-card" id="pubPreview" style="display:none">
+                    <div class="pc-head"><div class="pc-title">👁️ معاينة</div></div>
+                    <div class="preview-title" id="previewTitle">—</div>
+                    <div class="preview-meta" id="previewMeta"></div>
+                </div>
+                <button class="pub-submit-btn" id="addScriptBtn">📤 نشر السكربت</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── SCRIPT REQUESTS (طلبات إضافة سكربتات من المستخدمين) ─── -->
+    <div class="section" id="sec-script-requests">
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">🧾 طلبات إضافة سكربتات من المستخدمين</div></div>
+            <div class="safety-hint">
+                طلبات بعتها المستخدمون من صفحة "فحص أمان السكربتات" العامة عشان يطلبوا إضافة أو فحص سكربت معين.
+                راجع الطلب، وابعت السكربت من قسم "نشر سكربت" لو حابب، وبعدين علّمه "تم" أو احذفه.
+            </div>
+        </div>
+        <div class="search-bar"><input type="text" id="scriptReqSearch" placeholder="🔍 ابحث في طلبات السكربتات..."></div>
+        <div class="panel-card" style="padding:0;overflow:hidden">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>اسم السكربت المطلوب</th><th>ملاحظة</th><th>تاريخ الطلب</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="scriptReqBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── SCRIPTBLOX IMPORT (بوت استيراد سكربتات من ScriptBlox — قائمة انتظار للمراجعة فقط) ─── -->
+    <div class="section" id="sec-sb-import">
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">📥 استيراد سكربتات من ScriptBlox</div></div>
+            <div class="safety-hint">
+                البوت بيجيب أحدث السكربتات وأكثرها تفاعلاً من ScriptBlox API ويحطها هنا "قيد المراجعة" فقط — مفيش نشر تلقائي أبداً.
+                راجع كل سكربت وشوف الكود، وبعدين "✅ نشر" (بيتفحص تلقائياً بنفس نظام تشابه الكود المستخدم في النشر العادي) أو "❌ رفض".
+                نفس عملية الاستيراد دي بتحصل تلقائيًا مرة يوميًا من سيرفر خارجي — الزرار هنا بس لتشغيلها يدويًا وقت ما تحب.
+            </div>
+            <button class="btn-primary" id="sbImportNowBtn">📥 استيراد الآن</button>
+            <span id="sbImportStatus" style="font-size:0.76rem;color:var(--lo);margin-right:10px"></span>
+        </div>
+
+        <div class="search-bar"><input type="text" id="sbImportSearch" placeholder="🔍 ابحث في طلبات الاستيراد..."></div>
+        <div class="panel-card" style="padding:0;overflow:hidden">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>العنوان</th><th>اللعبة</th><th>مفتاح؟</th><th>المصدر</th><th>تاريخ الاستيراد</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="sbImportBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── USERS ─── -->
+    <div class="section" id="sec-users">
+        <div class="search-bar"><input type="text" id="userSearch" placeholder="🔍 ابحث عن مستخدم..."></div>
+        <div class="panel-card" style="padding:0;overflow:hidden">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>المستخدم</th><th>السكربتات</th><th>النقاط</th><th>البادجات</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="usersBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── SAFETY (فحص الأمان) ─── -->
+    <div class="section" id="sec-safety">
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">⚠️ إضافة سكربت للقائمة الغير آمنة</div></div>
+            <div class="safety-hint">
+                السكربتات اللي بتتضاف هنا بتظهر تحذير عليها لأي حد يفحصها من صفحة "فحص أمان السكربتات" العامة (safety-check.html).
+                اكتب اسم السكربت زي ما هو منشور بالظبط عشان الفحص يلاقيه صح.
+            </div>
+            <div class="field-group"><label class="field-label">اسم السكربت</label><input type="text" id="unsafeScriptName" placeholder="اسم السكربت بالظبط..."></div>
+            <div class="field-group"><label class="field-label">السبب</label><textarea id="unsafeScriptReason" placeholder="مثال: بيسرق بيانات تسجيل الدخول..." style="min-height:70px"></textarea></div>
+            <button class="btn-primary" id="addUnsafeBtn">⚠️ إضافة للقائمة</button>
+        </div>
+
+        <div class="search-bar"><input type="text" id="unsafeSearch" placeholder="🔍 ابحث في القائمة الغير آمنة..."></div>
+        <div class="panel-card" style="padding:0;overflow:hidden">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>اسم السكربت</th><th>السبب</th><th>تاريخ الإبلاغ</th><th>إجراءات</th></tr></thead><tbody id="unsafeBody"></tbody></table></div>
+        </div>
+
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">🧬 نماذج كود غير آمن (لمنع النشر تلقائياً)</div></div>
+            <div class="safety-hint">
+                ألصق هنا كود سكربت معروف أنه ضار. عند نشر سكربت جديد يشبه أحد هذه النماذج بنسبة عالية، يُرفض نشره تلقائياً.
+                سكربتات بسيطة من نوع <code>loadstring(game:HttpGet("رابط"))()</code> فقط (بدون كود إضافي) تُستثنى من هذا الفحص تلقائياً لأنها غالباً لودرات عادية.
+            </div>
+            <div class="field-group"><label class="field-label">اسم/وصف مختصر</label><input type="text" id="unsafeCodeName" placeholder="مثال: سكربت سرقة الحسابات..."></div>
+            <div class="field-group"><label class="field-label">الكود</label><textarea id="unsafeCodeSample" class="code-field" placeholder="-- الصق الكود الضار هنا..."></textarea></div>
+            <div class="field-group"><label class="field-label">السبب</label><textarea id="unsafeCodeReason" placeholder="مثال: بيسرق التوكن ويبعته لسيرفر خارجي..." style="min-height:60px"></textarea></div>
+            <button class="btn-primary" id="addUnsafeCodeBtn">🧬 إضافة النموذج</button>
+        </div>
+        <div class="panel-card" style="padding:0;overflow:hidden">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>الاسم</th><th>السبب</th><th>تاريخ الإضافة</th><th>إجراءات</th></tr></thead><tbody id="unsafeCodeBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── POINTS ─── -->
+    <div class="section" id="sec-points-ctrl">
+        <div class="control-grid">
+            <div class="control-card"><h4>➕ إضافة نقاط</h4><div class="ctrl-row"><input type="text" id="pts-email" placeholder="البريد أو اسم المستخدم"></div><div class="ctrl-row"><input type="number" id="pts-amount" placeholder="العدد" min="1"><button class="ctrl-btn gold" onclick="addPointsToUser()">إضافة</button></div></div>
+            <div class="control-card"><h4>➖ خصم نقاط</h4><div class="ctrl-row"><input type="text" id="pts-remove-email" placeholder="البريد أو اسم المستخدم"></div><div class="ctrl-row"><input type="number" id="pts-remove-amount" placeholder="العدد" min="1"><button class="ctrl-btn red" onclick="removePointsFromUser()">خصم</button></div></div>
+            <div class="control-card"><h4>🎁 نقاط للجميع</h4><div class="ctrl-row"><input type="number" id="pts-all-amount" placeholder="عدد النقاط" min="1"><button class="ctrl-btn gold" onclick="addPointsToAll()">منح</button></div><div style="font-size:0.65rem;color:var(--lo);margin-top:4px">يضيف لكل المستخدمين المسجلين</div></div>
+            <div class="control-card"><h4>🔄 إعادة تعيين</h4><div class="ctrl-row"><input type="text" id="pts-reset-email" placeholder="البريد أو اسم المستخدم"><button class="ctrl-btn red" onclick="resetUserPoints()">إعادة</button></div></div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">⭐ أكثر المستخدمين نقاطاً</div></div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>#</th><th>المستخدم</th><th>النقاط</th><th>الدعوات</th></tr></thead><tbody id="topPointsBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── REDEEM CODES ─── -->
+    <div class="section" id="sec-codes">
+        <div class="control-grid">
+            <div class="control-card">
+                <h4>🎟️ إنشاء كود جديد</h4>
+                <div class="ctrl-row"><input type="text" id="code-new-text" placeholder="الكود (مثال: WELCOME2026)" style="direction:ltr;text-align:left"></div>
+                <div class="ctrl-row"><input type="number" id="code-new-points" placeholder="عدد النقاط" min="1"><button class="ctrl-btn gold" onclick="createRedeemCode()">إنشاء</button></div>
+                <div style="font-size:0.65rem;color:var(--lo);margin-top:4px">كل مستخدم يقدر يستخدم الكود مرة واحدة بس، لكن نفس الكود ممكن يستخدمه أي عدد من المستخدمين.</div>
+            </div>
+        </div>
+        <div class="panel-card" style="padding:0;overflow:hidden">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>الكود</th><th>النقاط</th><th>عدد الاستخدامات</th><th>تاريخ الإنشاء</th><th>إجراءات</th></tr></thead><tbody id="codesBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── BADGES ─── -->
+    <div class="section" id="sec-badges-ctrl">
+        <div class="control-grid">
+            <div class="control-card">
+                <h4>🏅 منح بادج</h4>
+                <div class="ctrl-row"><input type="text" id="badge-email" placeholder="البريد أو اسم المستخدم"></div>
+                <div class="ctrl-row">
+                    <select id="badge-select">
+                        <option value="">اختر البادج</option>
+                        <optgroup label="سكربتات"><option value="first_script">🚀 الانطلاقة</option><option value="five_scripts">📦 مجموعة</option><option value="ten_scripts">💎 محترف</option></optgroup>
+                        <optgroup label="لايكات"><option value="first_like">👍 محبوب</option><option value="ten_likes">🔥 مشهور</option><option value="fifty_likes">⭐ نجم</option><option value="hundred_likes">👑 أسطورة</option></optgroup>
+                        <optgroup label="نقاط"><option value="pts_first">🌱 أول خطوة</option><option value="pts_50">💫 صاعد</option><option value="pts_150">🌟 مؤثر</option><option value="pts_500">💥 قائد</option><option value="pts_1000">🔮 أسطورة الإحالة</option></optgroup>
+                        <optgroup label="إحالة"><option value="ref_1">🤝 مُضيف</option><option value="ref_5">📣 داعية</option><option value="ref_20">🌐 موسع المجتمع</option></optgroup>
+                        <optgroup label="بادجات خاصة">
+                            <option value="og_member">🌟 أول المستخدمين</option>
+                            <option value="og">🏆 OG — عضو أصلي</option>
+                            <option value="founder">🔱 مؤسس</option>
+                            <option value="pioneer">🚀 رائد</option>
+                            <option value="admin_choice">👑 اختيار الأدمن</option>
+                            <option value="verified">✅ موثّق</option>
+                            <option value="vip">💎 VIP</option>
+                            <option value="moderator">🛡️ مراقب</option>
+                            <option value="legend">🌟 أسطورة</option>
+                            <option value="creator">🎨 منشئ محتوى</option>
+                            <option value="partner">🤝 شريك</option>
+                        </optgroup>
+                    </select>
+                    <button class="ctrl-btn purple" onclick="grantBadge()">منح</button>
+                </div>
+            </div>
+            <div class="control-card"><h4>🗑️ سحب بادج</h4><div class="ctrl-row"><input type="text" id="badge-remove-email" placeholder="البريد أو اسم المستخدم"></div><div class="ctrl-row"><input type="text" id="badge-remove-id" placeholder="ID البادج (مثال: veteran)"><button class="ctrl-btn red" onclick="revokeBadge()">سحب</button></div></div>
+            <div class="control-card"><h4>🧹 مسح كل البادجات</h4><div class="ctrl-row"><input type="text" id="badge-clear-email" placeholder="البريد أو اسم المستخدم"><button class="ctrl-btn red" onclick="clearAllBadges()">مسح</button></div><div style="font-size:0.65rem;color:var(--red);margin-top:4px">⚠️ لا يمكن التراجع</div></div>
+            <div class="control-card"><h4>🎯 بادج للجميع</h4><div class="ctrl-row"><select id="badge-all-select"><option value="veteran">🎖️ مخضرم</option><option value="first_script">🚀 الانطلاقة</option></select><button class="ctrl-btn purple" onclick="grantBadgeToAll()">للجميع</button></div></div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">🏅 أكثر المستخدمين بادجات</div></div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>#</th><th>المستخدم</th><th>عدد البادجات</th><th>آخر بادج</th></tr></thead><tbody id="topBadgesBody"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- ─── CHAT ─── -->
+    <div class="section" id="sec-chat">
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">💬 رسائل الشات</div></div>
+            <div id="chatContainer"></div>
+        </div>
+    </div>
+
+    <!-- ─── ANNOUNCE ─── -->
+    <div class="section" id="sec-announce">
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">📢 إرسال إعلان</div></div>
+            <div class="field-group"><textarea id="annText" placeholder="اكتب نص الإعلان هنا..." style="min-height:90px"></textarea></div>
+            <button class="btn-primary" id="sendAnnBtn">📢 إرسال</button>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">📋 سجل الإعلانات</div></div>
+            <div id="annHistory"></div>
+        </div>
+    </div>
+
+    <!-- ─── SETTINGS ─── -->
+    <div class="section" id="sec-settings">
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">⚙️ إعدادات الموقع</div></div>
+            <div class="settings-grid">
+                <div class="setting-item"><div class="setting-info"><div class="si-label">🔒 وضع الصيانة</div><div class="si-desc">يمنع المستخدمين من الدخول</div></div><label class="toggle"><input type="checkbox" id="toggle-maintenance"><span class="toggle-slider"></span></label></div>
+                <div class="setting-item"><div class="setting-info"><div class="si-label">📤 السماح بالنشر</div><div class="si-desc">يسمح لليوزرز بنشر سكربتات</div></div><label class="toggle"><input type="checkbox" id="toggle-publish" checked><span class="toggle-slider"></span></label></div>
+                <div class="setting-item"><div class="setting-info"><div class="si-label">📱 السماح بنشر APK</div><div class="si-desc">يسمح لليوزرز بنشر تطبيقات APK</div></div><label class="toggle"><input type="checkbox" id="toggle-apks" checked><span class="toggle-slider"></span></label></div>
+                <div class="setting-item"><div class="setting-info"><div class="si-label">💬 الشات العام</div><div class="si-desc">تفعيل أو تعطيل الشات</div></div><label class="toggle"><input type="checkbox" id="toggle-chat" checked><span class="toggle-slider"></span></label></div>
+                <div class="setting-item"><div class="setting-info"><div class="si-label">🎁 نظام الإحالة</div><div class="si-desc">كسب النقاط بالدعوة</div></div><label class="toggle"><input type="checkbox" id="toggle-referral" checked><span class="toggle-slider"></span></label></div>
+                <div class="setting-item"><div class="setting-info"><div class="si-label">👍 نظام اللايكات</div><div class="si-desc">السماح بلايك السكربتات</div></div><label class="toggle"><input type="checkbox" id="toggle-likes" checked><span class="toggle-slider"></span></label></div>
+                <div class="setting-item"><div class="setting-info"><div class="si-label">🔖 تسجيل جديد</div><div class="si-desc">السماح بإنشاء حسابات</div></div><label class="toggle"><input type="checkbox" id="toggle-register" checked><span class="toggle-slider"></span></label></div>
+            </div>
+            <div style="margin-top:14px"><button class="btn-primary" id="saveSettingsBtn">💾 حفظ الإعدادات</button></div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">🔑 إضافة أدمن جديد</div></div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <input type="text" id="newAdminUid" placeholder="UID المستخدم الجديد" style="flex:1;background:rgba(0,0,0,0.25);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--hi);font-family:Tajawal,sans-serif;outline:none;margin:0;min-width:200px">
+                <button onclick="addNewAdmin()" class="btn-primary" style="padding:9px 18px">➕ إضافة</button>
+            </div>
+            <div style="font-size:0.65rem;color:var(--lo);margin-top:6px">اذهب لـ Firebase Console للحصول على الـ UID</div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">🔒 أدوات الخصوصية</div></div>
+            <div class="safety-hint">
+                هذا الزرار بيحذف نهائيًا حقل الإيميل (<code>email</code>) المخزّن مع كل مستخدم حاليًا في قاعدة البيانات. بعد الحذف:
+                <br>• ما فيش مكان في الموقع هيعرض إيميل أي مستخدم بعد كده.
+                <br>• البحث عن مستخدم في هذه اللوحة (حظر، نقاط، بادجات...) لازم يتم باسم المستخدم (username) مش بالإيميل.
+                <br>• العملية دي لمرة واحدة على كل المستخدمين الحاليين — أي إيميل جديد يتسجل بعد التفعيل الأخير في صفحة تسجيل الدخول مش بيتخزن أصلًا.
+            </div>
+            <div class="safety-danger-note">⚠️ لا يمكن التراجع عن هذا الإجراء بعد تنفيذه.</div>
+            <div style="margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <button class="btn-primary" style="background:linear-gradient(135deg,#ef4444,#b91c1c);box-shadow:0 6px 18px rgba(239,68,68,0.32)" id="purgeEmailsBtn" onclick="purgeAllStoredEmails()">🗑️ حذف كل الإيميلات المخزّنة الآن</button>
+                <span id="purgeEmailsStatus" style="font-size:0.78rem;color:var(--lo)"></span>
+            </div>
+            <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+                <div class="si-label" style="margin-bottom:6px">🧹 مسح كل أسماء المستخدمين الحالية</div>
+                <div class="safety-hint">
+                    هذا الزرار بيمسح <code>username</code> المحفوظ لكل المستخدمين دفعة واحدة (وبيفرّغ الاسم في فهرس <code>usernames</code> عشان أي حد يقدر ياخده تاني). بعد المسح، أول ما أي مستخدم يفتح <code>profile.html</code> أو يسجل دخول، هيظهر له فورًا فورم إجباري "اختر اسم مستخدم" من غير ما يقدر يتخطاه.
+                    <br>⚠️ لحد ما كل مستخدم يختار اسمه الجديد، أي مكان بيعرض اسمه (بروفايله، سكربتاته، تعليقاته) هيظهر "cCraft Space User" مؤقتًا.
+                </div>
+                <div style="margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                    <button class="btn-primary" style="background:linear-gradient(135deg,#ef4444,#b91c1c);box-shadow:0 6px 18px rgba(239,68,68,0.32)" id="resetUsernamesBtn" onclick="resetAllUsernames()">🧹 مسح كل الأسماء الآن</button>
+                    <span id="resetUsernamesStatus" style="font-size:0.78rem;color:var(--lo)"></span>
+                </div>
+            </div>
+            <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+                <div class="si-label" style="margin-bottom:6px">🔄 تحديث أسماء مؤلفي السكربتات القديمة</div>
+                <div class="safety-hint">
+                    سكربتات قديمة كانت اتنشرت وقت ما اسم المؤلف كان بيتخزن من بادئة الإيميل (زي <code>ant349164</code>) بدل اسم المستخدم الحقيقي. الزرار ده بيمر على كل السكربتات، وبيجيب اسم المستخدم الحالي (username) لصاحب كل سكربت من <code>authorUid</code> ويحدّث حقل <code>author</code> بيه — أو "cCraft Space User" لو المؤلف لسه ما اختارش اسم.
+                    <br>السكربتات اللي مالهاش <code>authorUid</code> محفوظ (قديمة جدًا) هتتسيب زي ما هي لأنه مفيش طريقة مضمونة نلاقي صاحبها.
+                </div>
+                <div style="margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                    <button class="btn-primary" id="fixAuthorsBtn" onclick="fixOldScriptAuthors()">🔄 تحديث أسماء المؤلفين الآن</button>
+                    <span id="fixAuthorsStatus" style="font-size:0.78rem;color:var(--lo)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ─── VERIFY SCRIPTS ─── -->
+    <div class="section" id="sec-verify-scripts">
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">✅ طلبات التحقق المنتظرة</div></div>
+            <div style="font-size:0.78rem;color:var(--lo);margin-bottom:14px">مستخدمون طلبوا توثيق سكربتاتهم. الموافقة توثّق <strong>كل</strong> سكربتات المستخدم دفعة واحدة، وتظهر بشارة ✅ موثوق في قائمة السكربتات.</div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>المستخدم</th><th>عدد السكربتات</th><th>السبب</th><th>التاريخ</th><th>إجراء</th></tr></thead><tbody id="verifyBody"></tbody></table></div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">🖊️ توثيق يدوي بالإيميل</div></div>
+            <div style="font-size:0.78rem;color:var(--lo);margin-bottom:14px">وثّق مستخدم مباشرة بإيميله من غير ما يكون بعت طلب — هيوثّق كل سكربتاته الحالية فورًا.</div>
+            <div class="ctrl-row"><input type="text" id="manual-verify-email" placeholder="البريد أو اسم المستخدم" style="flex:1;background:rgba(0,0,0,0.25);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:var(--hi);font-family:Tajawal,sans-serif;outline:none;margin:0"><button class="ctrl-btn gold" onclick="manualVerifyByEmail()">✅ توثيق</button></div>
+            <div id="manual-verify-msg" style="font-size:0.72rem;margin-top:8px;min-height:16px"></div>
+        </div>
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">✅ السكربتات الموثوقة</div></div>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>السكربت</th><th>المستخدم</th><th>تاريخ التوثيق</th><th>إجراء</th></tr></thead><tbody id="verifiedBody"></tbody></table></div>
+        </div>
+    </div>
+    <!-- ─── REPORTS ─── -->
+    <div class="section" id="sec-reports">
+        <div class="reports-filter">
+            <button class="rf-tab active" onclick="filterReports(this,'all')">🚩 الكل</button>
+            <button class="rf-tab" onclick="filterReports(this,'pending')">🔴 جديد</button>
+            <button class="rf-tab" onclick="filterReports(this,'reviewed')">🟡 مراجعة</button>
+            <button class="rf-tab" onclick="filterReports(this,'resolved')">✅ محلول</button>
+        </div>
+        <div id="reportsContainer"><div style="text-align:center;padding:36px;color:var(--lo)">⏳ جارٍ التحميل...</div></div>
+    </div>
+
+    <!-- ─── BAN LIST ─── -->
+    <div class="section" id="sec-ban-list">
+        <div class="reports-filter">
+            <button class="rf-tab active" onclick="filterBanTab(this,'users')">👤 المستخدمون المحظورون</button>
+            <button class="rf-tab" onclick="filterBanTab(this,'emails')">✉️ الإيميلات المحظورة مسبقًا</button>
+        </div>
+
+        <!-- Banned users tab -->
+        <div id="banUsersTab">
+            <div class="search-bar"><input type="text" id="banSearch" placeholder="🔍 ابحث بالإيميل أو السبب..."></div>
+            <div class="panel-card" style="padding:0;overflow:hidden">
+                <div class="table-wrap"><table class="data-table">
+                    <thead><tr><th>المستخدم</th><th>السبب</th><th>بواسطة</th><th>تاريخ الحظر</th><th>المدة</th><th>مرات الحظر</th><th>إجراءات</th></tr></thead>
+                    <tbody id="banListBody"></tbody>
+                </table></div>
+            </div>
+        </div>
+
+        <!-- Blocked emails tab (pre-emptive block, before signup) -->
+        <div id="banEmailsTab" style="display:none">
+            <div class="panel-card">
+                <div class="pc-head"><div class="pc-title">✉️ حظر إيميل مباشرة (قبل ما يعمل حساب)</div></div>
+                <div class="link-warn">⚠️ ده بيمنع الإيميل ده من التسجيل في الموقع تاني، لكن لازم كود التسجيل (login.html / auth-guard.js) يتحقق من القايمة دي بعد ما تضيفها — مش شغال تلقائي لوحده لسه.</div>
+                <div class="email-block-row">
+                    <input type="email" id="newBlockEmail" placeholder="الإيميل المراد حظره">
+                    <input type="text" id="newBlockReason" placeholder="السبب" style="flex:1">
+                    <button class="btn-primary" id="addBlockEmailBtn" style="white-space:nowrap">🚫 حظر</button>
+                </div>
+            </div>
+            <div class="panel-card" style="padding:0;overflow:hidden">
+                <div class="table-wrap"><table class="data-table">
+                    <thead><tr><th>الإيميل</th><th>السبب</th><th>بواسطة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+                    <tbody id="blockedEmailsBody"></tbody>
+                </table></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── LOG ─── -->
+    <div class="section" id="sec-log">
+        <div class="panel-card">
+            <div class="pc-head"><div class="pc-title">📋 سجل أنشطة الأدمن</div></div>
+            <div id="activityLog"></div>
+        </div>
+    </div>
+
+    </div><!-- end main-content -->
+</main>
+</div>
+</div>
+
+<!-- Edit Modal (Scripts) -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal-box">
+        <h3>✏️ تعديل السكربت</h3>
+        <input type="hidden" id="editId">
+        <div class="field-group"><label class="field-label">العنوان</label><input type="text" id="editTitle"></div>
+        <div class="field-group"><label class="field-label">الكود</label><textarea id="editCode" class="code-field" style="min-height:110px"></textarea></div>
+        <div class="field-group"><label class="field-label">الوصف</label><textarea id="editDesc" style="min-height:55px"></textarea></div>
+        <div class="field-group"><label class="field-label">القسم</label><select id="editCategory"><option value="game">🎮 Game</option><option value="admin">🛡️ Admin</option><option value="ai">🤖 AI</option><option value="سكربت من الادارة">👑 من الإدارة</option></select></div>
+        <div class="modal-actions">
+            <button id="saveEditBtn">💾 حفظ</button>
+            <button id="cancelEditBtn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal (APK) -->
+<div class="modal-overlay" id="editApkModal">
+    <div class="modal-box">
+        <h3>✏️ تعديل التطبيق</h3>
+        <input type="hidden" id="editApkId">
+        <div class="field-group"><label class="field-label">الاسم</label><input type="text" id="editApkTitle"></div>
+        <div class="field-group"><label class="field-label">الوصف</label><textarea id="editApkDesc" style="min-height:55px"></textarea></div>
+        <div class="field-group"><label class="field-label">القسم</label>
+            <select id="editApkCategory">
+                <option value="game">🎮 لعبة</option>
+                <option value="app">📲 تطبيق</option>
+                <option value="mod">🧩 مود</option>
+            </select>
+        </div>
+        <div class="field-group"><label class="field-label">رابط التحميل الخارجي</label><input type="url" id="editApkUrl"></div>
+        <div class="modal-actions">
+            <button id="saveApkEditBtn">💾 حفظ</button>
+            <button id="cancelApkEditBtn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal (Unsafe Script) -->
+<div class="modal-overlay" id="editUnsafeModal">
+    <div class="modal-box">
+        <h3>✏️ تعديل بلاغ السكربت</h3>
+        <input type="hidden" id="editUnsafeKey">
+        <div class="field-group"><label class="field-label">اسم السكربت</label><input type="text" id="editUnsafeName" disabled style="opacity:0.6"></div>
+        <div class="field-group"><label class="field-label">السبب</label><textarea id="editUnsafeReason" style="min-height:70px"></textarea></div>
+        <div class="modal-actions">
+            <button id="saveUnsafeEditBtn">💾 حفظ</button>
+            <button id="cancelUnsafeEditBtn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- Publish Account Modal (ScriptBlox Import) -->
+<div class="modal-overlay" id="publishAccountModal">
+    <div class="modal-box">
+        <h3>📤 نشر السكربت باسم حساب</h3>
+        <input type="hidden" id="publishImportId">
+        <p style="color:var(--mid);font-size:0.8rem;margin-bottom:10px">لازم تختار حساب مسجل في الموقع — السكربت هيتنشر باسمه. مفيش حساب مسجل = مفيش نشر.</p>
+        <div class="field-group">
+            <label class="field-label">الحساب المسجل</label>
+            <select id="publishAccountSelect"></select>
+        </div>
+        <div class="modal-actions">
+            <button id="confirmPublishBtn">✅ نشر</button>
+            <button id="cancelPublishBtn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- Ban Modal -->
+<div class="modal-overlay" id="banModal">
+    <div class="modal-box">
+        <h3>🚫 حظر مستخدم</h3>
+        <input type="hidden" id="banUid">
+        <p style="color:var(--mid);font-size:0.8rem;margin-bottom:12px" id="banTargetLabel"></p>
+        <div class="field-group"><label class="field-label">سبب الحظر</label><textarea id="banReasonInput" placeholder="اكتب سبب الحظر..." style="min-height:65px"></textarea></div>
+        <div class="field-group"><label class="field-label">مدة الحظر</label>
+            <select id="banDurationInput">
+                <option value="1">يوم واحد</option>
+                <option value="7">أسبوع</option>
+                <option value="30">شهر</option>
+                <option value="permanent" selected>دائم</option>
+            </select>
+        </div>
+        <div class="setting-item" style="margin-bottom:6px">
+            <div><div class="si-label" style="font-size:0.78rem">حظر الإيميل كمان</div><div class="si-desc">يمنعه من عمل حساب جديد بنفس الإيميل</div></div>
+            <label class="toggle"><input type="checkbox" id="banEmailToo" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="modal-actions">
+            <button id="confirmBanBtn">🚫 تأكيد الحظر</button>
+            <button id="cancelBanBtn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- Unban Modal -->
+<div class="modal-overlay" id="unbanModal">
+    <div class="modal-box">
+        <h3>✅ رفع الحظر</h3>
+        <input type="hidden" id="unbanUid">
+        <p style="color:var(--mid);font-size:0.8rem;margin-bottom:12px" id="unbanTargetLabel"></p>
+        <div class="field-group"><label class="field-label">سبب رفع الحظر (اختياري)</label><textarea id="unbanReasonInput" placeholder="مثلاً: تم التواصل وتوضيح سوء الفهم..." style="min-height:55px"></textarea></div>
+        <div class="modal-actions">
+            <button id="confirmUnbanBtn">✅ تأكيد رفع الحظر</button>
+            <button id="cancelUnbanBtn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<!-- Ban History Modal -->
+<div class="modal-overlay" id="banHistoryModal">
+    <div class="modal-box">
+        <h3>🕒 سجل الحظر</h3>
+        <div id="banHistoryList"></div>
+        <div class="modal-actions"><button id="closeBanHistoryBtn">إغلاق</button></div>
+    </div>
+</div>
+
+<div class="admin-toast" id="adminToast"></div>
+
+<script type="module">
+import { GoogleAuthProvider, get, getApp, getApps, getAuth, getDatabase, initializeApp, onAuthStateChanged, onChildAdded, push, ref, remove, set, signInWithEmailAndPassword, signInWithPopup, signOut, update } from "./supabase-config.js";
+
+
+
+
+
+
+, db=getDatabase(app), auth=getAuth(app);
+
+let allScripts={}, allUsers={}, allApks={}, allUnsafe={}, allUnsafeCode={}, allCodes={}, allScriptRequests={}, allScriptImports={}, allBannedEmails={}, chatLoaded=false, adminUid=null, allReports={}, currentFilter='all';
+
+const sectionTitles={overview:'📊 نظرة عامة',scripts:'📜 السكربتات',apks:'📱 تطبيقات APK',publish:'📤 نشر سكربت','script-requests':'🧾 طلبات السكربتات','sb-import':'📥 استيراد ScriptBlox',users:'👥 المستخدمون','points-ctrl':'⭐ النقاط',codes:'🎟️ أكواد النقاط','badges-ctrl':'🏅 البادجات',chat:'💬 الشات',safety:'🛡️ فحص الأمان',announce:'📢 الإعلانات',settings:'⚙️ الإعدادات',reports:'🚩 البلاغات',log:'📋 سجل الأنشطة','verify-scripts':'✅ التحقق من السكربتات','ban-list':'🚫 قائمة الحظر'};
+
+// عنوان endpoint الاستيراد — نفس سيرفر Nova AI بتاعك (ghgh62131r.pythonanywhere.com)، لازم تضيف عليه route جديد اسمه /import-scriptblox
+const SB_IMPORT_URL="https://ghgh62131r.pythonanywhere.com/import-scriptblox";
+
+/* ─── Toast ─── */
+function toast(msg,dur=2500){ const t=document.getElementById('adminToast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),dur); }
+
+/* ─── Auth ─── */
+function withTimeout(promise, ms, label){
+  return Promise.race([
+    promise,
+    new Promise((_,reject)=>setTimeout(()=>reject(new Error(`${label} استغرق وقت طويل جدًا (تحقق من الإنترنت أو أدوات حظر الإعلانات اللي ممكن تمنع طلبات Firebase)`)), ms))
+  ]);
+}
+
+async function checkAdminAndEnter(user, err){
+  try{
+    const s=await withTimeout(get(ref(db,`admins/${user.uid}`)), 12000, 'التحقق من صلاحيات الأدمن');
+    const v=s.val();
+    const isAdmin=s.exists()&&(v===true||v==='true'||v===1);
+    if(isAdmin)showAdmin(user);
+    else{err.textContent='ليس لديك صلاحيات أدمن';await signOut(auth);}
+  }catch(dbErr){
+    err.textContent='خطأ في قراءة صلاحيات الأدمن: '+dbErr.message;
+    console.error('Admin check error:',dbErr);
+  }
+}
+
+document.getElementById('loginBtn').onclick=async()=>{
+  const e=document.getElementById('email').value.trim(), p=document.getElementById('password').value.trim(), err=document.getElementById('loginError');
+  if(!e||!p){err.textContent='ادخل البريد وكلمة المرور';return;}
+  err.textContent='⏳ جارٍ تسجيل الدخول...';
+  const btn=document.getElementById('loginBtn'); btn.disabled=true;
+  let user;
+  try{
+    const c=await withTimeout(signInWithEmailAndPassword(auth,e,p), 12000, 'تسجيل الدخول');
+    user=c.user;
+  }catch(loginErr){
+    err.textContent = loginErr.message.includes('طويل') ? loginErr.message : 'بريد أو كلمة مرور خاطئة';
+    console.error('Login error:',loginErr);
+    btn.disabled=false;
+    return;
+  }
+  await checkAdminAndEnter(user, err);
+  btn.disabled=false;
+};
+
+document.getElementById('googleLoginBtn').onclick=async()=>{
+  const err=document.getElementById('loginError');
+  const btn=document.getElementById('googleLoginBtn'); btn.disabled=true;
+  err.textContent='⏳ جارٍ تسجيل الدخول...';
+  try{
+    const provider=new GoogleAuthProvider();
+    const c=await withTimeout(signInWithPopup(auth,provider), 30000, 'تسجيل الدخول بجوجل');
+    await checkAdminAndEnter(c.user, err);
+  }catch(gErr){
+    err.textContent = gErr.message.includes('طويل')
+      ? gErr.message
+      : (gErr.code==='auth/popup-closed-by-user' ? 'اتقفلت نافذة جوجل قبل ما تكمل الدخول' : 'حصل خطأ أثناء تسجيل الدخول بجوجل: '+gErr.message);
+    console.error('Google login error:',gErr);
+  }finally{
+    btn.disabled=false;
+  }
+};
+
+onAuthStateChanged(auth,async u=>{if(!u)return;const s=await get(ref(db,`admins/${u.uid}`));const v=s.val();if(s.exists()&&(v===true||v==='true'||v===1))showAdmin(u);});
+
+function showAdmin(user){
+  adminUid=user.uid;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
+  const n=user.email.split('@')[0];
+  ['sideAvatar','topAvatar'].forEach(id=>document.getElementById(id).innerText=n.charAt(0).toUpperCase());
+  document.getElementById('sideEmail').innerText=user.email;
+  document.getElementById('topEmail').innerText=user.email;
+  loadAll();loadSettings();loadActivityLog();
+}
+
+document.getElementById('adminLogoutBtn').onclick=async()=>{await signOut(auth);location.reload();};
+
+/* ─── Nav ─── */
+document.querySelectorAll('.nav-item').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const sec=btn.dataset.section;
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(`sec-${sec}`).classList.add('active');
+    document.getElementById('pageTitle').innerText=sectionTitles[sec]||sec;
+    if(sec==='chat'&&!chatLoaded){loadChat();chatLoaded=true;}
+    if(sec==='points-ctrl')renderTopPoints();
+    if(sec==='codes')renderCodes();
+    if(sec==='badges-ctrl')renderTopBadges();
+    if(sec==='log')loadActivityLog();
+    if(sec==='reports')loadReports();
+    if(sec==='verify-scripts')loadVerifyRequests();
+    if(sec==='script-requests')loadScriptRequests();
+  if(sec==='sb-import')loadScriptImports();
+    if(sec==='apks')renderFullApks();
+    if(sec==='safety'){renderUnsafeList();renderUnsafeCodeList();}
+    if(sec==='ban-list')renderBanList();
+  });
+});
+
+/* ─── Load All ─── */
+async function loadAll(){
+  const[ss,us,cs,as,aps,uns,unsc,cds,srs,sbi]=await Promise.all([get(ref(db,'scripts')),get(ref(db,'users')),get(ref(db,'chat')),get(ref(db,'announcements')),get(ref(db,'apks')),get(ref(db,'unsafeScripts')),get(ref(db,'unsafeCodeSignatures')),get(ref(db,'redeemCodes')),get(ref(db,'scriptRequests')),get(ref(db,'scriptImports'))]);
+  allScripts=ss.exists()?ss.val():{};
+  allUsers=us.exists()?us.val():{};
+  allApks=aps.exists()?aps.val():{};
+  allUnsafe=uns.exists()?uns.val():{};
+  allUnsafeCode=unsc.exists()?unsc.val():{};
+  allCodes=cds.exists()?cds.val():{};
+  allScriptRequests=srs.exists()?srs.val():{};
+  allScriptImports=sbi.exists()?sbi.val():{};
+  const cm=cs.exists()?Object.keys(cs.val()).length:0;
+  let tl=0,tp=0,tb=0;
+  Object.values(allScripts).forEach(s=>tl+=s.likes||0);
+  Object.values(allUsers).forEach(u=>{tp+=u.points||0;tb+=u.badges?Object.keys(u.badges).length:0;});
+  document.getElementById('st-scripts').innerText=Object.keys(allScripts).length;
+  document.getElementById('st-users').innerText=Object.keys(allUsers).length;
+  document.getElementById('st-likes').innerText=tl;
+  document.getElementById('st-pts').innerText=tp;
+  document.getElementById('st-badges').innerText=tb;
+  document.getElementById('st-msgs').innerText=cm;
+  document.getElementById('st-apks').innerText=Object.keys(allApks).length;
+  document.getElementById('st-unsafe').innerText=Object.keys(allUnsafe).length;
+  document.getElementById('scriptsBadge').innerText=Object.keys(allScripts).length;
+  document.getElementById('usersBadge').innerText=Object.keys(allUsers).length;
+  document.getElementById('apksBadge').innerText=Object.keys(allApks).length;
+  document.getElementById('safetyBadge').innerText=Object.keys(allUnsafe).length;
+  document.getElementById('codesBadge').innerText=Object.keys(allCodes).length;
+  const srPending=Object.values(allScriptRequests).filter(r=>r.status==='pending').length;
+  const srBadge=document.getElementById('scriptReqBadge');
+  if(srPending>0){srBadge.innerText=srPending;srBadge.style.display='inline-block';}else srBadge.style.display='none';
+  const sbiPending=Object.values(allScriptImports).filter(r=>r.status==='pending').length;
+  const sbiBadge=document.getElementById('sbImportBadge');
+  if(sbiPending>0){sbiBadge.innerText=sbiPending;sbiBadge.style.display='inline-block';}else sbiBadge.style.display='none';
+  const bannedCount=Object.values(allUsers).filter(u=>u.banned===true).length;
+  const banBadge=document.getElementById('banListBadge');
+  if(bannedCount>0){banBadge.innerText=bannedCount;banBadge.style.display='inline-block';}else banBadge.style.display='none';
+  renderRecentScripts();renderRecentUsers();renderFullScripts();renderUsers();
+  renderRecentApks();renderFullApks();
+  if(as.exists())renderAnnouncements(as.val());
+}
+
+/* ─── Overview Tables ─── */
+function renderRecentScripts(){
+  const b=document.getElementById('recentBody');b.innerHTML='';
+  const e=Object.entries(allScripts).sort((a,x)=>(x[1].timestamp||0)-(a[1].timestamp||0)).slice(0,5);
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="4">لا توجد سكربتات</td></tr>';return;}
+  e.forEach(([,s])=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="t-title">${s.title||'—'}</td><td><span class="t-cat">${s.category||'—'}</span></td><td style="color:var(--mid)">${s.author||'مجهول'}</td><td>👍 ${s.likes||0}</td>`;b.appendChild(tr);});
+}
+
+function renderRecentUsers(){
+  const b=document.getElementById('recentUsersBody');b.innerHTML='';
+  Object.entries(allUsers).slice(0,5).forEach(([uid,u])=>{
+    const s=Object.values(allScripts).filter(x=>x.authorUid===uid||x.authorEmail===u.email).length;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${(u.email||'').split('@')[0]}</td><td>⭐ ${u.points||0}</td><td>🏅 ${u.badges?Object.keys(u.badges).length:0}</td><td>📜 ${s}</td>`;
+    b.appendChild(tr);
+  });
+}
+
+/* ─── APKs: Overview mini table ─── */
+const apkCatLabels={game:'🎮 لعبة',app:'📲 تطبيق',mod:'🧩 مود'};
+
+function renderRecentApks(){
+  const b=document.getElementById('recentApksBody');b.innerHTML='';
+  const e=Object.entries(allApks).sort((a,x)=>(x[1].timestamp||0)-(a[1].timestamp||0)).slice(0,5);
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="4">لا توجد تطبيقات بعد</td></tr>';return;}
+  e.forEach(([,a])=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="t-title">${a.title||'—'}</td><td><span class="t-cat">${apkCatLabels[a.category]||a.category||'—'}</span></td><td style="color:var(--mid)">${a.author||'مجهول'}</td><td>👍 ${a.likes||0}</td>`;b.appendChild(tr);});
+}
+
+/* ─── APKs: Full management table ─── */
+function renderFullApks(f=''){
+  const b=document.getElementById('apksBody');if(!b)return;b.innerHTML='';
+  const e=Object.entries(allApks).filter(([,a])=>!f||(a.title||'').toLowerCase().includes(f)||(a.author||'').toLowerCase().includes(f)).sort((a,x)=>(x[1].timestamp||0)-(a[1].timestamp||0));
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="7">لا توجد تطبيقات</td></tr>';return;}
+  e.forEach(([id,a])=>{
+    const isApproved=a.status!=='hidden';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><img class="t-icon" src="${a.icon||''}" alt=""></td>
+      <td class="t-title">${a.title||'—'}</td>
+      <td><span class="t-cat">${apkCatLabels[a.category]||a.category||'—'}</span></td>
+      <td style="color:var(--mid)">${a.author||'مجهول'}</td>
+      <td>👍 ${a.likes||0}</td>
+      <td><span class="status-pill ${isApproved?'on':'off'}">${isApproved?'✅ ظاهر':'🚫 مخفي'}</span></td>
+      <td><div class="t-actions">
+        <button class="t-btn view">🔗</button>
+        <button class="t-btn edit">✏️</button>
+        <button class="t-btn ${isApproved?'ban':'unban'}">${isApproved?'🚫 إخفاء':'✅ إظهار'}</button>
+        <button class="t-btn del">🗑️</button>
+      </div></td>`;
+    tr.querySelector('.view').onclick=()=>{if(a.url)window.open(a.url,'_blank');};
+    tr.querySelector('.edit').onclick=()=>openApkEdit(id,a);
+    tr.querySelector(`.${isApproved?'ban':'unban'}`).onclick=()=>toggleApkStatus(id,a,isApproved);
+    tr.querySelector('.del').onclick=()=>deleteApk(id,tr,a.title);
+    b.appendChild(tr);
+  });
+}
+
+document.getElementById('apkSearch').addEventListener('input',e=>renderFullApks(e.target.value.toLowerCase().trim()));
+
+async function toggleApkStatus(id,a,isApproved){
+  const newStatus=isApproved?'hidden':'approved';
+  await update(ref(db,`apks/${id}`),{status:newStatus});
+  allApks[id].status=newStatus;
+  renderFullApks(document.getElementById('apkSearch').value.toLowerCase().trim());
+  logActivity(isApproved?'🚫':'✅',`${isApproved?'إخفاء':'إظهار'} تطبيق: ${a.title}`);
+  toast(isApproved?'🚫 تم إخفاء التطبيق':'✅ تم إظهار التطبيق');
+}
+
+async function deleteApk(id,row,title){
+  if(!confirm(`حذف "${title}" نهائياً؟`))return;
+  await remove(ref(db,`apks/${id}`));delete allApks[id];
+  row.style.cssText+='opacity:0;transition:0.3s';
+  setTimeout(()=>{row.remove();updateApkCount();renderRecentApks();},300);
+  logActivity('🗑️',`حذف تطبيق: ${title}`);toast(`🗑️ تم حذف "${title}"`);
+}
+
+function updateApkCount(){const n=Object.keys(allApks).length;document.getElementById('st-apks').innerText=n;document.getElementById('apksBadge').innerText=n;}
+
+function openApkEdit(id,a){
+  document.getElementById('editApkId').value=id;
+  document.getElementById('editApkTitle').value=a.title||'';
+  document.getElementById('editApkDesc').value=a.description||'';
+  document.getElementById('editApkCategory').value=a.category||'game';
+  document.getElementById('editApkUrl').value=a.url||'';
+  document.getElementById('editApkModal').classList.add('open');
+}
+
+document.getElementById('cancelApkEditBtn').onclick=()=>document.getElementById('editApkModal').classList.remove('open');
+document.getElementById('editApkModal').addEventListener('click',e=>{if(e.target===document.getElementById('editApkModal'))document.getElementById('editApkModal').classList.remove('open');});
+
+document.getElementById('saveApkEditBtn').onclick=async()=>{
+  const id=document.getElementById('editApkId').value;
+  const upd={
+    title:document.getElementById('editApkTitle').value.trim(),
+    description:document.getElementById('editApkDesc').value.trim(),
+    category:document.getElementById('editApkCategory').value,
+    url:document.getElementById('editApkUrl').value.trim()
+  };
+  if(!upd.title||!upd.url)return alert('الاسم ورابط التحميل مطلوبان');
+  await update(ref(db,`apks/${id}`),upd);
+  Object.assign(allApks[id],upd);
+  renderFullApks(document.getElementById('apkSearch').value.toLowerCase());
+  renderRecentApks();
+  document.getElementById('editApkModal').classList.remove('open');
+  logActivity('✏️',`تعديل تطبيق: ${upd.title}`);toast('✅ تم حفظ التعديلات');
+};
+
+/* ─── Scripts Table ─── */
+function renderFullScripts(f=''){
+  const b=document.getElementById('fullScriptsBody');b.innerHTML='';
+  const e=Object.entries(allScripts).filter(([,s])=>!f||(s.title||'').toLowerCase().includes(f)||(s.author||'').toLowerCase().includes(f)).sort((a,x)=>(x[1].timestamp||0)-(a[1].timestamp||0));
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="7">لا توجد نتائج</td></tr>';return;}
+  e.forEach(([id,s],i)=>{
+    const avg=s.votes?(s.rating/s.votes).toFixed(1):'—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="color:var(--lo);font-size:0.72rem">${i+1}</td><td class="t-title">${s.title||'—'}</td><td><span class="t-cat">${s.category||'—'}</span></td><td style="color:var(--mid)">${s.author||'مجهول'}</td><td>👍 ${s.likes||0}</td><td>⭐ ${avg}</td><td><div class="t-actions"><button class="t-btn edit">✏️</button><button class="t-btn del">🗑️</button></div></td>`;
+    tr.querySelector('.edit').onclick=()=>openEdit(id,s);
+    tr.querySelector('.del').onclick=()=>deleteScript(id,tr,s.title);
+    b.appendChild(tr);
+  });
+}
+
+document.getElementById('scriptSearch').addEventListener('input',e=>renderFullScripts(e.target.value.toLowerCase().trim()));
+
+async function deleteScript(id,row,title){
+  if(!confirm(`حذف "${title}" نهائياً؟`))return;
+  await remove(ref(db,`scripts/${id}`));delete allScripts[id];
+  row.style.cssText+='opacity:0;transition:0.3s';
+  setTimeout(()=>{row.remove();updateScriptCount();renderRecentScripts();},300);
+  logActivity('🗑️',`حذف سكربت: ${title}`);toast(`🗑️ تم حذف "${title}"`);
+}
+
+function updateScriptCount(){const n=Object.keys(allScripts).length;document.getElementById('st-scripts').innerText=n;document.getElementById('scriptsBadge').innerText=n;}
+
+/* ─── Edit Modal ─── */
+function openEdit(id,s){
+  document.getElementById('editId').value=id;
+  document.getElementById('editTitle').value=s.title||'';
+  document.getElementById('editCode').value=s.code||'';
+  document.getElementById('editDesc').value=s.description||'';
+  document.getElementById('editCategory').value=s.category||'';
+  document.getElementById('editModal').classList.add('open');
+}
+
+document.getElementById('cancelEditBtn').onclick=()=>document.getElementById('editModal').classList.remove('open');
+document.getElementById('editModal').addEventListener('click',e=>{if(e.target===document.getElementById('editModal'))document.getElementById('editModal').classList.remove('open');});
+
+document.getElementById('saveEditBtn').onclick=async()=>{
+  const id=document.getElementById('editId').value;
+  const upd={title:document.getElementById('editTitle').value.trim(),code:document.getElementById('editCode').value.trim(),description:document.getElementById('editDesc').value.trim(),category:document.getElementById('editCategory').value};
+  if(!upd.title||!upd.code)return alert('العنوان والكود مطلوبان');
+  await update(ref(db,`scripts/${id}`),upd);
+  Object.assign(allScripts[id],upd);
+  renderFullScripts(document.getElementById('scriptSearch').value.toLowerCase());
+  renderRecentScripts();
+  document.getElementById('editModal').classList.remove('open');
+  logActivity('✏️',`تعديل: ${upd.title}`);toast('✅ تم حفظ التعديلات');
+};
+
+/* ─── PUBLISH ─── */
+let pubSelectedMap=null, pubImageBase64=null;
+
+document.querySelectorAll('.map-mini-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.map-mini-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    pubSelectedMap=btn.dataset.map||null;
+    document.getElementById('customMapInput').value='';
+    updatePreview();
+  });
+});
+
+document.getElementById('customMapInput').addEventListener('input',e=>{
+  const v=e.target.value.trim();
+  document.querySelectorAll('.map-mini-btn').forEach(b=>b.classList.remove('selected'));
+  pubSelectedMap=v||null;updatePreview();
+});
+
+['newTitle','newDesc','newCategory'].forEach(id=>document.getElementById(id)?.addEventListener('input',updatePreview));
+
+function updatePreview(){
+  const t=document.getElementById('newTitle').value.trim(),c=document.getElementById('newCategory').value,pr=document.getElementById('pubPreview');
+  if(t||c){
+    pr.style.display='block';
+    const mapName=(pubSelectedMap||'').trim();
+    const finalTitle=t?(mapName?`سكربت ماب "${mapName}"`:`سكربت "${t}"`):'—';
+    document.getElementById('previewTitle').innerText=finalTitle;
+    const m=[];if(c)m.push(`📁 ${c}`);if(pubSelectedMap)m.push(`🗺️ ${pubSelectedMap}`);document.getElementById('previewMeta').innerText=m.join('  ·  ')||'لم يُحدد';
+  }
+  else pr.style.display='none';
+}
+
+document.getElementById('newCode').addEventListener('input',e=>{
+  const n=e.target.value.length,el=document.getElementById('codeCounter');
+  el.textContent=`${n.toLocaleString()} حرف`;el.classList.toggle('warn',n>50000);
+});
+
+// Image upload
+const pubZone=document.getElementById('pubUploadZone'),pubInput=document.getElementById('pubImgInput');
+pubZone.addEventListener('click',()=>{if(!pubZone.classList.contains('has-img'))pubInput.click();});
+pubZone.addEventListener('dragover',e=>{e.preventDefault();pubZone.style.borderColor='rgba(139,92,246,0.45)';});
+pubZone.addEventListener('dragleave',()=>pubZone.style.borderColor='');
+pubZone.addEventListener('drop',e=>{e.preventDefault();pubZone.style.borderColor='';const f=e.dataTransfer.files[0];if(f)processPubImage(f);});
+pubInput.addEventListener('change',e=>{if(e.target.files[0])processPubImage(e.target.files[0]);});
+
+async function processPubImage(file){
+  if(!file.type.startsWith('image/')){toast('❌ ليس ملف صورة');return;}
+  if(file.size>12*1024*1024){toast('❌ الصورة أكبر من 12MB');return;}
+  document.getElementById('pubImgStatus').textContent='⏳ معالجة...';
+  const compressed=await new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');let w=img.width,h=img.height;if(w>800){h=Math.round(h*800/w);w=800;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',0.82));};img.onerror=rej;img.src=e.target.result;};
+    r.onerror=rej;r.readAsDataURL(file);
+  });
+  pubImageBase64=compressed;
+  document.getElementById('pubImgPreview').src=compressed;
+  pubZone.classList.add('has-img');
+  document.getElementById('pubImgStatus').textContent=`✅ جاهز — ${((compressed.length*0.75)/1024/1024).toFixed(2)} MB`;
+  document.getElementById('pubImgActions').style.display='flex';
+}
+
+window.changePubImg=()=>{pubInput.click();};
+window.removePubImg=()=>{pubImageBase64=null;document.getElementById('pubImgPreview').src='';pubZone.classList.remove('has-img');pubInput.value='';document.getElementById('pubImgStatus').textContent='';document.getElementById('pubImgActions').style.display='none';};
+
+document.getElementById('addScriptBtn').onclick=async()=>{
+  const title=document.getElementById('newTitle').value.trim();
+  const code=document.getElementById('newCode').value.trim();
+  const desc=document.getElementById('newDesc').value.trim();
+  const category=document.getElementById('newCategory').value;
+  if(!title||!code||!category){toast('❌ العنوان والكود والقسم مطلوبين');return;}
+
+  const safety=await checkCodeSafety(code);
+  if(safety.blocked){
+    toast('🚫 تم رفض النشر — الكود يشبه سكربت غير آمن معروف');
+    alert(`🚫 لا يمكن نشر هذا السكربت.\n\nالسبب: يتطابق بنسبة عالية مع سكربت مسجّل في قائمة السكربتات الغير آمنة.\n${safety.matchName?('السكربت المشابه: '+safety.matchName):''}\n\nإذا كنت متأكداً أن هذا السكربت مختلف وآمن، يمكنك مراجعته يدوياً أو تعديله قبل النشر.`);
+    return;
+  }
+
+  const btn=document.getElementById('addScriptBtn');
+  btn.disabled=true;btn.innerHTML='⏳ جارٍ النشر...';
+  const mapName=(pubSelectedMap||'').trim();
+  const finalTitle=mapName?`سكربت ماب "${mapName}"`:`سكربت "${title}"`;
+  const newRef=push(ref(db,'scripts'));
+  const data={title:finalTitle,code,description:desc,category,map:pubSelectedMap||null,author:'سكربت من الإدارة',timestamp:Date.now(),likes:0,rating:0,votes:0};
+  if(pubImageBase64)data.image=pubImageBase64;
+  await set(newRef,data);
+  allScripts[newRef.key]=data;
+  toast('✅ تم نشر السكربت!');
+  document.getElementById('newTitle').value='';document.getElementById('newCode').value='';document.getElementById('newDesc').value='';document.getElementById('newCategory').value='';
+  document.getElementById('codeCounter').textContent='0 حرف';
+  document.querySelectorAll('.map-mini-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelector('.map-mini-btn.no-map').classList.add('selected');
+  pubSelectedMap=null;pubImageBase64=null;
+  window.removePubImg();updatePreview();
+  renderFullScripts();renderRecentScripts();updateScriptCount();
+  logActivity('📤',`نشر سكربت: ${title}`);
+  btn.disabled=false;btn.innerHTML='📤 نشر السكربت';
+};
+
+/* ─── Users ─── */
+function renderUsers(f=''){
+  const b=document.getElementById('usersBody');b.innerHTML='';
+  let e=Object.entries(allUsers);
+  if(f)e=e.filter(([,u])=>(u.email||'').toLowerCase().includes(f));
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="6">لا يوجد مستخدمون</td></tr>';return;}
+  e.forEach(([uid,u])=>{
+    const name=(u.email||'').split('@')[0];
+    const scripts=Object.values(allScripts).filter(s=>s.authorUid===uid||s.authorEmail===u.email).length;
+    const banned=u.banned===true;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><div style="font-weight:800">${name}</div><div style="font-size:0.68rem;color:var(--lo)">${u.email||'—'}</div></td><td>📜 ${scripts}</td><td>⭐ ${u.points||0}</td><td>🏅 ${u.badges?Object.keys(u.badges).length:0}</td><td>${banned?'<span class="banned-badge">محظور</span>':'<span style="color:var(--green);font-size:0.72rem;font-weight:800">✅ نشط</span>'}</td><td><div class="t-actions"><button class="t-btn view">👤</button><button class="t-btn pts">⭐</button><button class="t-btn ${banned?'unban':'ban'}">${banned?'✅ رفع':'🚫 حظر'}</button></div></td>`;
+    tr.querySelector('.view').onclick=()=>window.open(`profile.html?uid=${uid}`,'_blank');
+    tr.querySelector('.pts').onclick=()=>{const p=prompt(`إضافة نقاط لـ ${name}:`);if(!p||isNaN(p))return;addPtsToUid(uid,parseInt(p));};
+    tr.querySelector(`.${banned?'unban':'ban'}`).onclick=()=>toggleBan(uid,u,banned);
+    b.appendChild(tr);
+  });
+}
+
+document.getElementById('userSearch')?.addEventListener('input',e=>renderUsers(e.target.value.toLowerCase().trim()));
+
+function toggleBan(uid,u,isBanned){
+  if(isBanned)openUnbanModal(uid,u);
+  else openBanModal(uid,u);
+}
+
+/* ─── Ban / Unban modals ─── */
+function emailKey(email){ return (email||'').toLowerCase().trim().replace(/[.#$/\[\]]/g,','); }
+
+function openBanModal(uid,u){
+  document.getElementById('banUid').value=uid;
+  document.getElementById('banTargetLabel').innerText=`المستخدم: ${u.email||uid}`;
+  document.getElementById('banReasonInput').value='';
+  document.getElementById('banDurationInput').value='permanent';
+  document.getElementById('banEmailToo').checked=true;
+  document.getElementById('banModal').classList.add('open');
+}
+document.getElementById('cancelBanBtn').onclick=()=>document.getElementById('banModal').classList.remove('open');
+
+document.getElementById('confirmBanBtn').onclick=async()=>{
+  const uid=document.getElementById('banUid').value;
+  const u=allUsers[uid]||{};
+  const reason=document.getElementById('banReasonInput').value.trim()||'بدون سبب محدد';
+  const durationVal=document.getElementById('banDurationInput').value;
+  const blockEmailToo=document.getElementById('banEmailToo').checked;
+  const now=Date.now();
+  const expiresAt=durationVal==='permanent'?null:now+parseInt(durationVal)*24*60*60*1000;
+  const banRecord={reason,bannedAt:now,bannedBy:auth.currentUser?.email||adminUid,banExpiresAt:expiresAt};
+  const newBanCount=(u.banCount||0)+1;
+
+  await update(ref(db,`users/${uid}`),{
+    banned:true,
+    banReason:reason,
+    bannedAt:now,
+    bannedBy:banRecord.bannedBy,
+    banExpiresAt:expiresAt,
+    banCount:newBanCount
+  });
+  await push(ref(db,`users/${uid}/banHistory`),banRecord);
+
+  if(blockEmailToo&&u.email){
+    await set(ref(db,`bannedEmails/${emailKey(u.email)}`),{
+      email:u.email,reason,bannedAt:now,bannedBy:banRecord.bannedBy
+    });
+  }
+
+  allUsers[uid]={...u,banned:true,banReason:reason,bannedAt:now,bannedBy:banRecord.bannedBy,banExpiresAt:expiresAt,banCount:newBanCount};
+  document.getElementById('banModal').classList.remove('open');
+  renderUsers(document.getElementById('userSearch')?.value?.toLowerCase()||'');
+  renderBanList();
+  logActivity('🚫',`حظر ${durationVal==='permanent'?'دائم':`(${durationVal} يوم)`}: ${u.email} — السبب: ${reason}`);
+  toast('🚫 تم الحظر');
+};
+
+function openUnbanModal(uid,u){
+  document.getElementById('unbanUid').value=uid;
+  document.getElementById('unbanTargetLabel').innerText=`المستخدم: ${u.email||uid}`;
+  document.getElementById('unbanReasonInput').value='';
+  document.getElementById('unbanModal').classList.add('open');
+}
+document.getElementById('cancelUnbanBtn').onclick=()=>document.getElementById('unbanModal').classList.remove('open');
+
+document.getElementById('confirmUnbanBtn').onclick=async()=>{
+  const uid=document.getElementById('unbanUid').value;
+  const u=allUsers[uid]||{};
+  const reason=document.getElementById('unbanReasonInput').value.trim();
+  const now=Date.now();
+  await update(ref(db,`users/${uid}`),{banned:false,banExpiresAt:null});
+  await push(ref(db,`users/${uid}/banHistory`),{unbannedAt:now,unbanReason:reason||'—',unbannedBy:auth.currentUser?.email||adminUid});
+  allUsers[uid]={...u,banned:false,banExpiresAt:null};
+  document.getElementById('unbanModal').classList.remove('open');
+  renderUsers(document.getElementById('userSearch')?.value?.toLowerCase()||'');
+  renderBanList();
+  logActivity('✅',`رفع حظر: ${u.email}${reason?' — '+reason:''}`);
+  toast('✅ تم رفع الحظر');
+};
+
+window.unbanFromList=(uid)=>{ openUnbanModal(uid, allUsers[uid]||{}); };
+
+/* ─── Ban History Modal ─── */
+window.showBanHistory=(uid)=>{
+  const u=allUsers[uid]||{};
+  const hist=u.banHistory?Object.values(u.banHistory).sort((a,x)=>(x.bannedAt||x.unbannedAt||0)-(a.bannedAt||a.unbannedAt||0)):[];
+  const list=document.getElementById('banHistoryList');
+  if(!hist.length){list.innerHTML='<div style="color:var(--lo);text-align:center;padding:20px">لا يوجد سجل بعد</div>';}
+  else{
+    list.innerHTML=hist.map(h=>{
+      const d=new Date(h.bannedAt||h.unbannedAt||0).toLocaleString('ar-EG',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      return h.bannedAt
+        ? `<div class="ban-history-item">🚫 <b>حظر</b> — ${h.reason||'—'}<br><span style="font-size:0.68rem">بواسطة ${h.bannedBy||'—'} · ${d}${h.banExpiresAt?' · حتى '+new Date(h.banExpiresAt).toLocaleDateString('ar-EG'):' · دائم'}</span></div>`
+        : `<div class="ban-history-item">✅ <b>رفع حظر</b> — ${h.unbanReason||'—'}<br><span style="font-size:0.68rem">بواسطة ${h.unbannedBy||'—'} · ${d}</span></div>`;
+    }).join('');
+  }
+  document.getElementById('banHistoryModal').classList.add('open');
+};
+document.getElementById('closeBanHistoryBtn').onclick=()=>document.getElementById('banHistoryModal').classList.remove('open');
+
+/* ─── Ban List section ─── */
+window.filterBanTab=(btn,tab)=>{
+  document.querySelectorAll('#sec-ban-list .rf-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('banUsersTab').style.display=tab==='users'?'block':'none';
+  document.getElementById('banEmailsTab').style.display=tab==='emails'?'block':'none';
+};
+
+async function autoExpireBans(){
+  const now=Date.now();
+  const expired=Object.entries(allUsers).filter(([,u])=>u.banned===true&&u.banExpiresAt&&u.banExpiresAt<now);
+  for(const[uid,u]of expired){
+    await update(ref(db,`users/${uid}`),{banned:false});
+    await push(ref(db,`users/${uid}/banHistory`),{unbannedAt:now,unbanReason:'انتهت مدة الحظر تلقائيًا',unbannedBy:'النظام'});
+    allUsers[uid].banned=false;
+    logActivity('⏰',`انتهت مدة الحظر تلقائيًا: ${u.email}`);
+  }
+}
+
+async function renderBanList(){
+  await autoExpireBans();
+
+  const b=document.getElementById('banListBody');b.innerHTML='';
+  const f=(document.getElementById('banSearch')?.value||'').toLowerCase().trim();
+  let banned=Object.entries(allUsers).filter(([,u])=>u.banned===true);
+  if(f)banned=banned.filter(([,u])=>(u.email||'').toLowerCase().includes(f)||(u.banReason||'').toLowerCase().includes(f));
+
+  const badge=document.getElementById('banListBadge');
+  const totalBanned=Object.values(allUsers).filter(u=>u.banned===true).length;
+  if(totalBanned>0){badge.innerText=totalBanned;badge.style.display='inline-block';}else badge.style.display='none';
+
+  if(!banned.length){b.innerHTML='<tr class="empty-row"><td colspan="7">لا يوجد مستخدمون محظورون حاليًا</td></tr>';}
+  else{
+    banned.forEach(([uid,u])=>{
+      const date=u.bannedAt?new Date(u.bannedAt).toLocaleDateString('ar-EG'):'—';
+      const expiryHtml=!u.banExpiresAt
+        ?'<span class="ban-expiry perm">دائم</span>'
+        :`<span class="ban-expiry temp">حتى ${new Date(u.banExpiresAt).toLocaleDateString('ar-EG')}</span>`;
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td><div style="font-weight:800">${(u.email||'').split('@')[0]}</div><div style="font-size:0.68rem;color:var(--lo)">${u.email||uid}</div></td>
+        <td class="ban-reason-cell" title="${(u.banReason||'').replace(/"/g,'&quot;')}">${u.banReason||'—'}</td>
+        <td style="font-size:0.72rem;color:var(--lo)">${u.bannedBy||'—'}</td>
+        <td style="font-size:0.72rem;color:var(--lo)">${date}</td>
+        <td>${expiryHtml}</td>
+        <td><span class="ban-count-pill">${u.banCount||1}×</span></td>
+        <td><div class="t-actions">
+          <button class="t-btn unban" onclick="unbanFromList('${uid}')">✅ رفع الحظر</button>
+          <button class="t-btn view" onclick="showBanHistory('${uid}')">🕒 السجل</button>
+        </div></td>`;
+      b.appendChild(tr);
+    });
+  }
+  renderBlockedEmails();
+}
+document.getElementById('banSearch')?.addEventListener('input',()=>renderBanList());
+
+async function renderBlockedEmails(){
+  const b=document.getElementById('blockedEmailsBody');b.innerHTML='';
+  const s=await get(ref(db,'bannedEmails'));
+  allBannedEmails=s.exists()?s.val():{};
+  const entries=Object.entries(allBannedEmails);
+  if(!entries.length){b.innerHTML='<tr class="empty-row"><td colspan="5">لا توجد إيميلات محظورة مسبقًا</td></tr>';return;}
+  entries.sort((a,x)=>(x[1].bannedAt||0)-(a[1].bannedAt||0)).forEach(([key,rec])=>{
+    const date=rec.bannedAt?new Date(rec.bannedAt).toLocaleDateString('ar-EG'):'—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td style="font-weight:700">${rec.email||key}</td>
+      <td class="ban-reason-cell" title="${(rec.reason||'').replace(/"/g,'&quot;')}">${rec.reason||'—'}</td>
+      <td style="font-size:0.72rem;color:var(--lo)">${rec.bannedBy||'—'}</td>
+      <td style="font-size:0.72rem;color:var(--lo)">${date}</td>
+      <td><button class="t-btn del" onclick="removeBlockedEmail('${key}')">🗑️ إلغاء</button></td>`;
+    b.appendChild(tr);
+  });
+}
+
+document.getElementById('addBlockEmailBtn').onclick=async()=>{
+  const email=document.getElementById('newBlockEmail').value.trim().toLowerCase();
+  const reason=document.getElementById('newBlockReason').value.trim()||'بدون سبب محدد';
+  if(!email||!email.includes('@')){toast('❌ اكتب إيميل صحيح');return;}
+  const key=emailKey(email);
+  await set(ref(db,`bannedEmails/${key}`),{email,reason,bannedAt:Date.now(),bannedBy:auth.currentUser?.email||adminUid});
+  document.getElementById('newBlockEmail').value='';
+  document.getElementById('newBlockReason').value='';
+  logActivity('🚫',`حظر إيميل مباشرة: ${email} — ${reason}`);
+  toast('🚫 تم حظر الإيميل');
+  renderBlockedEmails();
+};
+
+window.removeBlockedEmail=async(key)=>{
+  if(!confirm('إلغاء حظر هذا الإيميل؟'))return;
+  const email=allBannedEmails[key]?.email||key;
+  await remove(ref(db,`bannedEmails/${key}`));
+  logActivity('✅',`إلغاء حظر إيميل: ${email}`);
+  toast('✅ تم إلغاء حظر الإيميل');
+  renderBlockedEmails();
+};
+
+/* ─── Points ─── */
+async function findUidByEmail(identifier){
+  const q=(identifier||'').trim().toLowerCase();
+  if(!q)return null;
+  const e=Object.entries(allUsers).find(([,u])=>
+    (u.email&&u.email.toLowerCase()===q) ||
+    (u.username&&u.username.toLowerCase()===q) ||
+    (u.email&&u.email.split('@')[0].toLowerCase()===q)
+  );
+  return e?e[0]:null;
+}
+
+async function addPtsToUid(uid,amount){
+  if(!uid||!amount||amount<=0)return;
+  const s=await get(ref(db,`users/${uid}/points`));
+  const cur=s.exists()?s.val():0;
+  await set(ref(db,`users/${uid}/points`),cur+amount);
+  await set(ref(db,`users/${uid}/pointsLog/${Date.now()}`),{type:'admin',points:amount,timestamp:Date.now()});
+  if(allUsers[uid])allUsers[uid].points=(allUsers[uid].points||0)+amount;
+  logActivity('⭐',`إضافة ${amount} نقطة للمستخدم ${allUsers[uid]?.email||uid}`);
+  toast(`✅ تم إضافة ${amount} نقطة`);
+}
+
+window.addPointsToUser=async()=>{const e=document.getElementById('pts-email').value.trim(),a=parseInt(document.getElementById('pts-amount').value);if(!e||!a)return toast('❌ مطلوب البريد أو اسم المستخدم والعدد');const uid=await findUidByEmail(e);if(!uid)return toast('❌ المستخدم غير موجود');await addPtsToUid(uid,a);};
+
+/* ─── Manual verify by email ─── */
+window.manualVerifyByEmail=async()=>{
+  const emailInput=document.getElementById('manual-verify-email');
+  const msg=document.getElementById('manual-verify-msg');
+  const email=emailInput.value.trim();
+  if(!email){msg.style.color='var(--red)';msg.textContent='❌ اكتب البريد أو اسم المستخدم الأول';return;}
+  msg.style.color='var(--lo)';msg.textContent='⏳ جارٍ البحث...';
+  const uid=await findUidByEmail(email);
+  if(!uid){msg.style.color='var(--red)';msg.textContent='❌ مفيش مستخدم بالبريد أو الاسم ده';return;}
+  const ss=await get(ref(db,'scripts'));
+  const allS=ss.exists()?ss.val():{};
+  const userScripts=scriptsByUser(allS,uid,email);
+  await Promise.all(userScripts.map(([id])=>update(ref(db,`scripts/${id}`),{verified:true,verifiedAt:Date.now()})));
+  await update(ref(db,`users/${uid}/`),{verified:true});
+  if(allUsers[uid])allUsers[uid].verified=true;
+  msg.style.color='var(--green)';msg.textContent=`✅ تم توثيق ${userScripts.length} سكربت لهذا المستخدم`;
+  toast(`✅ تم توثيق ${email} (${userScripts.length} سكربت)`);
+  logActivity('✅',`توثيق يدوي بالإيميل: ${email}`);
+  emailInput.value='';
+  loadVerifyRequests();
+};
+
+window.removePointsFromUser=async()=>{
+  const e=document.getElementById('pts-remove-email').value.trim(),a=parseInt(document.getElementById('pts-remove-amount').value);
+  if(!e||!a)return toast('❌ مطلوب البريد أو اسم المستخدم والعدد');
+  const uid=await findUidByEmail(e);if(!uid)return toast('❌ غير موجود');
+  const s=await get(ref(db,`users/${uid}/points`));
+  await set(ref(db,`users/${uid}/points`),Math.max(0,(s.exists()?s.val():0)-a));
+  logActivity('➖',`خصم ${a} نقطة من ${e}`);toast('✅ تم الخصم');
+};
+
+window.addPointsToAll=async()=>{
+  const a=parseInt(document.getElementById('pts-all-amount').value);
+  if(!a)return toast('❌ أدخل عدد النقاط');
+  if(!confirm(`إضافة ${a} نقطة لكل المستخدمين؟`))return;
+  for(const[uid]of Object.entries(allUsers)){const s=await get(ref(db,`users/${uid}/points`));await set(ref(db,`users/${uid}/points`),(s.exists()?s.val():0)+a);}
+  logActivity('🎁',`إضافة ${a} نقطة للجميع`);toast('✅ تم');
+};
+
+window.resetUserPoints=async()=>{
+  const e=document.getElementById('pts-reset-email').value.trim();if(!e)return toast('❌ أدخل البريد أو اسم المستخدم');
+  const uid=await findUidByEmail(e);if(!uid)return toast('❌ غير موجود');
+  if(!confirm(`إعادة نقاط ${e} إلى 0؟`))return;
+  await set(ref(db,`users/${uid}/points`),0);logActivity('🔄',`إعادة تعيين نقاط ${e}`);toast('✅ تم');
+};
+
+function renderTopPoints(){
+  const b=document.getElementById('topPointsBody');b.innerHTML='';
+  const s=Object.entries(allUsers).filter(([,u])=>(u.points||0)>0).sort((a,x)=>(x[1].points||0)-(a[1].points||0)).slice(0,10);
+  if(!s.length){b.innerHTML='<tr class="empty-row"><td colspan="4">لا توجد نقاط</td></tr>';return;}
+  s.forEach(([,u],i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${(u.email||'').split('@')[0]}</td><td>⭐ ${u.points||0}</td><td>—</td>`;b.appendChild(tr);});
+}
+
+/* ─── Redeem Codes ─── */
+function renderCodes(){
+  const b=document.getElementById('codesBody'); if(!b)return; b.innerHTML='';
+  const e=Object.entries(allCodes).sort((a,x)=>(x[1].createdAt||0)-(a[1].createdAt||0));
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="5">لا توجد أكواد بعد</td></tr>';return;}
+  e.forEach(([code,c])=>{
+    const usesCount=c.uses?Object.keys(c.uses).length:0;
+    const date=c.createdAt?new Date(c.createdAt).toLocaleDateString('ar-EG'):'—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="t-title" style="direction:ltr;text-align:left;font-family:'Fira Code',monospace">${code}</td><td>⭐ ${c.points||0}</td><td>👥 ${usesCount}</td><td style="font-size:0.72rem;color:var(--lo)">${date}</td><td><div class="t-actions"><button class="t-btn del">🗑️</button></div></td>`;
+    tr.querySelector('.del').onclick=()=>deleteRedeemCode(code,tr);
+    b.appendChild(tr);
+  });
+}
+
+window.createRedeemCode=async()=>{
+  const textInput=document.getElementById('code-new-text');
+  const ptsInput=document.getElementById('code-new-points');
+  const code=textInput.value.trim().toUpperCase().replace(/\s+/g,'');
+  const pts=parseInt(ptsInput.value);
+  if(!code||!pts||pts<=0)return toast('❌ مطلوب كود صحيح وعدد نقاط أكبر من صفر');
+  const exists=await get(ref(db,`redeemCodes/${code}`));
+  if(exists.exists())return toast('❌ الكود ده موجود بالفعل');
+  const data={points:pts,createdAt:Date.now()};
+  await set(ref(db,`redeemCodes/${code}`),data);
+  allCodes[code]=data;
+  textInput.value='';ptsInput.value='';
+  renderCodes();
+  document.getElementById('codesBadge').innerText=Object.keys(allCodes).length;
+  logActivity('🎟️',`إنشاء كود نقاط: ${code} (${pts} نقطة)`);
+  toast('✅ تم إنشاء الكود');
+};
+
+async function deleteRedeemCode(code,row){
+  if(!confirm(`حذف الكود "${code}"؟ (لن يقدر أي حد يستخدمه بعد كده)`))return;
+  await remove(ref(db,`redeemCodes/${code}`));
+  delete allCodes[code];
+  row.style.cssText+='opacity:0;transition:0.3s';
+  setTimeout(()=>{row.remove();document.getElementById('codesBadge').innerText=Object.keys(allCodes).length;},300);
+  logActivity('🗑️',`حذف كود نقاط: ${code}`);
+  toast('🗑️ تم الحذف');
+}
+
+/* ─── Badges ─── */
+window.grantBadge=async()=>{
+  const e=document.getElementById('badge-email').value.trim(),bid=document.getElementById('badge-select').value;
+  if(!e||!bid)return toast('❌ مطلوب البريد أو اسم المستخدم والبادج');
+  const uid=await findUidByEmail(e);if(!uid)return toast('❌ غير موجود');
+  await set(ref(db,`users/${uid}/badges/${bid}`),{earnedAt:Date.now(),rarity:'admin',grantedByAdmin:true});
+  logActivity('🏅',`منح بادج ${bid} لـ ${e}`);toast('✅ تم منح البادج');
+};
+
+window.revokeBadge=async()=>{
+  const e=document.getElementById('badge-remove-email').value.trim(),bid=document.getElementById('badge-remove-id').value.trim();
+  if(!e||!bid)return toast('❌ مطلوب البريد أو اسم المستخدم والـ ID');
+  const uid=await findUidByEmail(e);if(!uid)return toast('❌ غير موجود');
+  if(!confirm(`سحب بادج "${bid}" من ${e}؟`))return;
+  await remove(ref(db,`users/${uid}/badges/${bid}`));
+  logActivity('🗑️',`سحب بادج ${bid} من ${e}`);toast('✅ تم السحب');
+};
+
+window.clearAllBadges=async()=>{
+  const e=document.getElementById('badge-clear-email').value.trim();if(!e)return toast('❌ أدخل البريد أو اسم المستخدم');
+  const uid=await findUidByEmail(e);if(!uid)return toast('❌ غير موجود');
+  if(!confirm(`مسح جميع بادجات ${e}؟`))return;
+  await remove(ref(db,`users/${uid}/badges`));
+  logActivity('🧹',`مسح بادجات ${e}`);toast('✅ تم المسح');
+};
+
+window.grantBadgeToAll=async()=>{
+  const bid=document.getElementById('badge-all-select').value;
+  if(!confirm(`منح بادج "${bid}" لجميع المستخدمين؟`))return;
+  for(const uid of Object.keys(allUsers))await set(ref(db,`users/${uid}/badges/${bid}`),{earnedAt:Date.now(),rarity:'admin',grantedByAdmin:true});
+  logActivity('🎯',`منح بادج ${bid} للجميع`);toast('✅ تم');
+};
+
+/* ─── Privacy: bulk email purge ─── */
+window.purgeAllStoredEmails=async()=>{
+  const uids=Object.keys(allUsers).filter(uid=>allUsers[uid]&&allUsers[uid].email);
+  if(!uids.length){toast('لا توجد إيميلات مخزّنة أصلًا');return;}
+  if(!confirm(`هيتم حذف الإيميل المخزّن نهائيًا لـ ${uids.length} مستخدم. الإجراء ده لا يمكن التراجع عنه. متأكد؟`))return;
+  if(!confirm('تأكيد أخير: فعلاً عايز تحذف كل الإيميلات دلوقتي؟'))return;
+
+  const btn=document.getElementById('purgeEmailsBtn');
+  const status=document.getElementById('purgeEmailsStatus');
+  btn.disabled=true;
+  let done=0, failed=0;
+
+  for(const uid of uids){
+    try{
+      await remove(ref(db,`users/${uid}/email`));
+      delete allUsers[uid].email;
+      done++;
+    }catch(e){
+      failed++;
+    }
+    status.innerText=`⏳ جارٍ الحذف... ${done+failed}/${uids.length}`;
+  }
+
+  btn.disabled=false;
+  status.innerText=`✅ تم حذف ${done} إيميل${failed?` — تعذّر حذف ${failed}`:''}`;
+  logActivity('🔒',`حذف جميع الإيميلات المخزّنة (${done} مستخدم${failed?`، فشل ${failed}`:''})`);
+  toast('✅ تم الحذف');
+};
+
+/* ─── Privacy: reset everyone's chosen username (forces re-entry on next visit) ─── */
+window.resetAllUsernames=async()=>{
+  const entries=Object.entries(allUsers).filter(([,u])=>u.username);
+  if(!entries.length){toast('لا توجد أسماء مستخدمين محفوظة أصلًا');return;}
+  if(!confirm(`هيتم مسح اسم المستخدم المحفوظ لـ ${entries.length} مستخدم. كل واحد فيهم هيضطر يختار اسم جديد أول ما يفتح البروفايل أو يسجل دخول. الإجراء ده لا يمكن التراجع عنه. متأكد؟`))return;
+  if(!confirm('تأكيد أخير: فعلاً عايز تمسح كل الأسماء دلوقتي؟'))return;
+
+  const btn=document.getElementById('resetUsernamesBtn');
+  const status=document.getElementById('resetUsernamesStatus');
+  btn.disabled=true;
+  let done=0, failed=0;
+
+  for(const [uid,u] of entries){
+    try{
+      const oldName=u.username;
+      await remove(ref(db,`users/${uid}/username`));
+      await remove(ref(db,`users/${uid}/usernameChangedAt`));
+      if(oldName)await remove(ref(db,`usernames/${oldName.toLowerCase()}`));
+      delete allUsers[uid].username;
+      delete allUsers[uid].usernameChangedAt;
+      done++;
+    }catch(e){
+      failed++;
+    }
+    status.innerText=`⏳ جارٍ المسح... ${done+failed}/${entries.length}`;
+  }
+
+  btn.disabled=false;
+  status.innerText=`✅ تم مسح ${done} اسم${failed?` — تعذّر مسح ${failed}`:''}`;
+  logActivity('🧹',`مسح جميع أسماء المستخدمين (${done} مستخدم${failed?`، فشل ${failed}`:''})`);
+  toast('✅ تم المسح — كل المستخدمين هيحتاجوا يختاروا اسم جديد');
+};
+
+/* ─── Privacy: fix old scripts' author field (was email-prefix, now real username) ─── */
+window.fixOldScriptAuthors=async()=>{
+  const entries=Object.entries(allScripts).filter(([,s])=>s.authorUid);
+  if(!entries.length){toast('لا توجد سكربتات فيها authorUid لتحديثها');return;}
+  if(!confirm(`هيتم تحديث حقل "المؤلف" لـ ${entries.length} سكربت بناءً على اسم المستخدم الحالي لصاحب كل سكربت. متابعة؟`))return;
+
+  const btn=document.getElementById('fixAuthorsBtn');
+  const status=document.getElementById('fixAuthorsStatus');
+  btn.disabled=true;
+  let updated=0, skipped=0, failed=0;
+
+  for(const [id,s] of entries){
+    try{
+      const uid=s.authorUid;
+      let newName='cCraft Space User';
+      if(allUsers[uid]&&allUsers[uid].username){
+        newName=allUsers[uid].username;
+      }else{
+        const snap=await get(ref(db,`users/${uid}/username`));
+        if(snap.exists()&&snap.val())newName=snap.val();
+      }
+      if(s.author===newName){skipped++;}
+      else{
+        await set(ref(db,`scripts/${id}/author`),newName);
+        allScripts[id].author=newName;
+        updated++;
+      }
+    }catch(e){
+      failed++;
+    }
+    status.innerText=`⏳ جارٍ التحديث... ${updated+skipped+failed}/${entries.length}`;
+  }
+
+  btn.disabled=false;
+  status.innerText=`✅ تحديث ${updated} — بدون تغيير ${skipped}${failed?` — فشل ${failed}`:''}`;
+  logActivity('🔄',`تحديث أسماء مؤلفي ${updated} سكربت قديم`);
+  toast('✅ تم التحديث');
+};
+
+function renderTopBadges(){
+  const b=document.getElementById('topBadgesBody');b.innerHTML='';
+  const s=Object.entries(allUsers).filter(([,u])=>u.badges&&Object.keys(u.badges).length>0).sort((a,x)=>Object.keys(x[1].badges||{}).length-Object.keys(a[1].badges||{}).length).slice(0,10);
+  if(!s.length){b.innerHTML='<tr class="empty-row"><td colspan="4">لا بيانات</td></tr>';return;}
+  s.forEach(([,u],i)=>{
+    const bg=u.badges||{},cnt=Object.keys(bg).length;
+    const lb=Object.entries(bg).sort((a,x)=>(x[1].earnedAt||0)-(a[1].earnedAt||0))[0];
+    const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${(u.email||'').split('@')[0]}</td><td>🏅 ${cnt}</td><td style="font-size:0.72rem;color:var(--lo)">${lb?lb[0]:'—'}</td>`;b.appendChild(tr);
+  });
+}
+
+/* ─── Chat ─── */
+function loadChat(){
+  const c=document.getElementById('chatContainer');c.innerHTML='';
+  onChildAdded(ref(db,'chat'),snapshot=>{
+    const msg=snapshot.val(),key=snapshot.key;
+    const div=document.createElement('div');div.className='chat-msg';
+    const name=msg.username||'مجهول',time=msg.timestamp?new Date(msg.timestamp).toLocaleTimeString('ar-EG'):'';
+    div.innerHTML=`<div class="msg-avatar">${name.charAt(0).toUpperCase()}</div><div class="msg-body"><div class="msg-user">${name}</div><div class="msg-text" id="mt-${key}">${msg.text}</div><div class="msg-time">${time}</div></div><div class="msg-actions"><button class="t-btn edit">✏️</button><button class="t-btn del">🗑️</button></div>`;
+    div.querySelector('.del').onclick=async()=>{if(!confirm('حذف الرسالة؟'))return;await remove(ref(db,`chat/${key}`));div.remove();};
+    div.querySelector('.edit').onclick=async()=>{const cur=document.getElementById(`mt-${key}`).innerText,t=prompt('عدل الرسالة:',cur);if(!t)return;await update(ref(db,`chat/${key}`),{text:t});document.getElementById(`mt-${key}`).innerText=t;};
+    c.appendChild(div);c.scrollTop=c.scrollHeight;
+  });
+}
+
+/* ─── Announcements ─── */
+document.getElementById('sendAnnBtn').onclick=async()=>{
+  const t=document.getElementById('annText').value.trim();if(!t)return toast('❌ اكتب نص الإعلان');
+  const nr=push(ref(db,'announcements'));await set(nr,{text:t,timestamp:Date.now()});
+  document.getElementById('annText').value='';
+  const s=await get(ref(db,'announcements'));if(s.exists())renderAnnouncements(s.val());
+  logActivity('📢',`إعلان: ${t.slice(0,40)}`);toast('✅ تم إرسال الإعلان');
+};
+
+function renderAnnouncements(data){
+  const c=document.getElementById('annHistory');c.innerHTML='';
+  Object.entries(data).sort((a,x)=>(x[1].timestamp||0)-(a[1].timestamp||0)).forEach(([id,ann])=>{
+    const div=document.createElement('div');div.className='ann-item';
+    div.innerHTML=`<p>${ann.text}</p><span class="ann-time">${new Date(ann.timestamp||0).toLocaleDateString('ar-EG')}</span>`;
+    c.appendChild(div);
+  });
+}
+
+/* ─── Settings ─── */
+async function loadSettings(){
+  const s=await get(ref(db,'siteSettings'));if(!s.exists())return;
+  const v=s.val();['maintenance','publish','apks','chat','referral','likes','register'].forEach(k=>{const el=document.getElementById(`toggle-${k}`);if(el&&v[k]!==undefined)el.checked=v[k];});
+}
+
+document.getElementById('saveSettingsBtn').onclick=async()=>{
+  const s={};['maintenance','publish','apks','chat','referral','likes','register'].forEach(k=>{s[k]=document.getElementById(`toggle-${k}`)?.checked??true;});
+  await set(ref(db,'siteSettings'),s);
+  logActivity('⚙️','حفظ إعدادات الموقع');toast('✅ تم حفظ الإعدادات');
+};
+
+window.addNewAdmin=async()=>{
+  const uid=document.getElementById('newAdminUid').value.trim();if(!uid)return toast('❌ أدخل الـ UID');
+  if(!confirm(`إضافة ${uid} كأدمن؟`))return;
+  await set(ref(db,`admins/${uid}`),true);
+  logActivity('🔑',`إضافة أدمن: ${uid}`);toast('✅ تم إضافة الأدمن');
+};
+
+/* ─── Safety (فحص الأمان) ─── */
+function normalizeScriptName(name){ return (name||'').trim().toLowerCase().replace(/\s+/g,' '); }
+function toUnsafeKey(normalizedName){ return normalizedName.replace(/[.#$[\]/]/g,'_'); }
+
+function renderUnsafeList(f=''){
+  const b=document.getElementById('unsafeBody'); if(!b) return; b.innerHTML='';
+  const e=Object.entries(allUnsafe).filter(([,u])=>!f||(u.originalName||'').toLowerCase().includes(f)).sort((a,x)=>new Date(x[1].reportedAt||0)-new Date(a[1].reportedAt||0));
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="4">القائمة فاضية دلوقتي</td></tr>';return;}
+  e.forEach(([key,u])=>{
+    const date=u.reportedAt?new Date(u.reportedAt).toLocaleDateString('ar-EG'):'—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="t-title">⚠️ ${u.originalName||key}</td>
+      <td style="color:var(--mid);max-width:220px">${u.reason||'—'}</td>
+      <td style="font-size:0.72rem;color:var(--lo)">${date}</td>
+      <td><div class="t-actions">
+        <button class="t-btn edit">✏️</button>
+        <button class="t-btn del">🗑️</button>
+      </div></td>`;
+    tr.querySelector('.edit').onclick=()=>openUnsafeEdit(key,u);
+    tr.querySelector('.del').onclick=()=>deleteUnsafe(key,tr,u.originalName);
+    b.appendChild(tr);
+  });
+}
+
+document.getElementById('unsafeSearch')?.addEventListener('input',e=>renderUnsafeList(e.target.value.toLowerCase().trim()));
+
+document.getElementById('addUnsafeBtn').onclick=async()=>{
+  const nameInput=document.getElementById('unsafeScriptName');
+  const reasonInput=document.getElementById('unsafeScriptReason');
+  const name=nameInput.value.trim();
+  if(!name){toast('❌ اكتب اسم السكربت الأول');return;}
+
+  const key=toUnsafeKey(normalizeScriptName(name));
+  const data={originalName:name,reason:reasonInput.value.trim()||'تم الإبلاغ عنه من قبل الإدارة',reportedAt:new Date().toISOString()};
+
+  const btn=document.getElementById('addUnsafeBtn');
+  btn.disabled=true;btn.innerText='⏳ جارٍ الإضافة...';
+  try{
+    await set(ref(db,`unsafeScripts/${key}`),data);
+    allUnsafe[key]=data;
+    document.getElementById('st-unsafe').innerText=Object.keys(allUnsafe).length;
+    document.getElementById('safetyBadge').innerText=Object.keys(allUnsafe).length;
+    nameInput.value='';reasonInput.value='';
+    renderUnsafeList();
+    logActivity('🛡️',`إضافة سكربت للقائمة الغير آمنة: ${name}`);
+    toast('✅ تم إضافة السكربت للقائمة');
+  }catch(err){
+    toast('❌ حصل خطأ: '+err.message);
+  }finally{
+    btn.disabled=false;btn.innerText='⚠️ إضافة للقائمة';
+  }
+};
+
+function openUnsafeEdit(key,u){
+  document.getElementById('editUnsafeKey').value=key;
+  document.getElementById('editUnsafeName').value=u.originalName||key;
+  document.getElementById('editUnsafeReason').value=u.reason||'';
+  document.getElementById('editUnsafeModal').classList.add('open');
+}
+
+document.getElementById('cancelUnsafeEditBtn').onclick=()=>document.getElementById('editUnsafeModal').classList.remove('open');
+document.getElementById('editUnsafeModal').addEventListener('click',e=>{if(e.target===document.getElementById('editUnsafeModal'))document.getElementById('editUnsafeModal').classList.remove('open');});
+
+document.getElementById('saveUnsafeEditBtn').onclick=async()=>{
+  const key=document.getElementById('editUnsafeKey').value;
+  const reason=document.getElementById('editUnsafeReason').value.trim();
+  await update(ref(db,`unsafeScripts/${key}`),{reason:reason||'تم الإبلاغ عنه من قبل الإدارة'});
+  if(allUnsafe[key])allUnsafe[key].reason=reason;
+  renderUnsafeList(document.getElementById('unsafeSearch')?.value?.toLowerCase()||'');
+  document.getElementById('editUnsafeModal').classList.remove('open');
+  logActivity('✏️',`تعديل بلاغ سكربت: ${allUnsafe[key]?.originalName||key}`);
+  toast('✅ تم حفظ التعديل');
+};
+
+async function deleteUnsafe(key,row,name){
+  if(!confirm(`إزالة "${name}" من القائمة الغير آمنة؟`))return;
+  await remove(ref(db,`unsafeScripts/${key}`));
+  delete allUnsafe[key];
+  document.getElementById('st-unsafe').innerText=Object.keys(allUnsafe).length;
+  document.getElementById('safetyBadge').innerText=Object.keys(allUnsafe).length;
+  row.style.cssText+='opacity:0;transition:0.3s';
+  setTimeout(()=>row.remove(),300);
+  logActivity('🗑️',`إزالة من القائمة الغير آمنة: ${name}`);
+  toast('🗑️ تم الحذف');
+}
+
+/* ─── Unsafe CODE signatures + publish-time similarity guard ───
+   يُستخدم هنا وأيضاً منطقياً في صفحة النشر العامة publish.html */
+function normalizeCode(code){
+  return (code||'')
+    .toLowerCase()
+    .replace(/--\[\[[\s\S]*?\]\]/g,'')      // block comments
+    .replace(/--.*$/gm,'')                    // line comments
+    .replace(/["'][^"']*["']/g,'"s"')         // collapse string literals (so different URLs/keys don't dodge matching)
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+// كود مجرد "لودر" بسيط: loadstring(game:HttpGet("رابط"))() فقط، مع سطر اختياري لتعريف مفتاح.
+// هذا الشكل مستثنى تلقائياً من فحص التشابه لأنه أسلوب تحميل شائع وغير ضار بذاته.
+function isSimpleLoader(code){
+  const c=(code||'').trim();
+  const lines=c.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!lines.length||lines.length>3) return false;
+  const loaderLine=/^(local\s+\w+\s*=\s*)?loadstring\s*\(\s*game\s*:\s*HttpGet\s*\(\s*['"][^'"]+['"]\s*(,\s*(true|false))?\s*\)\s*\)\s*\(\s*\)$/i;
+  const keyLine=/^(local\s+)?\w+\s*=\s*['"][^'"]*['"]$/;
+  return lines.every(l=>loaderLine.test(l)||keyLine.test(l)) && lines.some(l=>loaderLine.test(l));
+}
+
+function extractLoaderUrl(code){
+  const m=(code||'').match(/HttpGet\s*\(\s*['"]([^'"]+)['"]/i);
+  return m?m[1]:null;
+}
+
+// Dice/bigram تشابه نصي تقريبي — بسيط وسريع وكافٍ لرصد النسخ شبه الحرفي
+function bigrams(s){
+  const out=new Set();
+  for(let i=0;i<s.length-1;i++)out.add(s.slice(i,i+2));
+  return out;
+}
+function similarity(a,b){
+  if(!a||!b)return 0;
+  if(a===b)return 1;
+  const A=bigrams(a),B=bigrams(b);
+  if(!A.size||!B.size)return 0;
+  let inter=0;
+  A.forEach(g=>{if(B.has(g))inter++;});
+  return (2*inter)/(A.size+B.size);
+}
+
+const UNSAFE_SIMILARITY_THRESHOLD=0.82;
+
+// دالة الفحص الرئيسية — استدعيها قبل نشر أي سكربت جديد
+async function checkCodeSafety(code){
+  if(isSimpleLoader(code)){
+    // لودر بسيط: مسموح، لكن يُفضّل أن يكون رابطه من مصدر معروف — لا يوجد حظر تلقائي هنا
+    // لأن الرابط نفسه لا يمكن التحقق منه بأمان من المتصفح، لكن التمييز محفوظ لمراجعة يدوية لو لزم.
+    return {blocked:false, isLoader:true, url:extractLoaderUrl(code)};
+  }
+  const norm=normalizeCode(code);
+  let best=0, bestName=null;
+  for(const [,sig] of Object.entries(allUnsafeCode)){
+    const sc=similarity(norm, normalizeCode(sig.code||''));
+    if(sc>best){best=sc;bestName=sig.name;}
+  }
+  if(best>=UNSAFE_SIMILARITY_THRESHOLD){
+    return {blocked:true, matchName:bestName, score:best};
+  }
+  return {blocked:false, score:best};
+}
+
+function renderUnsafeCodeList(){
+  const b=document.getElementById('unsafeCodeBody'); if(!b) return; b.innerHTML='';
+  const e=Object.entries(allUnsafeCode).sort((a,x)=>new Date(x[1].addedAt||0)-new Date(a[1].addedAt||0));
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="4">لا توجد نماذج كود مضافة بعد</td></tr>';return;}
+  e.forEach(([key,sig])=>{
+    const date=sig.addedAt?new Date(sig.addedAt).toLocaleDateString('ar-EG'):'—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="t-title">🧬 ${sig.name||key}</td>
+      <td style="color:var(--mid);max-width:220px">${sig.reason||'—'}</td>
+      <td style="font-size:0.72rem;color:var(--lo)">${date}</td>
+      <td><div class="t-actions"><button class="t-btn del">🗑️</button></div></td>`;
+    tr.querySelector('.del').onclick=async()=>{
+      if(!confirm(`إزالة نموذج "${sig.name||key}"؟`))return;
+      await remove(ref(db,`unsafeCodeSignatures/${key}`));
+      delete allUnsafeCode[key];
+      tr.style.cssText+='opacity:0;transition:0.3s';
+      setTimeout(()=>tr.remove(),300);
+      logActivity('🗑️',`إزالة نموذج كود غير آمن: ${sig.name||key}`);
+      toast('🗑️ تم الحذف');
+    };
+    b.appendChild(tr);
+  });
+}
+
+document.getElementById('addUnsafeCodeBtn').onclick=async()=>{
+  const nameInput=document.getElementById('unsafeCodeName');
+  const codeInput=document.getElementById('unsafeCodeSample');
+  const reasonInput=document.getElementById('unsafeCodeReason');
+  const name=nameInput.value.trim();
+  const code=codeInput.value.trim();
+  if(!name||!code){toast('❌ اكتب الاسم والكود');return;}
+  const btn=document.getElementById('addUnsafeCodeBtn');
+  btn.disabled=true;btn.innerText='⏳ جارٍ الإضافة...';
+  try{
+    const newRef=push(ref(db,'unsafeCodeSignatures'));
+    const data={name,code,reason:reasonInput.value.trim()||'كود مطابق لسكربت ضار معروف',addedAt:Date.now()};
+    await set(newRef,data);
+    allUnsafeCode[newRef.key]=data;
+    nameInput.value='';codeInput.value='';reasonInput.value='';
+    renderUnsafeCodeList();
+    logActivity('🧬',`إضافة نموذج كود غير آمن: ${name}`);
+    toast('✅ تم إضافة النموذج');
+  }catch(err){
+    toast('❌ حصل خطأ: '+err.message);
+  }finally{
+    btn.disabled=false;btn.innerText='🧬 إضافة النموذج';
+  }
+};
+
+/* ─── Reports ─── */
+async function loadReports(){
+  const s=await get(ref(db,'reports'));allReports=s.exists()?s.val():{};renderReports();
+  const p=Object.values(allReports).filter(r=>r.status==='pending').length;
+  const badge=document.getElementById('reportsBadge');
+  if(p>0){badge.innerText=p;badge.style.display='inline-block';}else badge.style.display='none';
+}
+
+function renderReports(f=currentFilter){
+  const c=document.getElementById('reportsContainer');if(!c)return;c.innerHTML='';
+  let e=Object.entries(allReports).sort((a,x)=>(x[1].timestamp||0)-(a[1].timestamp||0));
+  if(f!=='all')e=e.filter(([,r])=>r.status===f);
+  if(!e.length){c.innerHTML=`<div style="text-align:center;padding:36px;color:var(--lo)">لا توجد بلاغات ${f!=='all'?'في هذه الفئة':''}</div>`;return;}
+  e.forEach(([id,r])=>{
+    const date=new Date(r.timestamp||0).toLocaleString('ar-EG',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    const status=r.status||'pending';
+    const sl={pending:'🔴 جديد',reviewed:'🟡 مراجعة',resolved:'✅ محلول'}[status]||status;
+    const item=document.createElement('div');item.className=`report-item status-${status}`;
+    item.innerHTML=`
+      <div class="ri-header">
+        <span class="ri-reason">${r.reason||'—'}</span>
+        <span class="ri-status ${status}">${sl}</span>
+      </div>
+      <div class="ri-script">📜 ${r.scriptTitle||r.scriptId||'—'}</div>
+      <div class="ri-meta">👤 ${r.reporterEmail||'مجهول'} &nbsp;·&nbsp; 🕐 ${date}</div>
+      ${r.details?`<div class="ri-details" id="det-${id}"><strong style="color:var(--lo);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px">تفاصيل:</strong><p style="margin:3px 0 0">${r.details}</p></div>`:''}
+      ${r.adminReply?`<div class="ri-existing-reply"><strong>✅ رد الأدمن:</strong>${r.adminReply}</div>`:''}
+      <div class="ri-actions">
+        ${r.details?`<button class="t-btn view" onclick="toggleDetails('${id}')">📋 التفاصيل</button>`:''}
+        <button class="t-btn edit" onclick="openScriptLink('${r.scriptId}')">🔗 فتح</button>
+        <button class="t-btn view" onclick="toggleReply('${id}')">💬 رد</button>
+        ${status!=='resolved'?`<button class="t-btn edit" onclick="changeStatus('${id}','reviewed')">🟡 مراجعة</button>`:''}
+        ${status!=='resolved'?`<button class="t-btn unban" onclick="changeStatus('${id}','resolved')">✅ حل</button>`:''}
+        <button class="t-btn del" onclick="deleteReport('${id}')">🗑️</button>
+      </div>
+      <div class="reply-box" id="reply-${id}">
+        <textarea placeholder="اكتب ردك..." id="replyText-${id}"></textarea>
+        <div style="display:flex;gap:6px">
+          <button class="t-btn edit" onclick="sendReply('${id}')">📨 إرسال</button>
+          <button class="t-btn del"  onclick="toggleReply('${id}')">إلغاء</button>
+        </div>
+      </div>`;
+    c.appendChild(item);
+  });
+}
+
+window.filterReports=(btn,s)=>{document.querySelectorAll('.rf-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentFilter=s;renderReports(s);};
+window.toggleDetails=id=>document.getElementById(`det-${id}`)?.classList.toggle('show');
+window.toggleReply=id=>document.getElementById(`reply-${id}`)?.classList.toggle('show');
+window.openScriptLink=id=>{if(id&&id!=='unknown')window.open(`script.html?id=${id}`,'_blank');};
+
+window.changeStatus=async(id,ns)=>{
+  await update(ref(db,`reports/${id}`),{status:ns});allReports[id].status=ns;
+  logActivity('🚩',`تغيير حالة بلاغ → ${ns}`);renderReports();loadReports();
+};
+
+window.sendReply=async(id)=>{
+  const t=document.getElementById(`replyText-${id}`)?.value.trim();if(!t)return toast('❌ اكتب الرد أولاً');
+  await update(ref(db,`reports/${id}`),{adminReply:t,repliedAt:Date.now(),status:'resolved'});
+  allReports[id].adminReply=t;allReports[id].status='resolved';
+  // 🔔 إرسال إشعار حقيقي للمستخدم اللي بلّغ (لو مسجل دخول، مش زائر مجهول)
+  const rep=allReports[id];
+  if(rep.reporterUid&&rep.reporterUid!=='anonymous'){
+    await push(ref(db,`notifications/${rep.reporterUid}`),{
+      type:'report_reply',
+      text:`💬 رد الأدمن على بلاغك عن "${rep.scriptTitle||'سكربت'}": ${t}`,
+      scriptId:rep.scriptId||null,
+      timestamp:Date.now()
+    });
+  }
+  logActivity('💬',`رد على بلاغ`);toast('✅ تم إرسال الرد');renderReports();loadReports();
+};
+
+window.deleteReport=async(id)=>{
+  if(!confirm('حذف هذا البلاغ؟'))return;
+  await remove(ref(db,`reports/${id}`));delete allReports[id];renderReports();loadReports();toast('🗑️ تم الحذف');
+};
+
+/* ─── Script Requests (طلبات إضافة سكربتات من المستخدمين) ─── */
+async function loadScriptRequests(){
+  const s=await get(ref(db,'scriptRequests'));
+  allScriptRequests=s.exists()?s.val():{};
+  renderScriptRequests();
+}
+
+function renderScriptRequests(filter=''){
+  const b=document.getElementById('scriptReqBody');if(!b)return;b.innerHTML='';
+  let entries=Object.entries(allScriptRequests).sort((a,x)=>(x[1].requestedAt||0)-(a[1].requestedAt||0));
+  if(filter)entries=entries.filter(([,r])=>(r.scriptName||'').toLowerCase().includes(filter)||(r.note||'').toLowerCase().includes(filter));
+
+  const pending=Object.values(allScriptRequests).filter(r=>r.status==='pending').length;
+  const badge=document.getElementById('scriptReqBadge');
+  if(badge){if(pending>0){badge.innerText=pending;badge.style.display='inline-block';}else badge.style.display='none';}
+
+  if(!entries.length){b.innerHTML='<tr class="empty-row"><td colspan="5">لا توجد طلبات بعد</td></tr>';return;}
+  entries.forEach(([id,r])=>{
+    const date=r.requestedAt?new Date(r.requestedAt).toLocaleDateString('ar-EG'):'—';
+    const statusLabel=r.status==='done'
+      ?'<span style="color:var(--green);font-weight:800">✅ تم</span>'
+      :(r.status==='rejected'?'<span style="color:var(--red);font-weight:800">❌ مرفوض</span>':'<span style="color:var(--yellow);font-weight:800">⏳ قيد الانتظار</span>');
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="t-title">${r.scriptName||'—'}</td><td style="font-size:0.78rem;color:var(--lo);max-width:200px">${r.note||'—'}</td><td style="font-size:0.72rem;color:var(--lo)">${date}</td><td>${statusLabel}</td>
+      <td><div class="t-actions">
+        <button class="t-btn unban" onclick="markScriptRequest('${id}','done')">✅ تم</button>
+        <button class="t-btn ban" onclick="markScriptRequest('${id}','rejected')">❌ رفض</button>
+        <button class="t-btn del" onclick="deleteScriptRequest('${id}')">🗑️</button>
+      </div></td>`;
+    b.appendChild(tr);
+  });
+}
+
+window.markScriptRequest=async(id,status)=>{
+  await update(ref(db,`scriptRequests/${id}`),{status});
+  if(allScriptRequests[id])allScriptRequests[id].status=status;
+  logActivity(status==='done'?'✅':'❌',`${status==='done'?'تنفيذ':'رفض'} طلب سكربت: ${allScriptRequests[id]?.scriptName||id}`);
+  toast(status==='done'?'✅ تم التحديث':'❌ تم الرفض');
+  renderScriptRequests(document.getElementById('scriptReqSearch')?.value.toLowerCase()||'');
+};
+
+window.deleteScriptRequest=async(id)=>{
+  if(!confirm('حذف هذا الطلب؟'))return;
+  await remove(ref(db,`scriptRequests/${id}`));
+  delete allScriptRequests[id];
+  logActivity('🗑️','حذف طلب سكربت');
+  toast('🗑️ تم الحذف');
+  renderScriptRequests(document.getElementById('scriptReqSearch')?.value.toLowerCase()||'');
+};
+
+document.getElementById('scriptReqSearch')?.addEventListener('input',e=>renderScriptRequests(e.target.value.toLowerCase()));
+
+/* ─── ScriptBlox Import Queue (بوت الاستيراد — عرض/مراجعة فقط، مفيش نشر تلقائي) ─── */
+async function loadScriptImports(){
+  const s=await get(ref(db,'scriptImports'));
+  allScriptImports=s.exists()?s.val():{};
+  const pending=Object.values(allScriptImports).filter(r=>r.status==='pending').length;
+  const badge=document.getElementById('sbImportBadge');
+  if(pending>0){badge.innerText=pending;badge.style.display='inline-block';}else badge.style.display='none';
+  renderScriptImports(document.getElementById('sbImportSearch')?.value.toLowerCase()||'');
+}
+
+function renderScriptImports(filter=''){
+  const b=document.getElementById('sbImportBody'); if(!b) return; b.innerHTML='';
+  let e=Object.entries(allScriptImports).sort((a,x)=>(x[1].importedAt||0)-(a[1].importedAt||0));
+  if(filter)e=e.filter(([,r])=>(r.title||'').toLowerCase().includes(filter)||(r.game||'').toLowerCase().includes(filter));
+  if(!e.length){b.innerHTML='<tr class="empty-row"><td colspan="7">لا توجد طلبات استيراد بعد — دوس "📥 استيراد الآن" أو استنى الجدولة اليومية</td></tr>';return;}
+  e.forEach(([id,r])=>{
+    const date=r.importedAt?new Date(r.importedAt).toLocaleDateString('ar-EG'):'—';
+    const statusLabel=r.status==='approved'
+      ?'<span style="color:var(--green);font-weight:800">✅ منشور</span>'
+      :(r.status==='rejected'?'<span style="color:var(--red);font-weight:800">❌ مرفوض</span>':'<span style="color:var(--yellow);font-weight:800">⏳ قيد المراجعة</span>');
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="t-title">${r.title||'—'}</td><td style="color:var(--mid)">${r.game||'—'}</td><td>${r.key?'🔒 نعم':'🔓 لا'}</td><td>${r.sourceUrl?`<a href="${r.sourceUrl}" target="_blank" rel="noopener" style="color:#67e8f9">🔗 المصدر</a>`:'—'}</td><td style="font-size:0.72rem;color:var(--lo)">${date}</td><td>${statusLabel}</td>
+      <td><div class="t-actions">
+        <button class="t-btn view">👁️ الكود</button>
+        ${r.status==='pending'?`<button class="t-btn unban">✅ نشر</button><button class="t-btn ban">❌ رفض</button>`:''}
+        <button class="t-btn del">🗑️</button>
+      </div></td>`;
+    tr.querySelector('.view').onclick=()=>{
+      alert(`📜 ${r.title||'—'}\n\n${(r.code||'لا يوجد كود').slice(0,3000)}${(r.code||'').length>3000?'\n\n... (تم الاقتصار على أول 3000 حرف)':''}`);
+    };
+    if(r.status==='pending'){
+      tr.querySelector('.unban').onclick=()=>approveScriptImport(id);
+      tr.querySelector('.ban').onclick=async()=>{
+        if(!confirm('رفض هذا السكربت المستورد؟'))return;
+        await update(ref(db,`scriptImports/${id}`),{status:'rejected'});
+        allScriptImports[id].status='rejected';
+        logActivity('❌',`رفض استيراد ScriptBlox: ${r.title||id}`);
+        toast('❌ تم الرفض');
+        renderScriptImports(document.getElementById('sbImportSearch')?.value.toLowerCase()||'');
+      };
+    }
+    tr.querySelector('.del').onclick=async()=>{
+      if(!confirm('حذف طلب الاستيراد ده نهائيًا؟'))return;
+      await remove(ref(db,`scriptImports/${id}`));
+      delete allScriptImports[id];
+      toast('🗑️ تم الحذف');
+      renderScriptImports(document.getElementById('sbImportSearch')?.value.toLowerCase()||'');
+    };
+    b.appendChild(tr);
+  });
+}
+
+/* ─── Publish-as-account guard: لازم حساب مسجل اسمه nox عشان ينشر السكربت عليه ─── */
+const PUBLISH_ACCOUNT_USERNAME='nox';
+
+function findAccountByName(name){
+  const target=name.trim().toLowerCase();
+  return Object.entries(allUsers).find(([,u])=>{
+    const uname=(u.username||'').trim().toLowerCase();
+    const emailLocal=(u.email||'').split('@')[0].trim().toLowerCase();
+    return uname===target||emailLocal===target;
+  });
+}
+
+window.approveScriptImport=(id)=>{
+  const r=allScriptImports[id];
+  if(!r)return;
+
+  const userEntries=Object.entries(allUsers);
+  if(!userEntries.length){
+    alert('🚫 مفيش أي حساب مسجل في الموقع — لازم يكون في حساب عشان تقدر تنشر السكربت عليه. الحماية شغالة ومنعت النشر.');
+    return;
+  }
+
+  const noxEntry=findAccountByName(PUBLISH_ACCOUNT_USERNAME);
+  if(!noxEntry){
+    alert(`🚫 مفيش حساب مسجل اسمه "${PUBLISH_ACCOUNT_USERNAME}" — لازم الحساب ده يكون موجود في الموقع عشان تقدر تنشر السكربت عليه. الحماية شغالة ومنعت النشر.`);
+    return;
+  }
+
+  document.getElementById('publishImportId').value=id;
+  const sel=document.getElementById('publishAccountSelect');
+  sel.innerHTML=userEntries
+    .sort((a,x)=>(a[1].username||a[1].email||'').localeCompare(x[1].username||x[1].email||''))
+    .map(([uid,u])=>{
+      const label=(u.username||(u.email?u.email.split('@')[0]:null)||uid)+(u.verified?' ✅':'')+(u.banned?' 🚫محظور':'');
+      return `<option value="${uid}">${label}</option>`;
+    }).join('');
+  sel.value=noxEntry[0]; // اختيار حساب nox تلقائيًا كافتراضي
+  document.getElementById('publishAccountModal').classList.add('open');
+};
+
+document.getElementById('cancelPublishBtn').onclick=()=>document.getElementById('publishAccountModal').classList.remove('open');
+document.getElementById('publishAccountModal').addEventListener('click',e=>{if(e.target===document.getElementById('publishAccountModal'))document.getElementById('publishAccountModal').classList.remove('open');});
+
+document.getElementById('confirmPublishBtn').onclick=async()=>{
+  const id=document.getElementById('publishImportId').value;
+  const uid=document.getElementById('publishAccountSelect').value;
+  const r=allScriptImports[id];
+  const u=allUsers[uid];
+
+  // حماية إضافية: لو الحساب مش موجود فعليًا في القائمة، امنع النشر
+  if(!r||!uid||!u){
+    alert('🚫 لازم تختار حساب مسجل وموجود فعليًا — تعذّر تأكيد الحساب فمنعنا النشر.');
+    return;
+  }
+
+  const btn=document.getElementById('confirmPublishBtn');
+  btn.disabled=true;btn.innerText='⏳ جارٍ النشر...';
+
+  try{
+    const safety=await checkCodeSafety(r.code||'');
+    if(safety.blocked){
+      alert(`🚫 رفض تلقائي — الكود يشبه بنسبة عالية سكربت في قائمة الغير آمنة.\n${safety.matchName?('السكربت المشابه: '+safety.matchName):''}\n\nراجع الكود يدوياً أو ارفض الطلب.`);
+      return;
+    }
+
+    const authorName=u.username||(u.email?u.email.split('@')[0]:null)||'مستخدم مسجل';
+    const mapName=(r.game||'').trim();
+    const publishTitle=mapName?`سكربت ماب "${mapName}"`:`سكربت "${(r.title||'مستورد').trim()}"`;
+    const newRef=push(ref(db,'scripts'));
+    const scriptData={
+      title:publishTitle,
+      code:r.code||'',
+      description:r.description||`مستورد من ScriptBlox${r.game?(' — لعبة: '+r.game):''}`,
+      category:r.category||'game',
+      map:r.game||null,
+      author:authorName,
+      authorUid:uid,
+      authorEmail:u.email||null,
+      hasKey:!!r.key,
+      timestamp:Date.now(),
+      likes:0,rating:0,votes:0,
+      importSource:'scriptblox',
+      importSourceUrl:r.sourceUrl||null,
+    };
+    await set(newRef,scriptData);
+    allScripts[newRef.key]=scriptData;
+    await update(ref(db,`scriptImports/${id}`),{status:'approved',approvedScriptId:newRef.key,publishedAsUid:uid});
+    allScriptImports[id].status='approved';
+
+    logActivity('📥',`نشر سكربت مستورد من ScriptBlox باسم ${authorName}: ${r.title||id}`);
+    toast(`✅ تم النشر باسم ${authorName}`);
+    document.getElementById('publishAccountModal').classList.remove('open');
+    renderScriptImports(document.getElementById('sbImportSearch')?.value.toLowerCase()||'');
+    renderFullScripts();renderRecentScripts();updateScriptCount();
+  }finally{
+    btn.disabled=false;btn.innerText='✅ نشر';
+  }
+};
+
+document.getElementById('sbImportSearch')?.addEventListener('input',e=>renderScriptImports(e.target.value.toLowerCase()));
+
+document.getElementById('sbImportNowBtn')?.addEventListener('click',async()=>{
+  const btn=document.getElementById('sbImportNowBtn');
+  const statusEl=document.getElementById('sbImportStatus');
+  btn.disabled=true;btn.innerText='⏳ جارٍ الاستيراد...';
+  statusEl.textContent='بيتواصل مع سيرفر الاستيراد...';
+  try{
+    const res=await fetch(SB_IMPORT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({adminUid})});
+    if(!res.ok){
+      let bodyMsg='';
+      try{ const j=await res.json(); bodyMsg=j.message||j.error||''; }catch{}
+      throw new Error(`HTTP ${res.status}${bodyMsg?' — '+bodyMsg:''}`);
+    }
+    const data=await res.json();
+    const count=data.imported||0;
+    statusEl.textContent=count>0?`✅ اتضاف ${count} سكربت جديد للمراجعة`:'ℹ️ مفيش سكربتات جديدة (كلها موجودة بالفعل)';
+    logActivity('📥',`تشغيل يدوي لاستيراد ScriptBlox — ${count} سكربت جديد`);
+    loadScriptImports();
+  }catch(err){
+    // بيعرض السبب الحقيقي بدل رسالة عامة — لو "Failed to fetch" فده غالبًا CORS أو مشكلة شبكة، مش خطأ من السيرفر نفسه
+    statusEl.textContent='❌ '+(err.message||'فشل الاتصال بسيرفر الاستيراد');
+    console.error('ScriptBlox import error:',err);
+  }finally{
+    btn.disabled=false;btn.innerText='📥 استيراد الآن';
+  }
+});
+
+/* ─── Activity Log ─── */
+async function logActivity(icon,text){
+  if(!adminUid)return;
+  await set(push(ref(db,'adminLog')),{icon,text,timestamp:Date.now(),adminUid});
+}
+
+async function loadActivityLog(){
+  const s=await get(ref(db,'adminLog'));const c=document.getElementById('activityLog');c.innerHTML='';
+  if(!s.exists()){c.innerHTML='<div style="text-align:center;padding:22px;color:var(--lo)">لا توجد أنشطة بعد</div>';return;}
+  Object.entries(s.val()).sort((a,x)=>x[0]-a[0]).slice(0,30).forEach(([ts,log])=>{
+    const div=document.createElement('div');div.className='log-entry';
+    const d=new Date(parseInt(ts)).toLocaleString('ar-EG',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    div.innerHTML=`<span class="le-icon">${log.icon}</span><span class="le-text">${log.text}</span><span class="le-time">${d}</span>`;
+    c.appendChild(div);
+  });
+}
+
+/* ─── Verify Scripts (per-user: verifying a user verifies ALL of their scripts) ─── */
+function scriptsByUser(allS,userUid,userEmail){
+  const username = userUid ? (allUsers[userUid]?.username || null) : null;
+  return Object.entries(allS).filter(([,s])=>
+    (userUid && s.authorUid===userUid) || (userEmail && s.authorEmail===userEmail) || (username && s.author===username)
+  );
+}
+
+async function loadVerifyRequests(){
+  const[vs,ss]=await Promise.all([get(ref(db,'verifyRequests')),get(ref(db,'scripts'))]);
+  const allS=ss.exists()?ss.val():{};
+
+  // Badge count
+  const pending=vs.exists()?Object.values(vs.val()).filter(r=>r.status==='pending').length:0;
+  const badge=document.getElementById('verifyBadge');
+  if(pending>0){badge.innerText=pending;badge.style.display='inline-block';}else badge.style.display='none';
+
+  // Pending table
+  const pb=document.getElementById('verifyBody'); pb.innerHTML='';
+  if(!vs.exists()||!Object.values(vs.val()).some(r=>r.status==='pending')){
+    pb.innerHTML='<tr class="empty-row"><td colspan="5">لا توجد طلبات تحقق بعد</td></tr>';
+  }else{
+    Object.entries(vs.val()).filter(([,r])=>r.status==='pending').forEach(([rid,r])=>{
+      const userScripts=scriptsByUser(allS,r.userUid,r.userEmail);
+      const date=new Date(r.timestamp||0).toLocaleDateString('ar-EG');
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td class="t-title">${r.userEmail||r.userUid||'—'}</td>
+        <td style="color:var(--mid)">${userScripts.length} سكربت</td>
+        <td style="font-size:0.78rem;color:var(--lo);max-width:160px">${r.reason||'—'}</td>
+        <td style="font-size:0.72rem;color:var(--lo)">${date}</td>
+        <td><div class="t-actions">
+          <button class="t-btn unban" onclick="approveVerify('${rid}','${r.userUid}')">✅ توثيق كل سكربتاته</button>
+          <button class="t-btn del"   onclick="rejectVerify('${rid}')">❌ رفض</button>
+        </div></td>`;
+      pb.appendChild(tr);
+    });
+  }
+
+  // Verified table
+  const vb=document.getElementById('verifiedBody'); vb.innerHTML='';
+  const verified=Object.entries(allS).filter(([,s])=>s.verified===true);
+  if(!verified.length){
+    vb.innerHTML='<tr class="empty-row"><td colspan="4">لا توجد سكربتات موثوقة بعد</td></tr>';
+  }else{
+    verified.forEach(([id,s])=>{
+      const date=new Date(s.verifiedAt||0).toLocaleDateString('ar-EG');
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td class="t-title">${s.title||'—'}</td>
+        <td style="color:var(--mid)">${s.author||'—'}</td>
+        <td style="font-size:0.72rem;color:var(--lo)">${date}</td>
+        <td><button class="t-btn del" onclick="removeVerify('${id}')">❌ إزالة التوثيق</button></td>`;
+      vb.appendChild(tr);
+    });
+  }
+}
+
+window.approveVerify=async(rid,userUid)=>{
+  if(!confirm('تأكيد توثيق كل سكربتات هذا المستخدم؟'))return;
+  const ss=await get(ref(db,'scripts'));
+  const allS=ss.exists()?ss.val():{};
+  const vrSnap=await get(ref(db,`verifyRequests/${rid}`));
+  const r=vrSnap.exists()?vrSnap.val():{};
+  const userScripts=scriptsByUser(allS,userUid,r.userEmail);
+  await Promise.all(userScripts.map(([id])=>update(ref(db,`scripts/${id}`),{verified:true,verifiedAt:Date.now()})));
+  await update(ref(db,`users/${userUid}/`),{verified:true});
+  await update(ref(db,`verifyRequests/${rid}`),{status:'approved'});
+  toast(userScripts.length>0?`✅ تم توثيق ${userScripts.length} سكربت!`:'⚠️ تمت الموافقة لكن مفيش سكربتات اتلاقت لهذا المستخدم');
+  logActivity('✅',`توثيق كل سكربتات المستخدم: ${r.userEmail||userUid}`);
+  loadVerifyRequests();
+};
+
+window.rejectVerify=async(rid)=>{
+  if(!confirm('رفض طلب التحقق؟'))return;
+  await update(ref(db,`verifyRequests/${rid}`),{status:'rejected'});
+  toast('❌ تم رفض الطلب');
+  logActivity('❌',`رفض طلب تحقق`);
+  loadVerifyRequests();
+};
+
+window.removeVerify=async(scriptId)=>{
+  if(!confirm('إزالة توثيق هذا السكربت؟'))return;
+  await update(ref(db,`scripts/${scriptId}`),{verified:false});
+  toast('🗑️ تم إزالة التوثيق');
+  logActivity('🗑️',`إزالة توثيق: ${scriptId}`);
+  loadVerifyRequests();
+};
+</script>
+</body>
+</html>

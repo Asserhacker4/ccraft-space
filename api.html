@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | API للمطورين</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+
+body { min-height: 100svh; display: flex; flex-direction: column; }
+
+.api-page {
+    flex: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+    width: 100%;
+}
+
+/* Hero */
+.api-hero {
+    text-align: center;
+    padding: 20px 0 36px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 36px;
+}
+
+.api-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 50px; padding: 5px 14px;
+    font-size: 0.72rem; font-weight: 800; color: #60a5fa;
+    margin-bottom: 14px;
+}
+
+.api-hero h1 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 10px; line-height: 1.2;
+}
+
+.api-hero p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; max-width: 560px; margin: 0 auto 20px; }
+
+.base-url-box {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+    border-radius: 12px; padding: 10px 18px;
+    font-family: 'Fira Code', monospace; font-size: 0.85rem;
+    color: #60a5fa; direction: ltr;
+}
+
+.base-url-box span { color: var(--text-muted); font-size: 0.7rem; }
+
+/* Section Title */
+.sec-title {
+    font-size: 0.78rem; font-weight: 800; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 36px 0 16px;
+    display: flex; align-items: center; gap: 10px;
+}
+.sec-title::after { content:''; flex:1; height:1px; background:var(--border-color); }
+
+/* Use-case cards */
+.usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.usecase-card {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 16px; padding: 18px 16px;
+    text-align: center; transition: var(--transition);
+    cursor: default;
+}
+
+.usecase-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+.uc-icon  { font-size: 2rem; margin-bottom: 10px; display: block; }
+.uc-title { font-size: 0.9rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+.uc-desc  { font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; }
+
+/* Endpoint Card */
+.endpoint-card {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 18px; padding: 22px 24px;
+    margin-bottom: 16px; transition: var(--transition);
+}
+
+.endpoint-card:hover { border-color: var(--border-hover); }
+
+.ep-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 12px; flex-wrap: wrap;
+}
+
+.ep-method {
+    font-size: 0.72rem; font-weight: 900;
+    padding: 4px 12px; border-radius: 8px;
+    font-family: 'Fira Code', monospace; flex-shrink: 0;
+}
+
+.ep-method.get { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+
+.ep-path {
+    font-family: 'Fira Code', monospace; font-size: 0.85rem;
+    color: #60a5fa; flex: 1; min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    direction: ltr;
+}
+
+.ep-desc { color: var(--text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 14px; }
+
+/* Code Block */
+.code-block {
+    background: #06060f; border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 16px 18px;
+    font-family: 'Fira Code', monospace; font-size: 0.78rem;
+    line-height: 1.7; overflow-x: auto; direction: ltr;
+    position: relative;
+}
+
+.code-block pre { margin: 0; white-space: pre-wrap; word-break: break-all; }
+.code-block .c-key   { color: #a78bfa; }
+.code-block .c-str   { color: #86efac; }
+.code-block .c-num   { color: #fb923c; }
+.code-block .c-bool  { color: #60a5fa; }
+.code-block .c-comment { color: #4a4a6a; font-style: italic; }
+
+.copy-code-btn {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; padding: 4px 10px;
+    font-size: 0.68rem; font-weight: 800; color: var(--text-muted);
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+    margin: 0; transition: var(--transition);
+}
+
+.copy-code-btn:hover  { background: rgba(139,92,246,0.2); color: var(--primary); transform: none; filter: none; }
+.copy-code-btn.copied { color: var(--success); border-color: rgba(74,222,128,0.3); }
+
+/* Params table */
+.params-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.8rem; margin-top: 12px;
+}
+
+.params-table th {
+    text-align: right; padding: 8px 14px;
+    font-size: 0.7rem; font-weight: 800; color: var(--text-muted);
+    text-transform: uppercase; border-bottom: 1px solid var(--border-color);
+}
+
+.params-table td {
+    padding: 10px 14px; color: var(--text-main);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+}
+
+.params-table tr:last-child td { border-bottom: none; }
+
+.param-name { font-family: 'Fira Code', monospace; color: #a78bfa; font-size: 0.78rem; }
+.param-type { background: rgba(59,130,246,0.1); color: #60a5fa; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; }
+.param-opt  { background: rgba(255,255,255,0.06); color: var(--text-muted); padding: 2px 8px; border-radius: 6px; font-size: 0.68rem; }
+.param-req  { background: rgba(74,222,128,0.1); color: #4ade80; padding: 2px 8px; border-radius: 6px; font-size: 0.68rem; }
+
+/* Language tabs */
+.lang-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+
+.lang-tab {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border-color);
+    border-radius: 8px; padding: 5px 12px;
+    font-size: 0.72rem; font-weight: 800; color: var(--text-muted);
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+    margin: 0; transition: var(--transition);
+}
+
+.lang-tab:hover  { transform: none; filter: none; border-color: var(--primary); color: var(--text-main); }
+.lang-tab.active { background: var(--primary-dim); color: var(--primary); border-color: rgba(139,92,246,0.4); }
+
+.lang-content { display: none; }
+.lang-content.show { display: block; }
+
+/* Notice box */
+.notice-box {
+    background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 14px; padding: 14px 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.notice-box .nb-icon { font-size: 1.1rem; flex-shrink: 0; }
+.notice-box .nb-text { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+.notice-box .nb-text strong { color: #60a5fa; }
+
+/* Responsive */
+@media (max-width: 600px) {
+    .usecase-grid { grid-template-columns: 1fr 1fr; }
+    .ep-header    { gap: 8px; }
+    .code-block   { font-size: 0.72rem; padding: 12px 14px; }
+    .params-table { font-size: 0.74rem; }
+    .params-table td, .params-table th { padding: 8px 10px; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <button onclick="location.href='index.html'" class="nav-button">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div class="api-page">
+
+    <!-- Hero -->
+    <div class="api-hero">
+        <div class="api-badge">🔌 Public API — مجاني للجميع</div>
+        <h1>🚀 CCRAFT SPACE API</h1>
+        <p>اربط موقعك أو تطبيقك أو بوتك بمحتوى CCRAFT SPACE — سكربتات، مستخدمون، إحصائيات.</p>
+        <div class="base-url-box">
+            <span>Base URL</span>
+            https://ccraft-space-scripts-default-rtdb.firebaseio.com
+        </div>
+    </div>
+
+    <!-- استخدامات -->
+    <div class="sec-title">💡 تقدر تعمل إيه بالـ API</div>
+    <div class="usecase-grid">
+        <div class="usecase-card">
+            <span class="uc-icon">🤖</span>
+            <div class="uc-title">بوت تلجرام</div>
+            <div class="uc-desc">اعرض السكربتات وابحث فيها مباشرة من تلجرام</div>
+        </div>
+        <div class="usecase-card">
+            <span class="uc-icon">🌐</span>
+            <div class="uc-title">موقع ويب</div>
+            <div class="uc-desc">اعرض أحدث السكربتات أو الليدربورد في موقعك</div>
+        </div>
+        <div class="usecase-card">
+            <span class="uc-icon">📱</span>
+            <div class="uc-title">تطبيق موبايل</div>
+            <div class="uc-desc">ابني تطبيق عارض للسكربتات بـ Flutter أو React Native</div>
+        </div>
+        <div class="usecase-card">
+            <span class="uc-icon">🎮</span>
+            <div class="uc-title">Discord Bot</div>
+            <div class="uc-desc">أضف سكربتات CCRAFT لسيرفر Discord بتاعك</div>
+        </div>
+    </div>
+
+    <!-- ملاحظة -->
+    <div class="notice-box">
+        <span class="nb-icon">ℹ️</span>
+        <div class="nb-text">
+            الـ API مبني على <strong>Firebase Realtime Database REST API</strong> —
+            كل طلب GET بسيط لا يحتاج توثيق. البيانات بتترجع بصيغة JSON.
+            Rate limit: <strong>Firebase Free Tier</strong> (1 GB/month تحميل).
+        </div>
+    </div>
+
+
+    <!-- ============ ENDPOINTS ============ -->
+    <div class="sec-title">📡 الـ Endpoints</div>
+
+
+    <!-- 1. كل السكربتات -->
+    <div class="endpoint-card">
+        <div class="ep-header">
+            <span class="ep-method get">GET</span>
+            <span class="ep-path">/scripts.json</span>
+        </div>
+        <div class="ep-desc">جلب جميع السكربتات الموجودة في الموقع. كل سكربت له ID فريد.</div>
+
+        <div class="lang-tabs">
+            <button class="lang-tab active" onclick="switchTab(this,'s1','js')">JavaScript</button>
+            <button class="lang-tab" onclick="switchTab(this,'s1','python')">Python</button>
+            <button class="lang-tab" onclick="switchTab(this,'s1','curl')">cURL</button>
+        </div>
+
+        <div id="s1-js" class="lang-content show">
+            <div class="code-block">
+                <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+                <pre><span class="c-comment">// JavaScript — Fetch</span>
+<span class="c-key">const</span> res  = <span class="c-key">await</span> fetch(<span class="c-str">'https://ccraft-space-scripts-default-rtdb.firebaseio.com/scripts.json'</span>);
+<span class="c-key">const</span> data = <span class="c-key">await</span> res.json();
+
+<span class="c-comment">// data = { "-scriptId1": { title, code, category, ... }, ... }</span>
+<span class="c-key">const</span> scripts = Object.entries(data).map(([id, s]) => ({ id, ...s }));
+console.log(scripts);</pre>
+            </div>
+        </div>
+
+        <div id="s1-python" class="lang-content">
+            <div class="code-block">
+                <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+                <pre><span class="c-comment"># Python — requests</span>
+<span class="c-key">import</span> requests
+
+url  = <span class="c-str">'https://ccraft-space-scripts-default-rtdb.firebaseio.com/scripts.json'</span>
+data = requests.get(url).json()
+
+<span class="c-key">for</span> script_id, script <span class="c-key">in</span> data.items():
+    print(script_id, script[<span class="c-str">'title'</span>])</pre>
+            </div>
+        </div>
+
+        <div id="s1-curl" class="lang-content">
+            <div class="code-block">
+                <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+                <pre>curl https://ccraft-space-scripts-default-rtdb.firebaseio.com/scripts.json</pre>
+            </div>
+        </div>
+
+        <p class="ep-desc" style="margin-top:12px;margin-bottom:0">📦 <strong style="color:var(--text-main)">الـ Response:</strong></p>
+        <div class="code-block" style="margin-top:8px">
+            <pre>{
+  <span class="c-key">"-NxK1abc"</span>: {
+    <span class="c-key">"title"</span>:    <span class="c-str">"Speed Hack"</span>,
+    <span class="c-key">"code"</span>:     <span class="c-str">"game.Players.LocalPlayer..."</span>,
+    <span class="c-key">"category"</span>: <span class="c-str">"game"</span>,
+    <span class="c-key">"author"</span>:   <span class="c-str">"anas"</span>,
+    <span class="c-key">"likes"</span>:    <span class="c-num">42</span>,
+    <span class="c-key">"rating"</span>:   <span class="c-num">18.5</span>,
+    <span class="c-key">"votes"</span>:    <span class="c-num">5</span>,
+    <span class="c-key">"map"</span>:      <span class="c-str">"Jailbreak"</span>,
+    <span class="c-key">"timestamp"</span>:<span class="c-num">1704067200000</span>
+  }
+}</pre>
+        </div>
+    </div>
+
+
+    <!-- 2. سكربت واحد -->
+    <div class="endpoint-card">
+        <div class="ep-header">
+            <span class="ep-method get">GET</span>
+            <span class="ep-path">/scripts/{scriptId}.json</span>
+        </div>
+        <div class="ep-desc">جلب بيانات سكربت واحد بالـ ID الخاص به.</div>
+
+        <div class="lang-tabs">
+            <button class="lang-tab active" onclick="switchTab(this,'s2','js')">JavaScript</button>
+            <button class="lang-tab" onclick="switchTab(this,'s2','python')">Python</button>
+        </div>
+
+        <div id="s2-js" class="lang-content show">
+            <div class="code-block">
+                <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+                <pre><span class="c-key">const</span> id  = <span class="c-str">"-NxK1abc"</span>; <span class="c-comment">// ID السكربت</span>
+<span class="c-key">const</span> res = <span class="c-key">await</span> fetch(
+  <span class="c-str">`https://ccraft-space-scripts-default-rtdb.firebaseio.com/scripts/${id}.json`</span>
+);
+<span class="c-key">const</span> script = <span class="c-key">await</span> res.json();
+console.log(script.title, script.code);</pre>
+            </div>
+        </div>
+
+        <div id="s2-python" class="lang-content">
+            <div class="code-block">
+                <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+                <pre>script_id = <span class="c-str">"-NxK1abc"</span>
+url = <span class="c-str">f'https://ccraft-space-scripts-default-rtdb.firebaseio.com/scripts/{script_id}.json'</span>
+script = requests.get(url).json()
+print(script[<span class="c-str">'title'</span>])</pre>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 3. فلترة -->
+    <div class="endpoint-card">
+        <div class="ep-header">
+            <span class="ep-method get">GET</span>
+            <span class="ep-path">/scripts.json?orderBy="category"&equalTo="game"</span>
+        </div>
+        <div class="ep-desc">فلترة السكربتات حسب القسم أو أي حقل آخر باستخدام Firebase Query Parameters.</div>
+
+        <table class="params-table">
+            <thead>
+                <tr>
+                    <th>البارامتر</th>
+                    <th>النوع</th>
+                    <th>الوصف</th>
+                    <th>مثال</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="param-name">orderBy</span></td>
+                    <td><span class="param-type">string</span></td>
+                    <td style="color:var(--text-muted)">الحقل للترتيب</td>
+                    <td style="color:var(--text-muted)">"category"</td>
+                </tr>
+                <tr>
+                    <td><span class="param-name">equalTo</span></td>
+                    <td><span class="param-type">string</span></td>
+                    <td style="color:var(--text-muted)">فلتر بقيمة</td>
+                    <td style="color:var(--text-muted)">"game"</td>
+                </tr>
+                <tr>
+                    <td><span class="param-name">limitToFirst</span></td>
+                    <td><span class="param-type">number</span></td>
+                    <td style="color:var(--text-muted)">عدد النتائج (من البداية)</td>
+                    <td style="color:var(--text-muted)">10</td>
+                </tr>
+                <tr>
+                    <td><span class="param-name">limitToLast</span></td>
+                    <td><span class="param-type">number</span></td>
+                    <td style="color:var(--text-muted)">عدد النتائج (من النهاية)</td>
+                    <td style="color:var(--text-muted)">5</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="code-block" style="margin-top:14px">
+            <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+            <pre><span class="c-comment">// أحدث 10 سكربتات</span>
+<span class="c-key">const</span> url = <span class="c-str">'https://ccraft-space-scripts-default-rtdb.firebaseio.com/scripts.json'</span>
+          + <span class="c-str">'?orderBy="timestamp"&limitToLast=10'</span>;
+<span class="c-key">const</span> data = <span class="c-key">await</span> fetch(url).then(r => r.json());
+
+<span class="c-comment">// سكربتات Game فقط</span>
+<span class="c-key">const</span> url2 = <span class="c-str">'https://ccraft-space-scripts-default-rtdb.firebaseio.com/scripts.json'</span>
+           + <span class="c-str">'?orderBy="category"&equalTo="game"'</span>;</pre>
+        </div>
+    </div>
+
+
+    <!-- 4. المستخدمون -->
+    <div class="endpoint-card">
+        <div class="ep-header">
+            <span class="ep-method get">GET</span>
+            <span class="ep-path">/users/{uid}.json</span>
+        </div>
+        <div class="ep-desc">جلب بيانات مستخدم معين — الأفاتار، النقاط، البادجات. يحتاج الـ uid من Firebase Auth.</div>
+
+        <div class="code-block">
+            <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+            <pre><span class="c-key">const</span> uid  = <span class="c-str">"abc123xyz"</span>;
+<span class="c-key">const</span> user = <span class="c-key">await</span> fetch(
+  <span class="c-str">`https://ccraft-space-scripts-default-rtdb.firebaseio.com/users/${uid}.json`</span>
+).then(r => r.json());
+
+<span class="c-comment">// user.points  → النقاط</span>
+<span class="c-comment">// user.badges  → البادجات</span>
+<span class="c-comment">// user.avatar  → بيانات الشخصية</span></pre>
+        </div>
+    </div>
+
+
+    <!-- ============ أمثلة كاملة ============ -->
+    <div class="sec-title">💻 أمثلة كاملة</div>
+
+
+    <!-- بوت تلجرام -->
+    <div class="endpoint-card">
+        <div class="ep-header">
+            <span style="font-size:1.3rem">🤖</span>
+            <div>
+                <div style="font-weight:900;color:var(--text-main)">بوت تلجرام بسيط</div>
+                <div style="font-size:0.75rem;color:var(--text-muted)">Python — python-telegram-bot</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+            <pre><span class="c-key">import</span> requests
+<span class="c-key">from</span> telegram <span class="c-key">import</span> Update
+<span class="c-key">from</span> telegram.ext <span class="c-key">import</span> Application, CommandHandler, ContextTypes
+
+BASE = <span class="c-str">"https://ccraft-space-scripts-default-rtdb.firebaseio.com"</span>
+
+<span class="c-key">async def</span> top_scripts(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    data = requests.get(<span class="c-str">f"{BASE}/scripts.json"</span>).json()
+    scripts = sorted(data.values(), key=<span class="c-key">lambda</span> s: s.get(<span class="c-str">'likes'</span>, <span class="c-num">0</span>), reverse=<span class="c-bool">True</span>)[:<span class="c-num">5</span>]
+    
+    msg = <span class="c-str">"🏆 أكثر 5 سكربتات لايكات:\n\n"</span>
+    <span class="c-key">for</span> i, s <span class="c-key">in</span> enumerate(scripts, <span class="c-num">1</span>):
+        msg += <span class="c-str">f"{i}. {s['title']} — 👍 {s.get('likes',0)}\n"</span>
+    
+    <span class="c-key">await</span> update.message.reply_text(msg)
+
+app = Application.builder().token(<span class="c-str">"YOUR_TOKEN"</span>).build()
+app.add_handler(CommandHandler(<span class="c-str">"top"</span>, top_scripts))
+app.run_polling()</pre>
+        </div>
+    </div>
+
+
+    <!-- موقع ويب -->
+    <div class="endpoint-card">
+        <div class="ep-header">
+            <span style="font-size:1.3rem">🌐</span>
+            <div>
+                <div style="font-weight:900;color:var(--text-main)">عرض السكربتات في موقعك</div>
+                <div style="font-size:0.75rem;color:var(--text-muted)">JavaScript — Vanilla</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+            <pre><span class="c-key">async function</span> loadCCraftScripts() {
+    <span class="c-key">const</span> BASE = <span class="c-str">"https://ccraft-space-scripts-default-rtdb.firebaseio.com"</span>;
+    <span class="c-key">const</span> data = <span class="c-key">await</span> fetch(<span class="c-str">`${BASE}/scripts.json?orderBy="timestamp"&limitToLast=6`</span>)
+                    .then(r => r.json());
+    
+    <span class="c-key">const</span> scripts = Object.entries(data)
+        .map(([id, s]) => ({ id, ...s }))
+        .sort((a, b) => b.timestamp - a.timestamp);
+    
+    <span class="c-key">const</span> container = document.getElementById(<span class="c-str">'scripts-container'</span>);
+    scripts.forEach(s => {
+        container.innerHTML += <span class="c-str">`
+            &lt;div class="card"&gt;
+                &lt;h3&gt;${s.title}&lt;/h3&gt;
+                &lt;p&gt;👍 ${s.likes || 0} | 📁 ${s.category}&lt;/p&gt;
+                &lt;a href="https://ccraftspace.ddnsking.com/script.html?id=${s.id}"&gt;
+                    عرض السكربت →
+                &lt;/a&gt;
+            &lt;/div&gt;
+        `</span>;
+    });
+}
+
+loadCCraftScripts();</pre>
+        </div>
+    </div>
+
+
+    <!-- Discord -->
+    <div class="endpoint-card">
+        <div class="ep-header">
+            <span style="font-size:1.3rem">🎮</span>
+            <div>
+                <div style="font-weight:900;color:var(--text-main)">Discord Bot</div>
+                <div style="font-size:0.75rem;color:var(--text-muted)">JavaScript — discord.js</div>
+            </div>
+        </div>
+        <div class="code-block">
+            <button class="copy-code-btn" onclick="copyCode(this)">📋 نسخ</button>
+            <pre><span class="c-key">const</span> { Client, GatewayIntentBits } = require(<span class="c-str">'discord.js'</span>);
+<span class="c-key">const</span> client = <span class="c-key">new</span> Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+<span class="c-key">const</span> BASE = <span class="c-str">"https://ccraft-space-scripts-default-rtdb.firebaseio.com"</span>;
+
+client.on(<span class="c-str">'messageCreate'</span>, <span class="c-key">async</span> msg => {
+    <span class="c-key">if</span> (!msg.content.startsWith(<span class="c-str">'!ccraft'</span>)) <span class="c-key">return</span>;
+    
+    <span class="c-key">const</span> data = <span class="c-key">await</span> fetch(<span class="c-str">`${BASE}/scripts.json`</span>).then(r => r.json());
+    <span class="c-key">const</span> scripts = Object.values(data)
+        .sort((a, b) => (b.likes || <span class="c-num">0</span>) - (a.likes || <span class="c-num">0</span>))
+        .slice(<span class="c-num">0</span>, <span class="c-num">3</span>);
+    
+    <span class="c-key">let</span> reply = <span class="c-str">"**🚀 CCRAFT SPACE — أحدث السكربتات:**\n\n"</span>;
+    scripts.forEach((s, i) => {
+        reply += <span class="c-str">`${i+1}. **${s.title}** — 👍 ${s.likes || 0}\n`</span>;
+    });
+    reply += <span class="c-str">`\n🌐 ${<span class="c-str">"https://ccraftspace.ddnsking.com"</span>}`</span>;
+    
+    msg.reply(reply);
+});
+
+client.login(<span class="c-str">'YOUR_DISCORD_TOKEN'</span>);</pre>
+        </div>
+    </div>
+
+
+    <!-- حقوق الاستخدام -->
+    <div class="sec-title">📋 شروط الاستخدام</div>
+
+    <div class="notice-box" style="background:rgba(74,222,128,0.06);border-color:rgba(74,222,128,0.2)">
+        <span class="nb-icon">✅</span>
+        <div class="nb-text">
+            <strong style="color:#4ade80">مسموح:</strong>
+            قراءة السكربتات وعرضها — الربط بصفحة السكربت الأصلية — بناء بوتات وأدوات للمجتمع.
+        </div>
+    </div>
+
+    <div class="notice-box" style="background:rgba(248,113,113,0.06);border-color:rgba(248,113,113,0.2);margin-top:0">
+        <span class="nb-icon">❌</span>
+        <div class="nb-text">
+            <strong style="color:#f87171">غير مسموح:</strong>
+            نسخ السكربتات بدون نسب إلى CCRAFT SPACE — استخدامها تجارياً بدون إذن — الكتابة في قاعدة البيانات.
+        </div>
+    </div>
+
+    <div style="text-align:center;padding:24px 0;color:var(--text-muted);font-size:0.82rem">
+        للتواصل أو طلب صلاحيات إضافية:
+        <a href="https://t.me/cCraftspace" target="_blank" style="color:var(--primary);font-weight:800;text-decoration:none">قناة تلجرام ←</a>
+    </div>
+
+</div>
+
+
+<script>
+function switchTab(btn, section, lang) {
+    // إلغاء الـ active من كل تابز المجموعة
+    btn.closest('.endpoint-card').querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    // إخفاء كل المحتوى
+    btn.closest('.endpoint-card').querySelectorAll('.lang-content').forEach(c => c.classList.remove('show'));
+
+    // إظهار المطلوب
+    const target = document.getElementById(`${section}-${lang}`);
+    if (target) target.classList.add('show');
+}
+
+function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    // نسخ النص بدون HTML tags
+    const text = pre.innerText || pre.textContent;
+    navigator.clipboard.writeText(text.trim()).then(() => {
+        btn.innerText = '✅ تم';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.innerText = '📋 نسخ'; btn.classList.remove('copied'); }, 2000);
+    });
+}
+</script>
+
+</body>
+</html>

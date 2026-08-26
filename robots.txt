@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+Disallow: /login.html
+Disallow: /avatar.html
+Disallow: /publish.html
+Disallow: /admin.html
+Disallow: /page-builder.html
+Disallow: /referral.html
+Disallow: /report.html
+
+Disallow: /raw.html
+Disallow: /windows.html
+Disallow: /hacks.html
+Disallow: /errorhack.html
+Disallow: /api.html
+Disallow: /nova.html
+Disallow: /top-badges.html
+Disallow: /leaderboard.html
+Disallow: /ranking.html
+Disallow: /stats.html
+Disallow: /user-page.html
+Disallow: /market.html
+Disallow: /community.html
+Disallow: /partners.html
+Disallow: /search.html
+
+Sitemap: https://ccraftspace.ddnsking.com/sitemap.xml

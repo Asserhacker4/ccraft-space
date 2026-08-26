@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | سوق تبادل السكربتات</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+.mk-page { max-width: 980px; margin: 0 auto; padding: 0 20px 80px; }
+
+.mk-hero {
+    padding: 32px 0 20px; display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); margin-bottom: 22px;
+}
+.mk-hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 900;
+    background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;
+}
+.mk-hero p { color: var(--text-muted); font-size: 0.82rem; margin-top: 4px; }
+
+.mk-points-pill {
+    display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg,rgba(251,191,36,0.12),rgba(245,158,11,0.06));
+    border: 1px solid rgba(251,191,36,0.3); border-radius: 50px; padding: 9px 20px;
+}
+.mk-points-pill .mp-num { font-size: 1.15rem; font-weight: 900; color: #fbbf24; }
+.mk-points-pill .mp-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; }
+
+.mk-tabs { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+.mk-tab {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); border-radius: 50px;
+    padding: 9px 20px; font-size: 0.85rem; font-weight: 800; color: var(--text-muted);
+    cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0; transition: var(--transition);
+}
+.mk-tab:hover { border-color: var(--border-hover); color: var(--text-main); transform: none; filter: none; }
+.mk-tab.active { background: var(--primary-dim); color: var(--primary); border-color: rgba(139,92,246,0.4); }
+
+.mk-section { display: none; }
+.mk-section.active { display: block; animation: fadeIn 0.3s ease both; }
+
+/* ---- Market Grid ---- */
+.mk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+
+.mk-card {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px;
+    padding: 20px; display: flex; flex-direction: column; gap: 12px;
+    transition: var(--transition); position: relative; overflow: hidden;
+}
+.mk-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg,#fbbf24,#f59e0b); opacity: 0; transition: 0.3s; }
+.mk-card:hover { border-color: var(--border-hover); transform: translateY(-4px); box-shadow: 0 14px 32px rgba(0,0,0,0.4); }
+.mk-card:hover::before { opacity: 1; }
+
+.mk-card-title { font-size: 1rem; font-weight: 900; color: var(--text-main); line-height: 1.3; }
+.mk-card-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+.mk-card-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.mk-cat { background: var(--primary-dim); color: #b48bf8; padding: 3px 10px; border-radius: 50px; font-size: 0.68rem; font-weight: 800; }
+.mk-author { font-size: 0.72rem; color: var(--text-muted); }
+
+.mk-price-row { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 6px; }
+.mk-price { font-size: 1.05rem; font-weight: 900; color: #fbbf24; display: flex; align-items: center; gap: 5px; }
+
+.mk-buy-btn {
+    background: var(--accent-gradient); color: white; border: none; border-radius: 12px;
+    padding: 9px 18px; font-size: 0.8rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0; transition: var(--transition); box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+}
+.mk-buy-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+.mk-buy-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; filter: none; }
+.mk-buy-btn.owned { background: rgba(74,222,128,0.12); color: var(--success); box-shadow: none; }
+.mk-buy-btn.mine  { background: rgba(255,255,255,0.05); color: var(--text-muted); box-shadow: none; }
+
+.mk-empty { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-muted); }
+.mk-empty .ee-icon { font-size: 2.6rem; display: block; margin-bottom: 12px; }
+
+/* ---- My Listings ---- */
+.listing-row {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 12px;
+}
+.listing-info { flex: 1; min-width: 200px; }
+.listing-info h4 { font-size: 0.92rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+.listing-info .li-meta { font-size: 0.72rem; color: var(--text-muted); display: flex; gap: 10px; flex-wrap: wrap; }
+.listing-info .li-meta .sold-tag { color: var(--success); font-weight: 800; }
+
+.price-input-wrap { display: flex; align-items: center; gap: 8px; }
+.price-input-wrap input {
+    width: 100px; background: rgba(0,0,0,0.28); border: 1px solid var(--border-color); border-radius: 10px;
+    padding: 8px 12px; color: var(--text-main); font-family: 'Tajawal', sans-serif; font-size: 0.85rem;
+    outline: none; text-align: center; transition: var(--transition);
+}
+.price-input-wrap input:focus { border-color: var(--primary); }
+.save-price-btn {
+    background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 10px; padding: 8px 16px; font-size: 0.78rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0; transition: var(--transition);
+}
+.save-price-btn:hover { background: var(--primary); color: white; transform: none; filter: none; }
+.save-price-btn.saved { background: rgba(74,222,128,0.12); color: var(--success); }
+
+/* ---- Code Modal ---- */
+.mk-modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+    z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.mk-modal-overlay.open { display: flex; }
+.mk-modal-box {
+    background: var(--bg-card); border: 1px solid rgba(251,191,36,0.3); border-radius: 20px;
+    padding: 24px; width: 100%; max-width: 640px; max-height: 85vh; display: flex; flex-direction: column;
+    animation: fadeIn 0.3s ease both;
+}
+.mk-modal-box h3 { font-size: 1rem; font-weight: 900; color: var(--text-main); margin-bottom: 4px; }
+.mk-modal-box .mm-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px; }
+.mk-code-box {
+    background: #040610; border: 1px solid rgba(0,242,254,0.15); border-radius: 12px;
+    padding: 16px; font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #8be9fd;
+    overflow: auto; flex: 1; white-space: pre-wrap; direction: ltr; text-align: left; line-height: 1.7;
+}
+.mk-modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+.mm-copy-btn {
+    flex: 1; background: var(--accent-gradient); color: white; border: none; border-radius: 12px;
+    padding: 11px; font-size: 0.85rem; font-weight: 800; cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0;
+}
+.mm-close-btn {
+    background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border-color);
+    border-radius: 12px; padding: 11px 20px; font-size: 0.85rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0;
+}
+
+.mk-toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px);
+    background: var(--bg-card); border: 1px solid var(--primary); border-radius: 50px;
+    padding: 10px 24px; font-size: 0.85rem; font-weight: 800; color: var(--text-main);
+    z-index: 600; transition: transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); pointer-events: none; white-space: nowrap;
+}
+.mk-toast.show { transform: translateX(-50%) translateY(0); }
+
+.loading-box { text-align: center; padding: 60px 20px; color: var(--text-muted); grid-column: 1/-1; }
+
+/* ---- Sell Form ---- */
+.panel-card {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px;
+    padding: 22px; margin-bottom: 14px;
+}
+.field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field-label { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.field-group input, .field-group textarea, .field-group select {
+    background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 12px;
+    padding: 11px 14px; color: var(--text-main); font-family: 'Tajawal', sans-serif;
+    font-size: 0.88rem; outline: none; transition: var(--transition); direction: rtl; margin: 0;
+}
+.field-group input:focus, .field-group textarea:focus, .field-group select:focus {
+    border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139,92,246,0.08);
+}
+.field-group textarea { resize: vertical; }
+.field-group select option { background: #1a1a2e; }
+.code-field {
+    font-family: 'Fira Code', monospace !important; font-size: 0.8rem !important;
+    direction: ltr !important; text-align: left !important; line-height: 1.7 !important;
+}
+.section-title {
+    font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: 1px; display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+
+@media (max-width: 600px) {
+    .mk-grid { grid-template-columns: 1fr; }
+    .listing-row { flex-direction: column; align-items: stretch; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <button onclick="location.href='scripts.html'">📜 السكربتات</button>
+    <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div class="mk-page">
+
+    <div class="mk-hero">
+        <div>
+            <h1>🛒 سوق تبادل السكربتات</h1>
+            <p>سكربتات مميزة بسعر نقاط — بيعك واشتري بنقاطك اللي كسبتها من الموقع.</p>
+        </div>
+        <div class="mk-points-pill">
+            ⭐ <span class="mp-num" id="myPointsDisplay">—</span>
+            <span class="mp-label">نقطة متاحة</span>
+        </div>
+    </div>
+
+    <div class="mk-tabs">
+        <button class="mk-tab active" data-tab="browse">🛍️ تصفح السوق</button>
+        <button class="mk-tab" data-tab="mine">📤 اعرض سكربت للبيع</button>
+    </div>
+
+    <div class="mk-section active" id="sec-browse">
+        <div class="mk-grid" id="marketGrid">
+            <div class="loading-box">⏳ جارٍ التحميل...</div>
+        </div>
+    </div>
+
+    <div class="mk-section" id="sec-mine">
+        <div class="panel-card" id="sellFormCard">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:16px;line-height:1.7">
+                عندك أي سكربت — مش شرط يكون منشور عندك في الموقع — اكتب بياناته وحط سعره وهيظهر في السوق فورًا.
+            </div>
+            <div class="field-group"><label class="field-label">اسم السكربت</label><input type="text" id="sellTitle" placeholder="اسم السكربت..." maxlength="80"></div>
+            <div class="field-group"><label class="field-label">وصف مختصر (اختياري)</label><textarea id="sellDesc" placeholder="ايه اللي السكربت ده بيعمله؟" style="min-height:70px"></textarea></div>
+            <div class="field-group">
+                <label class="field-label">القسم</label>
+                <select id="sellCategory">
+                    <option value="game">🎮 Game Scripts</option>
+                    <option value="admin">🛡️ Admin Scripts</option>
+                    <option value="ai">🤖 AI & NPCs</option>
+                    <option value="other">📦 عام</option>
+                </select>
+            </div>
+            <div class="field-group"><label class="field-label">الكود</label><textarea id="sellCode" class="code-field" placeholder="-- الصق كود Lua هنا..." style="min-height:160px"></textarea></div>
+            <div class="field-group"><label class="field-label">السعر (نقاط)</label><input type="number" id="sellPrice" min="1" placeholder="مثال: 50"></div>
+            <button class="mk-buy-btn" id="submitListingBtn" style="width:100%;padding:12px;font-size:0.9rem">📤 اعرض للبيع</button>
+        </div>
+
+        <div class="section-title" style="margin-top:32px">📋 سكربتاتي المعروضة</div>
+        <div id="myListings"><div class="loading-box">⏳ جارٍ التحميل...</div></div>
+    </div>
+
+</div>
+
+<!-- Code View Modal -->
+<div class="mk-modal-overlay" id="codeModal">
+    <div class="mk-modal-box">
+        <h3 id="mmTitle">—</h3>
+        <div class="mm-desc" id="mmDesc"></div>
+        <div class="mk-code-box" id="mmCode">—</div>
+        <div class="mk-modal-actions">
+            <button class="mm-copy-btn" id="mmCopyBtn">📋 نسخ الكود</button>
+            <button class="mm-close-btn" id="mmCloseBtn">إغلاق</button>
+        </div>
+    </div>
+</div>
+
+<div class="mk-toast" id="mkToast"></div>
+
+<script type="module">
+import { get, getApp, getApps, getAuth, getDatabase, initializeApp, onAuthStateChanged, push, ref, remove, set, update } from "./supabase-config.js";
+
+
+
+
+
+
+
+const db   = getDatabase(app);
+const auth = getAuth(app);
+
+let currentUser  = null;
+let myPoints     = 0;
+let allListings  = {};
+let myPurchases  = {};
+
+/* ---- Toast ---- */
+function toast(msg, dur = 2600) {
+    const t = document.getElementById('mkToast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), dur);
+}
+
+/* ---- Auth ---- */
+onAuthStateChanged(auth, async user => {
+    if (!user) { location.href = 'login.html'; return; }
+    currentUser = user;
+    await loadAll();
+});
+
+async function loadAll() {
+    const [ptsSnap, listingsSnap, purchSnap] = await Promise.all([
+        get(ref(db, `users/${currentUser.uid}/points`)),
+        get(ref(db, 'marketListings')),
+        get(ref(db, `purchases/${currentUser.uid}`))
+    ]);
+    myPoints    = ptsSnap.exists() ? ptsSnap.val() : 0;
+    allListings = listingsSnap.exists() ? listingsSnap.val() : {};
+    myPurchases = purchSnap.exists() ? purchSnap.val() : {};
+
+    document.getElementById('myPointsDisplay').innerText = myPoints;
+    renderMarket();
+    renderMyListings();
+}
+
+/* ============================================================
+   Tabs
+   ============================================================ */
+document.querySelectorAll('.mk-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.mk-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.mk-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(`sec-${tab.dataset.tab}`).classList.add('active');
+    });
+});
+
+/* ============================================================
+   Market Browse
+   ============================================================ */
+
+function renderMarket() {
+    const grid = document.getElementById('marketGrid');
+    grid.innerHTML = '';
+
+    const forSale = Object.entries(allListings);
+
+    if (!forSale.length) {
+        grid.innerHTML = `
+            <div class="mk-empty">
+                <span class="ee-icon">🛒</span>
+                <h3 style="color:var(--text-main);margin-bottom:8px">السوق فاضي دلوقتي</h3>
+                <p>كن أول حد يعرض سكربت للبيع من تبويب "سكربتاتي للبيع"</p>
+            </div>`;
+        return;
+    }
+
+    forSale.sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
+
+    forSale.forEach(([id, s]) => {
+        const isMine  = s.sellerUid === currentUser.uid;
+        const isOwned = !!myPurchases[id];
+        const canAfford = myPoints >= (s.price || 0);
+
+        const card = document.createElement('div');
+        card.className = 'mk-card';
+        card.innerHTML = `
+            <div class="mk-card-title">${s.title || 'بدون عنوان'}</div>
+            ${s.description ? `<div class="mk-card-desc">${escapeHTML(s.description)}</div>` : ''}
+            <div class="mk-card-meta">
+                <span class="mk-cat">${s.category || 'عام'}</span>
+                <span class="mk-author">✍️ ${s.sellerName || 'مجهول'}</span>
+            </div>
+            <div class="mk-price-row">
+                <span class="mk-price">⭐ ${s.price}</span>
+                <button class="mk-buy-btn ${isMine ? 'mine' : isOwned ? 'owned' : ''}" ${isMine || (!isOwned && !canAfford) ? 'disabled' : ''}>
+                    ${isMine ? 'ده عرضك' : isOwned ? '✅ عرض الكود' : canAfford ? '🛒 شراء' : '❌ نقاط مش كفاية'}
+                </button>
+            </div>
+        `;
+        const btn = card.querySelector('.mk-buy-btn');
+        if (isMine) {
+            btn.onclick = () => openCodeModal(id, s);
+        } else {
+            btn.onclick = () => isOwned ? openCodeModal(id, s) : buyScript(id, s);
+        }
+        grid.appendChild(card);
+    });
+}
+
+async function buyScript(id, s) {
+    if (myPoints < (s.price || 0)) { toast('❌ نقاطك مش كفاية'); return; }
+    if (!confirm(`تشتري "${s.title}" بـ ⭐ ${s.price} نقطة؟`)) return;
+
+    try {
+        // خصم من المشتري
+        const buyerSnap = await get(ref(db, `users/${currentUser.uid}/points`));
+        const buyerPts  = buyerSnap.exists() ? buyerSnap.val() : 0;
+        if (buyerPts < s.price) { toast('❌ نقاطك مش كفاية'); return; }
+        await set(ref(db, `users/${currentUser.uid}/points`), buyerPts - s.price);
+        await set(ref(db, `users/${currentUser.uid}/pointsLog/${Date.now()}`), { type: 'market_buy', points: -s.price, note: `شراء: ${s.title}`, timestamp: Date.now() });
+
+        // إضافة للبائع
+        if (s.sellerUid) {
+            const sellerSnap = await get(ref(db, `users/${s.sellerUid}/points`));
+            const sellerPts  = sellerSnap.exists() ? sellerSnap.val() : 0;
+            await set(ref(db, `users/${s.sellerUid}/points`), sellerPts + s.price);
+            await set(ref(db, `users/${s.sellerUid}/pointsLog/${Date.now()}_s`), { type: 'market_sell', points: s.price, note: `بيع: ${s.title}`, timestamp: Date.now() });
+        }
+
+        // تسجيل الملكية
+        await set(ref(db, `purchases/${currentUser.uid}/${id}`), { timestamp: Date.now(), price: s.price });
+
+        myPoints -= s.price;
+        myPurchases[id] = true;
+        document.getElementById('myPointsDisplay').innerText = myPoints;
+
+        toast('✅ تم الشراء! افتح الكود دلوقتي');
+        renderMarket();
+        openCodeModal(id, s);
+    } catch (err) {
+        toast('❌ حصل خطأ: ' + err.message);
+    }
+}
+
+/* ============================================================
+   عرض سكربت جديد للبيع مباشرة — مش لازم يكون منشور في الموقع
+   ============================================================ */
+
+document.getElementById('submitListingBtn').onclick = async () => {
+    const title    = document.getElementById('sellTitle').value.trim();
+    const desc     = document.getElementById('sellDesc').value.trim();
+    const category = document.getElementById('sellCategory').value;
+    const code     = document.getElementById('sellCode').value.trim();
+    const price    = Math.max(1, parseInt(document.getElementById('sellPrice').value) || 0);
+
+    if (!title || !code) { toast('❌ الاسم والكود مطلوبين'); return; }
+    if (!price || price < 1) { toast('❌ حدد سعر أكبر من 0'); return; }
+
+    const btn = document.getElementById('submitListingBtn');
+    btn.disabled = true; btn.innerText = '⏳ جارٍ العرض...';
+
+    try {
+        const sellerName = currentUser.email.split('@')[0];
+        const newRef = push(ref(db, 'marketListings'));
+        const data = {
+            title, description: desc, category, code, price,
+            sellerUid: currentUser.uid, sellerEmail: currentUser.email, sellerName,
+            timestamp: Date.now()
+        };
+        await set(newRef, data);
+        allListings[newRef.key] = data;
+
+        toast('✅ اتعرض في السوق!');
+        document.getElementById('sellTitle').value = '';
+        document.getElementById('sellDesc').value = '';
+        document.getElementById('sellCode').value = '';
+        document.getElementById('sellPrice').value = '';
+        renderMarket();
+        renderMyListings();
+    } catch (err) {
+        toast('❌ حصل خطأ: ' + err.message);
+    } finally {
+        btn.disabled = false; btn.innerText = '📤 اعرض للبيع';
+    }
+};
+
+/* ============================================================
+   سكربتاتي المعروضة — تعديل السعر أو الحذف
+   ============================================================ */
+
+function renderMyListings() {
+    const box = document.getElementById('myListings');
+    box.innerHTML = '';
+
+    const mine = Object.entries(allListings).filter(([, s]) => s.sellerUid === currentUser.uid);
+
+    if (!mine.length) {
+        box.innerHTML = `<div class="loading-box">لسه معروضش أي سكربت للبيع. استخدم الفورم فوق.</div>`;
+        return;
+    }
+
+    mine.sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
+
+    mine.forEach(([id, s]) => {
+        const row = document.createElement('div');
+        row.className = 'listing-row';
+        row.innerHTML = `
+            <div class="listing-info">
+                <h4>${s.title || 'بدون عنوان'}</h4>
+                <div class="li-meta">
+                    <span>📁 ${s.category || 'عام'}</span>
+                    <span class="sold-tag">🛒 معروض بـ ${s.price} نقطة</span>
+                </div>
+            </div>
+            <div class="price-input-wrap">
+                <input type="number" min="1" placeholder="السعر" value="${s.price || ''}" id="price-${id}">
+                <button class="save-price-btn" id="save-${id}">💾 حفظ</button>
+                <button class="save-price-btn" id="del-${id}" style="color:var(--danger);border-color:rgba(248,113,113,0.25)">🗑️ حذف</button>
+            </div>
+        `;
+        row.querySelector(`#save-${id}`).onclick = () => savePrice(id, row);
+        row.querySelector(`#del-${id}`).onclick = () => deleteListing(id, row, s.title);
+        box.appendChild(row);
+    });
+}
+
+async function savePrice(id, row) {
+    const input = row.querySelector(`#price-${id}`);
+    const btn   = row.querySelector(`#save-${id}`);
+    const price = Math.max(1, parseInt(input.value) || 0);
+
+    try {
+        await update(ref(db, `marketListings/${id}`), { price });
+        allListings[id].price = price;
+        btn.innerText = '✅ اتحفظ'; btn.classList.add('saved');
+        setTimeout(() => { btn.innerText = '💾 حفظ'; btn.classList.remove('saved'); }, 1800);
+        toast(`✅ السعر بقى ${price} نقطة`);
+        renderMarket();
+    } catch (err) {
+        toast('❌ حصل خطأ: ' + err.message);
+    }
+}
+
+async function deleteListing(id, row, title) {
+    if (!confirm(`حذف "${title}" من السوق نهائيًا؟ لو حد اشتراه قبل كده هيفقد إمكانية فتح الكود تاني.`)) return;
+    try {
+        await remove(ref(db, `marketListings/${id}`));
+        delete allListings[id];
+        row.style.cssText += 'opacity:0;transition:0.3s';
+        setTimeout(() => row.remove(), 300);
+        toast('🗑️ اتشال من السوق');
+        renderMarket();
+    } catch (err) {
+        toast('❌ حصل خطأ: ' + err.message);
+    }
+}
+
+/* ============================================================
+   Code Modal
+   ============================================================ */
+
+function openCodeModal(id, s) {
+    document.getElementById('mmTitle').innerText = s.title || 'بدون عنوان';
+    document.getElementById('mmDesc').innerText  = s.description || '';
+    document.getElementById('mmCode').innerText  = s.code || 'لا يوجد كود محفوظ لهذا السكربت.';
+    document.getElementById('codeModal').classList.add('open');
+    document.getElementById('mmCopyBtn').onclick = () => {
+        navigator.clipboard.writeText(s.code || '').then(() => toast('📋 تم نسخ الكود'));
+    };
+}
+document.getElementById('mmCloseBtn').onclick = () => document.getElementById('codeModal').classList.remove('open');
+document.getElementById('codeModal').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+function escapeHTML(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | دعوة صديق</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+
+/* ============================================================
+   Referral Landing Page
+   ============================================================ */
+
+.ref-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.ref-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 28px;
+    padding: 48px 36px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease both;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+}
+
+.ref-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: var(--accent-gradient);
+}
+
+/* نجوم خلفية */
+.ref-card::after {
+    content: '✦ ✦ ✦';
+    position: absolute;
+    bottom: 14px; left: 0; right: 0;
+    text-align: center;
+    font-size: 0.7rem;
+    color: rgba(139,92,246,0.2);
+    letter-spacing: 8px;
+    pointer-events: none;
+}
+
+.ref-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 18px;
+    animation: float 3s ease infinite;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+.ref-card h1 {
+    font-size: 1.7rem;
+    font-weight: 900;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+
+.ref-card .sub {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+/* بطاقة النقاط */
+.points-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.08));
+    border: 1px solid rgba(251,191,36,0.35);
+    border-radius: 50px;
+    padding: 10px 22px;
+    margin-bottom: 28px;
+    font-size: 1rem;
+    font-weight: 900;
+    color: #fbbf24;
+}
+
+.points-badge .pb-icon { font-size: 1.3rem; }
+
+/* من دعاك */
+.inviter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    text-align: right;
+}
+
+.inviter-avatar {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    border: 2px solid rgba(139,92,246,0.3);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #0a0a14;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.inviter-info .ii-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; }
+.inviter-info .ii-name  { font-size: 0.95rem; font-weight: 900; color: var(--text-main); }
+
+/* أزرار */
+.ref-btns { display: flex; flex-direction: column; gap: 10px; }
+
+.ref-btns button {
+    width: 100%;
+    padding: 15px;
+    border-radius: var(--radius-btn);
+    font-size: 1rem;
+    margin: 0;
+}
+
+.btn-join {
+    background: var(--accent-gradient) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 8px 22px rgba(139,92,246,0.35) !important;
+}
+
+.btn-login {
+    background: rgba(255,255,255,0.04) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* رسالة النجاح */
+.success-msg {
+    display: none;
+    background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(59,130,246,0.05));
+    border: 1px solid rgba(74,222,128,0.3);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+    animation: fadeIn 0.4s ease both;
+}
+
+.success-msg .sm-icon  { font-size: 2rem; display: block; margin-bottom: 8px; }
+.success-msg .sm-title { font-size: 1rem; font-weight: 900; color: var(--success); margin-bottom: 4px; }
+.success-msg .sm-sub   { font-size: 0.82rem; color: var(--text-muted); }
+
+/* already visited */
+.already-msg {
+    display: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+</style>
+</head>
+<body>
+
+<div class="ref-wrapper">
+    <div class="ref-card">
+        <span class="ref-icon">🎁</span>
+        <h1>دعوة خاصة!</h1>
+        <p class="sub" id="refSub">صديقك دعاك للانضمام إلى<br><strong>CCRAFT SPACE</strong></p>
+
+        <div class="points-badge">
+            <span class="pb-icon">⭐</span>
+            اربح <strong>15 نقطة</strong> فوراً بمجرد التسجيل!
+        </div>
+
+        <!-- من دعاك -->
+        <div class="inviter-row" id="inviterRow" style="display:none">
+            <div class="inviter-avatar" id="inviterAvatar"></div>
+            <div class="inviter-info">
+                <div class="ii-label">دعاك</div>
+                <div class="ii-name" id="inviterName">—</div>
+            </div>
+        </div>
+
+        <div class="ref-btns" id="refBtns">
+            <button class="btn-join" id="joinBtn">🚀 سجّل واكسب النقاط</button>
+            <button class="btn-login" id="loginBtn">لديّ حساب بالفعل — دخول</button>
+        </div>
+
+        <div class="success-msg" id="successMsg">
+            <span class="sm-icon">🎉</span>
+            <div class="sm-title">تم! ربحت 15 نقطة</div>
+            <div class="sm-sub">النقاط اتضافت على حسابك</div>
+        </div>
+
+        <div class="already-msg" id="alreadyMsg">
+            ✅ سبق وزرت هذا الرابط — لا يمكن تكرار النقاط
+        </div>
+    </div>
+</div>
+
+
+<script type="module">
+import { get, getAuth, getDatabase, increment, initializeApp, onAuthStateChanged, ref, runTransaction, set } from "./supabase-config.js";
+
+
+
+
+import { buildAvatar, DEFAULT_CHAR } from './avatar.js';
+
+
+
+
+const db   = getDatabase(app);
+const auth = getAuth(app);
+
+const POINTS_PER_REFERRAL = 15;
+
+// جيب ref من الـ URL
+const urlParams  = new URLSearchParams(window.location.search);
+const refUid     = urlParams.get('ref'); // uid صاحب الرابط
+const localKey   = `ref_visited_${refUid}`; // عشان نمنع التكرار
+
+/* ============================================================
+   تحميل معلومات صاحب الدعوة
+   ============================================================ */
+
+async function loadInviter() {
+    if (!refUid) return;
+
+    const userSnap   = await get(ref(db, `users/${refUid}`));
+    const avatarSnap = await get(ref(db, `users/${refUid}/avatar`));
+
+    if (!userSnap.exists()) return;
+
+    const userData = userSnap.val();
+    const name     = (userData.email || '').split('@')[0];
+    const charData = avatarSnap.exists() ? { ...DEFAULT_CHAR, ...avatarSnap.val() } : DEFAULT_CHAR;
+
+    document.getElementById('inviterRow').style.display = 'flex';
+    document.getElementById('inviterName').innerText    = name;
+    document.getElementById('inviterAvatar').innerHTML  = buildAvatar(charData, 46);
+    document.getElementById('refSub').innerHTML         =
+        `<strong>${name}</strong> دعاك للانضمام إلى<br><strong>CCRAFT SPACE</strong>`;
+}
+
+loadInviter();
+
+
+/* ============================================================
+   Auth state — لو مسجل دخول بالفعل
+   ============================================================ */
+
+onAuthStateChanged(auth, async user => {
+    if (!user || !refUid) return;
+    if (user.uid === refUid) {
+        // صاحب الرابط نفسه
+        showAlready('لا يمكنك استخدام رابطك الخاص 😅');
+        return;
+    }
+    // لو زار الرابط ده قبل
+    const alreadySnap = await get(ref(db, `referrals/${refUid}/visitors/${user.uid}`));
+    if (alreadySnap.exists()) {
+        showAlready();
+        return;
+    }
+    // اضف النقاط تلقائياً
+    await awardPoints(user.uid);
+});
+
+
+/* ============================================================
+   الأزرار
+   ============================================================ */
+
+document.getElementById('joinBtn').onclick = () => {
+    // احفظ الـ ref في localStorage عشان نستخدمه بعد التسجيل
+    if (refUid) localStorage.setItem('pendingRef', refUid);
+    location.href = 'login.html?mode=register';
+};
+
+document.getElementById('loginBtn').onclick = () => {
+    if (refUid) localStorage.setItem('pendingRef', refUid);
+    location.href = 'login.html';
+};
+
+
+/* ============================================================
+   إضافة النقاط
+   ============================================================ */
+
+async function awardPoints(visitorUid) {
+    if (!refUid || !visitorUid) return;
+
+    try {
+        // تسجيل الزيارة عشان ما تتكررش
+        await set(ref(db, `referrals/${refUid}/visitors/${visitorUid}`), {
+            timestamp: Date.now(),
+            points: POINTS_PER_REFERRAL
+        });
+
+        // اضف النقاط لصاحب الرابط
+        await runTransaction(ref(db, `users/${refUid}/points`), current => {
+            return (current || 0) + POINTS_PER_REFERRAL;
+        });
+
+        // سجّل في سجل النقاط
+        await set(ref(db, `users/${refUid}/pointsLog/${Date.now()}`), {
+            type:   'referral',
+            points: POINTS_PER_REFERRAL,
+            from:   visitorUid,
+            timestamp: Date.now(),
+        });
+
+        showSuccess();
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+function showSuccess() {
+    document.getElementById('refBtns').style.display  = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+    // وجّهه للموقع بعد ثانيتين
+    setTimeout(() => location.href = 'index.html', 2500);
+}
+
+function showAlready(msg) {
+    document.getElementById('refBtns').style.display  = 'none';
+    const el = document.getElementById('alreadyMsg');
+    if (msg) el.innerText = msg;
+    el.style.display = 'block';
+    setTimeout(() => location.href = 'index.html', 2500);
+}
+
+</script>
+</body>
+</html>

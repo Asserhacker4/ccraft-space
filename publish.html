@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نشر سكربت | CCRAFT SPACE</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+
+    #authNotice { max-width: 800px; margin: 40px auto; padding: 0 24px; display: none; }
+
+    .notice-card {
+        background: var(--bg-card); border: 1px solid rgba(139,92,246,0.3);
+        border-radius: 20px; padding: 40px 32px; text-align: center;
+        animation: fadeIn 0.5s ease both;
+    }
+
+    .notice-card .n-icon { font-size: 3rem; margin-bottom: 16px; display: block; }
+    .notice-card h2 { font-size: 1.4rem; font-weight: 900; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+    .notice-card p  { color: var(--text-muted); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.7; }
+    .notice-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .notice-btns button { background: var(--accent-gradient); color: white; border: none; border-radius: var(--radius-btn); padding: 13px 28px; box-shadow: 0 8px 20px rgba(139,92,246,0.3); }
+    .notice-btns .ghost { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border-color); box-shadow: none; }
+
+    #successBadge { display: none; max-width: 800px; margin: 0 auto 24px; padding: 0 24px; }
+
+    .badge-earned {
+        background: linear-gradient(135deg,rgba(74,222,128,0.1) 0%,rgba(59,130,246,0.05) 100%);
+        border: 1px solid rgba(74,222,128,0.3); border-radius: 16px;
+        padding: 16px 22px; display: flex; align-items: center; gap: 14px;
+        margin-bottom: 10px; animation: fadeIn 0.4s ease both;
+    }
+    .badge-earned .be-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .badge-earned .be-text h4 { font-size: 0.9rem; font-weight: 800; color: var(--success); margin-bottom: 2px; }
+    .badge-earned .be-text p  { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
+
+    #userInfo { display: none; max-width: 800px; margin: 0 auto 20px; padding: 0 24px; }
+    .user-bar { display: flex; align-items: center; gap: 12px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px 18px; }
+    .ub-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 0.9rem; flex-shrink: 0; }
+    .ub-name  { font-weight: 800; font-size: 0.9rem; }
+    .ub-badge { margin-right: auto; background: var(--primary-dim); color: var(--primary); font-size: 0.72rem; font-weight: 800; padding: 4px 12px; border-radius: 50px; }
+    .ub-badge.auto-verify { background: rgba(0,242,254,0.1); color: #67e8f9; }
+
+    /* ---- Image Upload ---- */
+    .image-upload-section {
+        margin-top: 4px;
+    }
+
+    .image-upload-label {
+        display: block; color: var(--text-muted); font-size: 0.85rem;
+        font-weight: 700; margin-bottom: 10px;
+    }
+
+    .upload-zone {
+        border: 2px dashed var(--border-color);
+        border-radius: 16px;
+        padding: 28px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+        background: rgba(255,255,255,0.02);
+    }
+
+    .upload-zone:hover { border-color: var(--primary); background: rgba(139,92,246,0.05); }
+    .upload-zone.drag-over { border-color: var(--primary); background: rgba(139,92,246,0.1); }
+    .upload-zone.has-image { border-style: solid; border-color: rgba(139,92,246,0.4); padding: 0; }
+
+    .uz-icon  { font-size: 2.2rem; display: block; margin-bottom: 10px; }
+    .uz-text  { font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+    .uz-sub   { font-size: 0.72rem; color: var(--text-muted); opacity: 0.7; }
+    .uz-limit { font-size: 0.68rem; color: var(--text-muted); margin-top: 6px; opacity: 0.6; }
+
+    #imageInput { display: none; }
+
+    #imagePreview {
+        width: 100%; max-height: 280px;
+        object-fit: cover; border-radius: 14px;
+        display: none;
+    }
+
+    .image-overlay {
+        display: none;
+        position: absolute; inset: 0;
+        background: rgba(0,0,0,0.5);
+        border-radius: 14px;
+        align-items: center; justify-content: center; gap: 10px;
+    }
+
+    .upload-zone.has-image:hover .image-overlay { display: flex; }
+
+    .img-ov-btn {
+        background: var(--bg-card); border: 1px solid var(--border-color);
+        border-radius: 10px; padding: 8px 16px;
+        font-size: 0.78rem; font-weight: 800; color: var(--text-main);
+        cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0;
+        transition: var(--transition);
+    }
+    .img-ov-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+    .img-ov-btn.del   { color: var(--danger); border-color: rgba(248,113,113,0.3); }
+
+    /* Image status */
+    .img-status {
+        display: none;
+        align-items: center; gap: 8px;
+        margin-top: 8px; font-size: 0.78rem; font-weight: 700;
+    }
+    .img-status.show { display: flex; }
+    .img-status.ok   { color: var(--success); }
+    .img-status.err  { color: var(--danger); }
+    .img-status.warn { color: #fbbf24; }
+
+    /* Progress bar for compression */
+    .compress-progress {
+        display: none;
+        height: 3px; border-radius: 2px;
+        background: var(--border-color);
+        margin-top: 8px; overflow: hidden;
+    }
+    .compress-progress.show { display: block; }
+    .compress-progress .cp-bar {
+        height: 100%; border-radius: 2px;
+        background: var(--accent-gradient);
+        width: 0%; transition: width 0.4s ease;
+    }
+
+    /* Map Section */
+    .map-section { display: flex; flex-direction: column; gap: 12px; }
+    .map-toggle-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .no-map-btn { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: var(--radius-btn); padding: 10px 20px; font-size: 0.88rem; font-family: 'Tajawal', sans-serif; font-weight: 700; cursor: pointer; transition: var(--transition); margin: 0; }
+    .no-map-btn.active { background: rgba(74,222,128,0.1); color: var(--success); border-color: rgba(74,222,128,0.4); }
+    .no-map-btn:hover  { transform: translateY(-2px); filter: none; }
+    .map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+    .map-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 8px; text-align: center; cursor: pointer; transition: var(--transition); font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .map-card:hover { border-color: rgba(139,92,246,0.4); color: var(--text-main); transform: translateY(-2px); }
+    .map-card.selected { background: var(--primary-dim); border-color: rgba(139,92,246,0.5); color: var(--primary); }
+    .map-card .map-icon { font-size: 1.4rem; }
+    .custom-map-row { display: flex; gap: 10px; align-items: center; }
+    .custom-map-row input { flex: 1; margin: 0; border-radius: 14px; padding: 12px 18px; font-size: 0.9rem; }
+    .map-preview { display: none; align-items: center; gap: 10px; background: rgba(139,92,246,0.07); border: 1px solid rgba(139,92,246,0.25); border-radius: 12px; padding: 10px 16px; font-size: 0.85rem; color: var(--text-main); font-weight: 700; }
+    .map-preview.show { display: flex; }
+    .map-preview .mp-icon { font-size: 1.2rem; }
+
+    /* ---- Key Field (optional) ---- */
+    .key-section {
+        margin-top: 4px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .key-label {
+        display: flex; align-items: center; gap: 8px;
+        color: var(--text-muted); font-size: 0.85rem; font-weight: 700;
+    }
+    .key-optional-tag {
+        background: rgba(255,255,255,0.06); color: var(--text-muted);
+        font-size: 0.65rem; font-weight: 800; padding: 2px 10px;
+        border-radius: 50px; border: 1px solid var(--border-color);
+    }
+    #scriptKey { margin: 0; border-radius: 14px; padding: 12px 18px; font-size: 0.9rem; }
+    .key-hint { font-size: 0.72rem; color: var(--text-muted); opacity: 0.75; }
+
+    /* ---- Tag chips ---- */
+    .tag-chip {
+        display:inline-flex;align-items:center;gap:6px;
+        background:rgba(139,92,246,0.12);color:#a78bfa;
+        border:1px solid rgba(139,92,246,0.25);
+        padding:5px 12px;border-radius:50px;
+        font-size:0.78rem;font-weight:800;cursor:pointer;margin:0;
+    }
+    .tag-chip:hover { background:rgba(139,92,246,0.22); transform:none; filter:none; }
+
+    /* ---- Add tag button ---- */
+    #addTagBtn { white-space: nowrap; padding: 10px 18px; }
+
+  </style>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdA7YYtAAAAACNdrhaLxSVYQ0cHsfdkIqLW_rh7"></script>
+</head>
+<body>
+
+<header>
+  <button onclick="location.href='scripts.html'">📜 قائمة السكربتات</button>
+  <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div id="authNotice">
+    <div class="notice-card">
+        <span class="n-icon">🔐</span>
+        <h2>محتاج تسجّل دخول الأول</h2>
+        <p>عشان تنشر سكربت وتحسب في بروفايلك وتاخد البادجات،<br>لازم يكون عندك حساب على CCRAFT SPACE.</p>
+        <div class="notice-btns">
+            <button onclick="location.href='login.html'">🚀 تسجيل الدخول</button>
+            <button class="ghost" onclick="location.href='index.html'">رجوع للرئيسية</button>
+        </div>
+    </div>
+</div>
+
+<div id="userInfo">
+    <div class="user-bar">
+        <div class="ub-avatar" id="ubAvatar">أ</div>
+        <div>
+            <div class="ub-name"  id="ubName">—</div>
+        </div>
+        <span class="ub-badge" id="ubBadge">✅ مسجل دخول</span>
+    </div>
+</div>
+
+<div id="successBadge"></div>
+
+<main id="publishMain" style="display:none">
+  <h1>📤 نشر سكربت جديد</h1>
+
+  <form id="publishForm">
+
+    <input    type="text" id="scriptTitle"       placeholder="عنوان السكربت" required>
+    <textarea             id="scriptCode"        placeholder="كود السكربت هنا..." rows="6" required></textarea>
+    <textarea             id="scriptDescription" placeholder="اكتب وصف للسكربت..." rows="3" required></textarea>
+
+    <select id="category" required>
+      <option value="">اختر القسم</option>
+      <option value="game">Game Scripts</option>
+      <option value="admin">Admin Scripts</option>
+      <option value="ai">AI & NPCs</option>
+    </select>
+
+    <!-- ============================================================
+         🔑 المفتاح
+         ============================================================ -->
+    <div class="key-section">
+        <label class="key-label">🔑 هل السكربت يحتاج مفتاح (Key)؟</label>
+        <div class="map-toggle-row">
+            <button type="button" class="no-map-btn active" id="noKeyBtn">🔓 لا، بدون مفتاح</button>
+            <button type="button" class="no-map-btn" id="yesKeyBtn">🔒 نعم، يحتاج مفتاح</button>
+        </div>
+        <input type="text" id="scriptKey" placeholder="اكتب المفتاح هنا (اختياري)..." style="display:none">
+        <div class="key-hint">لو فعّلت "نعم" هيظهر بادج 🔒 على السكربت في كل مكان، وتقدر كمان تكتب المفتاح نفسه لو حابب.</div>
+    </div>
+
+    <!-- ============================================================
+         🏷️ تاجات السكربت
+         ============================================================ -->
+    <div class="key-section">
+        <label class="key-label">🏷️ تاجات السكربت <span class="key-optional-tag">اختياري</span></label>
+        <div class="custom-map-row">
+            <input type="text" id="tagInput" placeholder="اكتب تاج واضغط Enter أو دوس إضافة (مثال: ESP، سرعة، مجاني)...">
+            <button type="button" class="no-map-btn" id="addTagBtn">➕ إضافة</button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px" id="tagsPreview"></div>
+        <div class="key-hint">التاجات بتساعد الزوار يلاقوا سكربتك بسهولة بالبحث والفلترة.</div>
+    </div>
+
+    <!-- ============================================================
+         🖼️ صورة السكربت
+         ============================================================ -->
+    <div class="image-upload-section">
+        <label class="image-upload-label">🖼️ صورة السكربت (اختياري — حد أقصى 12 ميجا)</label>
+
+        <div class="upload-zone" id="uploadZone">
+            <img id="imagePreview" alt="معاينة الصورة">
+            <div class="image-overlay" id="imageOverlay">
+                <button class="img-ov-btn" onclick="triggerUpload(event)">🔄 تغيير</button>
+                <button class="img-ov-btn del" onclick="removeImage(event)">🗑️ حذف</button>
+            </div>
+            <div id="uploadPlaceholder">
+                <span class="uz-icon">🖼️</span>
+                <div class="uz-text">اسحب الصورة هنا أو اضغط للاختيار</div>
+                <div class="uz-sub">PNG، JPG، WebP</div>
+                <div class="uz-limit">الحد الأقصى: 12 ميجابايت</div>
+            </div>
+        </div>
+
+        <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp,image/gif">
+
+        <div class="img-status" id="imgStatus"></div>
+        <div class="compress-progress" id="compressProgress">
+            <div class="cp-bar" id="cpBar"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         🗺️ اختيار الماب
+         ============================================================ -->
+    <div style="margin-top:4px">
+        <label style="display:block;color:var(--text-muted);font-size:0.85rem;font-weight:700;margin-bottom:10px">
+            🗺️ الماب المخصص للسكربت
+        </label>
+
+        <div class="map-section">
+            <div class="map-toggle-row">
+                <button type="button" class="no-map-btn active" id="noMapBtn">🌐 ليس لماب محدد</button>
+                <span style="color:var(--text-muted);font-size:0.78rem">أو اختر ماب من الأسفل</span>
+            </div>
+            <div class="map-grid" id="mapGrid">
+                <div class="map-card" data-map="Adopt Me"><span class="map-icon">🏡</span>Adopt Me</div>
+                <div class="map-card" data-map="Bloxburg"><span class="map-icon">🏗️</span>Bloxburg</div>
+                <div class="map-card" data-map="Brookhaven"><span class="map-icon">🌆</span>Brookhaven</div>
+                <div class="map-card" data-map="Arsenal"><span class="map-icon">🔫</span>Arsenal</div>
+                <div class="map-card" data-map="Bedwars"><span class="map-icon">🛏️</span>Bedwars</div>
+                <div class="map-card" data-map="Murder Mystery 2"><span class="map-icon">🔪</span>MM2</div>
+                <div class="map-card" data-map="Jailbreak"><span class="map-icon">🚔</span>Jailbreak</div>
+                <div class="map-card" data-map="Pet Simulator X"><span class="map-icon">🐾</span>Pet Sim X</div>
+                <div class="map-card" data-map="Doors"><span class="map-icon">🚪</span>Doors</div>
+                <div class="map-card" data-map="Da Hood"><span class="map-icon">🏙️</span>Da Hood</div>
+                <div class="map-card" data-map="Anime Fighting Sim"><span class="map-icon">⚔️</span>Anime Fight</div>
+                <div class="map-card" data-map="Tower of Hell"><span class="map-icon">🗼</span>Tower of Hell</div>
+            </div>
+            <div class="custom-map-row">
+                <input type="text" id="customMap" placeholder="أو اكتب اسم الماب يدوياً...">
+            </div>
+            <div class="map-preview" id="mapPreview">
+                <span class="mp-icon">🗺️</span>
+                <span id="mapPreviewText">—</span>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="publishBtn">📤 نشر السكربت</button>
+  </form>
+</main>
+
+
+<script type="module">
+import { get, getAuth, getDatabase, initializeApp, onAuthStateChanged, push, ref, set, update } from "./supabase-config.js";
+
+  
+  
+  
+  import { guardAgainstBanned } from "./auth-guard.js";
+
+  
+
+  
+  guardAgainstBanned(app);
+  const db   = getDatabase(app);
+  const auth = getAuth(app);
+
+  let currentUser  = null;
+  let myUsername   = 'cCraft Space User'; // ✅ اسم المستخدم الحقيقي (مش الإيميل) — بيتحمّل من البروفايل
+  let selectedMap  = null;
+  let imageBase64  = null;   // الصورة المضغوطة جاهزة للحفظ
+  let hasKey       = false;  // ✅ هل السكربت يحتاج مفتاح
+  let scriptTags   = [];     // ✅ تاجات السكربت
+  let isAutoVerified = false; // 🎖️ هل صاحب الحساب موثّق دائم
+
+  const MAX_SIZE_MB   = 12;
+  const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+  const TARGET_WIDTH   = 800;  // العرض المستهدف بعد الضغط
+  const JPEG_QUALITY   = 0.82; // جودة الضغط
+
+  const ALL_BADGES = [
+    { id:'first_script',   icon:'🚀', name:'الانطلاقة',   desc:'نشر أول سكربت',      check:s=>s.scripts>=1    },
+    { id:'five_scripts',   icon:'📦', name:'مجموعة',      desc:'نشر 5 سكربتات',      check:s=>s.scripts>=5    },
+    { id:'ten_scripts',    icon:'💎', name:'محترف',        desc:'نشر 10 سكربتات',     check:s=>s.scripts>=10   },
+    { id:'first_like',     icon:'👍', name:'محبوب',        desc:'أول لايك',            check:s=>s.totalLikes>=1   },
+    { id:'ten_likes',      icon:'🔥', name:'مشهور',        desc:'10 لايكات',           check:s=>s.totalLikes>=10  },
+    { id:'fifty_likes',    icon:'⭐', name:'نجم',          desc:'50 لايك',             check:s=>s.totalLikes>=50  },
+    { id:'hundred_likes',  icon:'👑', name:'أسطورة',       desc:'100 لايك',            check:s=>s.totalLikes>=100 },
+    { id:'good_rating',    icon:'🏆', name:'تقييم ممتاز',  desc:'متوسط تقييم 4+',     check:s=>s.avgRating>=4    },
+    { id:'all_categories', icon:'🌈', name:'متنوع',        desc:'3 أقسام مختلفة',     check:s=>s.categories>=3   },
+    { id:'veteran',        icon:'🎖️', name:'مخضرم',       desc:'عضو أكثر من 30 يوم', check:s=>s.daysOld>=30     },
+  ];
+
+  /* ---- Auth ---- */
+  onAuthStateChanged(auth, async user => {
+    if (user) {
+        currentUser = user;
+
+        // ✅ اسم المستخدم الحقيقي بيتجاب من البروفايل، مش من الإيميل خالص
+        let hasUsername = false;
+        try {
+            const nameSnap = await get(ref(db, `users/${user.uid}/username`));
+            if (nameSnap.exists() && nameSnap.val()) {
+                myUsername = nameSnap.val();
+                hasUsername = true;
+            }
+        } catch (e) { /* لو التحقق فشل، هنكمل بالاسم الافتراضي */ }
+
+        // 🚧 لسه ما اختارش اسم مستخدم — لازم يختار الأول قبل ما ينشر أي حاجة باسمه
+        if (!hasUsername) {
+            location.href = 'profile.html';
+            return;
+        }
+
+        document.getElementById('ubAvatar').innerText = myUsername.charAt(0).toUpperCase();
+        document.getElementById('ubName').innerText   = myUsername;
+        document.getElementById('userInfo').style.display    = 'block';
+        document.getElementById('publishMain').style.display = 'block';
+        document.getElementById('authNotice').style.display  = 'none';
+
+        // 🎖️ تحقق هل الحساب موثّق دائم عشان السكربتات الجديدة تتوثق أوتوماتيك
+        try {
+            const uSnap = await get(ref(db, `users/${user.uid}/verified`));
+            isAutoVerified = uSnap.exists() && uSnap.val() === true;
+            if (isAutoVerified) {
+                const b = document.getElementById('ubBadge');
+                b.textContent = '🎖️ موثّق دائم';
+                b.classList.add('auto-verify');
+            }
+        } catch (e) { /* تجاهل — مش حرج */ }
+    } else {
+        document.getElementById('authNotice').style.display  = 'block';
+        document.getElementById('publishMain').style.display = 'none';
+        document.getElementById('userInfo').style.display    = 'none';
+    }
+  });
+
+  /* ============================================================
+     🔑 هل يحتاج مفتاح؟ (Toggle)
+     ============================================================ */
+  const noKeyBtn  = document.getElementById('noKeyBtn');
+  const yesKeyBtn = document.getElementById('yesKeyBtn');
+  const scriptKeyInput = document.getElementById('scriptKey');
+
+  function escP(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  noKeyBtn.addEventListener('click', () => {
+    hasKey = false;
+    noKeyBtn.classList.add('active');
+    yesKeyBtn.classList.remove('active');
+    scriptKeyInput.style.display = 'none';
+  });
+
+  yesKeyBtn.addEventListener('click', () => {
+    hasKey = true;
+    yesKeyBtn.classList.add('active');
+    noKeyBtn.classList.remove('active');
+    scriptKeyInput.style.display = 'block';
+  });
+
+  /* ============================================================
+     🏷️ التاجات
+     ============================================================ */
+  const tagInput   = document.getElementById('tagInput');
+  const tagsPreview = document.getElementById('tagsPreview');
+  const addTagBtn   = document.getElementById('addTagBtn');
+
+  function renderTags() {
+    tagsPreview.innerHTML = scriptTags.map((t,i) =>
+        `<span class="tag-chip" data-i="${i}">#${escP(t)} ✕</span>`).join('');
+    tagsPreview.querySelectorAll('.tag-chip').forEach(el => {
+        el.addEventListener('click', () => {
+            scriptTags.splice(parseInt(el.dataset.i), 1);
+            renderTags();
+        });
+    });
+  }
+
+  function addTag() {
+    const val = tagInput.value.trim().replace(/^#/, '');
+    if (val && !scriptTags.includes(val) && scriptTags.length < 8) {
+        scriptTags.push(val);
+        renderTags();
+    }
+    tagInput.value = '';
+    tagInput.focus();
+  }
+
+  tagInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        addTag();
+    }
+  });
+
+  addTagBtn.addEventListener('click', addTag);
+
+  /* ============================================================
+     Image Upload System
+     ============================================================ */
+
+  const uploadZone    = document.getElementById('uploadZone');
+  const imageInput    = document.getElementById('imageInput');
+  const imagePreview  = document.getElementById('imagePreview');
+  const imgStatus     = document.getElementById('imgStatus');
+  const compressBar   = document.getElementById('compressProgress');
+  const cpBar         = document.getElementById('cpBar');
+  const placeholder   = document.getElementById('uploadPlaceholder');
+
+  // كليك على الـ zone
+  uploadZone.addEventListener('click', () => {
+    if (!uploadZone.classList.contains('has-image')) imageInput.click();
+  });
+
+  // Drag & Drop
+  uploadZone.addEventListener('dragover',  e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) processImage(file);
+  });
+
+  // اختيار ملف
+  imageInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) processImage(file);
+  });
+
+  window.triggerUpload = (e) => { e.stopPropagation(); imageInput.click(); };
+  window.removeImage   = (e) => {
+    e.stopPropagation();
+    imageBase64 = null;
+    imagePreview.src = '';
+    imagePreview.style.display = 'none';
+    placeholder.style.display  = 'block';
+    uploadZone.classList.remove('has-image');
+    imageInput.value = '';
+    setImgStatus('', '');
+  };
+
+  async function processImage(file) {
+    // تحقق من النوع
+    if (!file.type.startsWith('image/')) {
+        setImgStatus('err', '❌ الملف المختار ليس صورة');
+        return;
+    }
+
+    // تحقق من الحجم قبل الضغط
+    if (file.size > MAX_SIZE_BYTES) {
+        setImgStatus('err', `❌ الصورة أكبر من ${MAX_SIZE_MB} ميجا (${(file.size/1024/1024).toFixed(1)} MB)`);
+        return;
+    }
+
+    setImgStatus('info', '⏳ جارٍ معالجة الصورة...');
+    showProgress(20);
+
+    try {
+        const compressed = await compressImage(file);
+        showProgress(90);
+
+        imageBase64 = compressed;
+        imagePreview.src = compressed;
+        imagePreview.style.display = 'block';
+        placeholder.style.display  = 'none';
+        uploadZone.classList.add('has-image');
+
+        const sizeMB = ((compressed.length * 0.75) / 1024 / 1024).toFixed(2);
+        setImgStatus('ok', `✅ الصورة جاهزة — حجم تقريبي: ${sizeMB} MB`);
+        showProgress(100);
+        setTimeout(() => { compressBar.classList.remove('show'); }, 600);
+
+    } catch (err) {
+        setImgStatus('err', '❌ حدث خطأ أثناء معالجة الصورة');
+        compressBar.classList.remove('show');
+    }
+  }
+
+  function compressImage(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas  = document.createElement('canvas');
+                let { width, height } = img;
+
+                // تصغير لو الصورة أكبر من TARGET_WIDTH
+                if (width > TARGET_WIDTH) {
+                    height = Math.round(height * TARGET_WIDTH / width);
+                    width  = TARGET_WIDTH;
+                }
+
+                canvas.width  = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                resolve(canvas.toDataURL('image/jpeg', JPEG_QUALITY));
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+  }
+
+  function setImgStatus(type, msg) {
+    imgStatus.className = `img-status${type ? ' show ' + type : ''}`;
+    imgStatus.innerHTML = msg;
+  }
+
+  function showProgress(pct) {
+    compressBar.classList.add('show');
+    cpBar.style.width = pct + '%';
+  }
+
+  /* ============================================================
+     Map Logic
+     ============================================================ */
+
+  const noMapBtn    = document.getElementById('noMapBtn');
+  const mapPreview  = document.getElementById('mapPreview');
+  const mapPrevText = document.getElementById('mapPreviewText');
+  const customMap   = document.getElementById('customMap');
+
+  function setMap(name) {
+    selectedMap = name;
+    document.querySelectorAll('.map-card').forEach(c => c.classList.remove('selected'));
+    if (name) {
+        noMapBtn.classList.remove('active');
+        mapPreview.classList.add('show');
+        mapPrevText.innerText = name;
+    } else {
+        noMapBtn.classList.add('active');
+        mapPreview.classList.remove('show');
+        customMap.value = '';
+    }
+  }
+
+  noMapBtn.addEventListener('click', () => setMap(null));
+
+  document.querySelectorAll('.map-card').forEach(card => {
+    card.addEventListener('click', () => {
+        document.querySelectorAll('.map-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        customMap.value = '';
+        setMap(card.dataset.map);
+    });
+  });
+
+  customMap.addEventListener('input', () => {
+    const val = customMap.value.trim();
+    if (val) {
+        document.querySelectorAll('.map-card').forEach(c => c.classList.remove('selected'));
+        noMapBtn.classList.remove('active');
+        mapPreview.classList.add('show');
+        mapPrevText.innerText = val;
+        selectedMap = val;
+    } else {
+        setMap(null);
+    }
+  });
+
+  /* ============================================================
+     نشر السكربت
+     ============================================================ */
+
+  document.getElementById('publishBtn').addEventListener('click', async () => {
+    if (!currentUser) { location.href = 'login.html'; return; }
+
+    const title       = document.getElementById('scriptTitle').value.trim();
+    const code        = document.getElementById('scriptCode').value.trim();
+    const category    = document.getElementById('category').value;
+    const description = document.getElementById('scriptDescription').value.trim();
+    const key         = document.getElementById('scriptKey').value.trim(); // ✅ اختياري
+
+    if (!title || !code || !category || !description) {
+        alert('مطلوب كل الحقول!'); return;
+    }
+
+    const btn = document.getElementById('publishBtn');
+    btn.disabled  = true;
+    btn.innerText = '⏳ جارٍ التحقق الأمني...';
+
+    // 🔐 reCAPTCHA v3 — لازم يتولد توكن بنجاح قبل ما نكمل النشر
+    let captchaToken = null;
+    try {
+        captchaToken = await new Promise((resolve, reject) => {
+            if (typeof grecaptcha === 'undefined') { reject(new Error('recaptcha not loaded')); return; }
+            grecaptcha.ready(() => {
+                grecaptcha.execute('6LdA7YYtAAAAACNdrhaLxSVYQ0cHsfdkIqLW_rh7', { action: 'publish' })
+                    .then(resolve).catch(reject);
+            });
+        });
+    } catch (e) {
+        alert('❌ تعذّر التحقق الأمني (reCAPTCHA) — تأكد إن حظر الإعلانات أو الإضافات مش مانع تحميله وحاول تاني');
+        btn.disabled  = false;
+        btn.innerText = '📤 نشر السكربت';
+        return;
+    }
+    if (!captchaToken) {
+        alert('❌ فشل التحقق الأمني — حاول تاني');
+        btn.disabled  = false;
+        btn.innerText = '📤 نشر السكربت';
+        return;
+    }
+
+    btn.innerText = '⏳ جارٍ النشر...';
+
+    const newRef   = push(ref(db, 'scripts'));
+
+    const scriptData = {
+        title,
+        code,
+        category,
+        description,
+        map:         selectedMap || null,
+        author:      myUsername,     // ✅ اسم المستخدم الحقيقي — مش بادئة الإيميل ومفيش إيميل مخزّن هنا خالص
+        authorUid:   currentUser.uid,
+        timestamp:   Date.now(),
+        rating:      0,
+        votes:       0,
+        likes:       0,
+        hasKey,                                        // ✅ فلاج واضح للمفتاح
+    };
+
+    // 🎖️ لو صاحب الحساب موثّق دائم من الأدمن — وثّق السكربت من ساعة النشر
+    if (isAutoVerified) {
+        scriptData.verified = true;
+        scriptData.verifiedAt = Date.now();
+    }
+
+    // ✅ ضيف المفتاح لو المستخدم كتب حاجة (اختياري تمامًا)
+    if (key) scriptData.key = key;
+
+    // ✅ ضيف التاجات لو موجودة
+    if (scriptTags.length) scriptData.tags = [...scriptTags];
+
+    // ضيف الصورة لو موجودة
+    if (imageBase64) scriptData.image = imageBase64;
+
+    try {
+        await set(newRef, scriptData);
+        // 🕒 سجّل وقت النشر ده عشان قاعدة الكولداون في الـ Database Rules تشتغل فعليًا
+        await update(ref(db, `users/${currentUser.uid}`), { lastPublished: Date.now() });
+        await checkAndAwardBadges();
+
+        document.getElementById('publishForm').reset();
+        setMap(null);
+        removeImage({ stopPropagation: () => {} });
+
+        // ✅ Reset حقول المفتاح والتاجات
+        hasKey = false;
+        scriptTags = [];
+        noKeyBtn.click();
+        renderTags();
+    } catch (err) {
+        if (err && err.code === 'PERMISSION_DENIED') {
+            alert('⏳ لازم تستنى دقيقة على الأقل بين كل نشر سكربت والتاني. حاول تاني بعد شوية.');
+        } else {
+            alert('❌ حصل خطأ أثناء النشر، حاول تاني.');
+        }
+    } finally {
+        btn.disabled  = false;
+        btn.innerText = '📤 نشر السكربت';
+    }
+  });
+
+  /* ============================================================
+     البادجات
+     ============================================================ */
+
+  async function checkAndAwardBadges() {
+    const uid      = currentUser.uid;
+    const scriptsSnap = await get(ref(db, 'scripts'));
+    const all  = scriptsSnap.exists() ? scriptsSnap.val() : {};
+    const mine = Object.values(all).filter(s =>
+        s.authorUid === uid || s.author === myUsername
+    );
+
+    let totalLikes=0, totalRating=0, totalVotes=0;
+    const cats = new Set();
+    mine.forEach(s => {
+        totalLikes  += s.likes  || 0;
+        totalRating += s.rating || 0;
+        totalVotes  += s.votes  || 0;
+        if (s.category) cats.add(s.category);
+    });
+
+    const stats = {
+        scripts:    mine.length,
+        totalLikes,
+        avgRating:  totalVotes > 0 ? totalRating/totalVotes : 0,
+        categories: cats.size,
+        daysOld:    (Date.now()-parseInt(currentUser.metadata.createdAt))/86400000,
+    };
+
+    const savedSnap = await get(ref(db, `users/${uid}/badges`));
+    const saved     = savedSnap.exists() ? savedSnap.val() : {};
+    const newlyEarned = [];
+
+    for (const badge of ALL_BADGES) {
+        if (badge.check(stats) && !saved[badge.id]) {
+            await set(ref(db, `users/${uid}/badges/${badge.id}`), { earnedAt: Date.now() });
+            newlyEarned.push(badge);
+        }
+    }
+
+    newlyEarned.length > 0 ? showNewBadges(newlyEarned) : showSuccessOnly();
+  }
+
+  function showNewBadges(badges) {
+    const c = document.getElementById('successBadge');
+    c.style.display = 'block';
+    c.innerHTML = `<div class="badge-earned"><div class="be-icon">✅</div><div class="be-text"><h4>تم نشر السكربت بنجاح!</h4><p>ظهر في قائمة السكربتات وفي بروفايلك</p></div></div>`;
+    badges.forEach((badge, i) => {
+        const div = document.createElement('div');
+        div.className = 'badge-earned';
+        div.style.animationDelay = `${i * 0.15}s`;
+        div.innerHTML = `<div class="be-icon">${badge.icon}</div><div class="be-text"><h4>🎉 بادج جديد: ${badge.name}!</h4><p>${badge.desc} — ظهر على بروفايلك</p></div>`;
+        c.appendChild(div);
+    });
+    c.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  function showSuccessOnly() {
+    const c = document.getElementById('successBadge');
+    c.style.display = 'block';
+    c.innerHTML = `<div class="badge-earned"><div class="be-icon">✅</div><div class="be-text"><h4>تم نشر السكربت بنجاح!</h4><p>ظهر في قائمة السكربتات وفي بروفايلك</p></div></div>`;
+    c.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الصفحة غير موجودة | CCRAFT SPACE</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" type="image/jpeg" href="https://ccraftspace.ddnsking.com/cCraft.jpg">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .nf-wrap {
+      max-width: 480px;
+      padding: 40px 24px;
+    }
+    .nf-emoji {
+      font-size: 4.5rem;
+      display: block;
+      margin-bottom: 10px;
+      animation: nfFloat 3s ease-in-out infinite;
+    }
+    @keyframes nfFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .nf-code {
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 8px;
+    }
+    .nf-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--text-main);
+      margin: 0 0 10px;
+    }
+    .nf-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin: 0 0 28px;
+    }
+    .nf-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .nf-btn {
+      padding: 12px 26px;
+      border-radius: 50px;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nf-btn.primary {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(139,92,246,0.35);
+    }
+    .nf-btn.secondary {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+    .nf-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  </style>
+</head>
+<body>
+
+  <div class="nf-wrap">
+    <span class="nf-emoji">🧭</span>
+    <div class="nf-code">404</div>
+    <h1 class="nf-title">الصفحة غير موجودة</h1>
+    <p class="nf-text">
+      الرابط اللي دخلت بيه مش موجود، ممكن يكون اتشال أو الرابط غلط.<br>
+      جرّب ترجع للرئيسية أو تدوّر في قائمة السكربتات.
+    </p>
+    <div class="nf-actions">
+      <a href="/" class="nf-btn primary">🏠 الصفحة الرئيسية</a>
+      <a href="/scripts/" class="nf-btn secondary">📜 قائمة السكربتات</a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | الإبلاغ عن سكربت</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+
+body { min-height: 100svh; display: flex; flex-direction: column; }
+
+.report-page {
+    flex: 1;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+    width: 100%;
+    animation: fadeIn 0.5s ease both;
+}
+
+/* Hero */
+.report-hero {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.report-hero .rh-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 14px;
+    animation: float 3s ease infinite;
+}
+
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+.report-hero h1 {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #f87171, #fb923c);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+
+.report-hero p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; }
+
+/* Script Info Card */
+.script-info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: var(--transition);
+}
+
+.script-info-card:hover { border-color: var(--border-hover); }
+.sic-icon  { font-size: 1.6rem; flex-shrink: 0; }
+.sic-info  { flex: 1; min-width: 0; }
+.sic-title { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 3px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.sic-meta  { font-size: 0.75rem; color: var(--text-muted); }
+
+/* Form Card */
+.form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.form-card h3 {
+    font-size: 0.78rem; font-weight: 800; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+}
+
+.form-card h3::after { content:''; flex:1; height:1px; background:var(--border-color); }
+
+/* Reason Options */
+.reason-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-bottom: 18px;
+}
+
+.reason-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+    padding: 12px 14px;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    text-align: right;
+    transition: var(--transition);
+    display: flex; align-items: center; gap: 8px;
+    margin: 0;
+}
+
+.reason-btn:hover { border-color: rgba(248,113,113,0.4); color: var(--text-main); transform: translateY(-2px); filter: none; }
+.reason-btn.selected { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.5); color: #f87171; }
+.reason-btn .rb-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+/* Details textarea */
+.form-label {
+    display: block;
+    font-size: 0.78rem; font-weight: 800; color: var(--text-muted);
+    margin-bottom: 8px; margin-top: 16px;
+}
+
+#reportDetails {
+    width: 100%; min-height: 110px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px; padding: 12px 16px;
+    color: var(--text-main);
+    font-family: 'Tajawal', sans-serif; font-size: 0.9rem;
+    line-height: 1.6; resize: vertical; outline: none;
+    transition: var(--transition); direction: rtl;
+    box-sizing: border-box;
+}
+
+#reportDetails:focus { border-color: rgba(248,113,113,0.4); box-shadow: 0 0 0 3px rgba(248,113,113,0.1); }
+#reportDetails::placeholder { color: var(--text-muted); opacity: 0.6; }
+
+/* Submit */
+#submitBtn {
+    width: 100%;
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    color: white; border: none;
+    border-radius: var(--radius-btn);
+    padding: 15px;
+    font-size: 1rem; font-weight: 900;
+    cursor: pointer; font-family: 'Tajawal', sans-serif;
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(239,68,68,0.3);
+    transition: var(--transition);
+}
+
+#submitBtn:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(239,68,68,0.4); filter: brightness(1.05); }
+#submitBtn:active { transform: scale(0.97); }
+#submitBtn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+
+/* Success State */
+.success-state {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+    animation: fadeIn 0.5s ease both;
+}
+
+.success-state .ss-icon { font-size: 3rem; display: block; margin-bottom: 14px; }
+.success-state h2 { font-size: 1.3rem; font-weight: 900; color: var(--success); margin-bottom: 8px; }
+.success-state p  { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 20px; }
+
+/* Login notice */
+.login-notice {
+    background: rgba(251,191,36,0.07);
+    border: 1px solid rgba(251,191,36,0.25);
+    border-radius: 14px; padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; font-size: 0.82rem; color: var(--text-muted);
+}
+
+.login-notice strong { color: #fbbf24; }
+
+@media (max-width: 480px) {
+    .reason-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <button class="nav-button" onclick="history.back()">← رجوع</button>
+</header>
+
+<div class="report-page">
+
+    <div class="report-hero">
+        <span class="rh-icon">🚩</span>
+        <h1>الإبلاغ عن سكربت</h1>
+        <p>ساعدنا في الحفاظ على جودة المحتوى — بلاغك يصل للأدمن مباشرة</p>
+    </div>
+
+    <!-- معلومات السكربت -->
+    <div class="script-info-card" id="scriptInfoCard">
+        <span class="sic-icon">📜</span>
+        <div class="sic-info">
+            <div class="sic-title" id="scriptTitle">جارٍ التحميل...</div>
+            <div class="sic-meta" id="scriptMeta">—</div>
+        </div>
+    </div>
+
+    <!-- نموذج الإبلاغ -->
+    <div class="form-card" id="reportForm">
+
+        <h3>🚩 سبب الإبلاغ</h3>
+
+        <div class="reason-grid" id="reasonGrid">
+            <button class="reason-btn" data-reason="محتوى مسيء">
+                <span class="rb-icon">🤬</span> محتوى مسيء
+            </button>
+            <button class="reason-btn" data-reason="سكربت لا يعمل">
+                <span class="rb-icon">💀</span> سكربت لا يعمل
+            </button>
+            <button class="reason-btn" data-reason="محتوى مكرر">
+                <span class="rb-icon">📋</span> محتوى مكرر
+            </button>
+            <button class="reason-btn" data-reason="معلومات خاطئة">
+                <span class="rb-icon">❌</span> معلومات خاطئة
+            </button>
+            <button class="reason-btn" data-reason="فيروس أو ضار">
+                <span class="rb-icon">🦠</span> فيروس أو ضار
+            </button>
+            <button class="reason-btn" data-reason="انتهاك حقوق">
+                <span class="rb-icon">⚖️</span> انتهاك حقوق
+            </button>
+            <button class="reason-btn" data-reason="سبام">
+                <span class="rb-icon">📢</span> سبام
+            </button>
+            <button class="reason-btn" data-reason="أخرى">
+                <span class="rb-icon">💬</span> أخرى
+            </button>
+        </div>
+
+        <div id="loginNotice" class="login-notice" style="display:none">
+            <span>⚠️</span>
+            <span>أنت <strong>غير مسجل دخول</strong> — البلاغ سيُرسل كـ "زائر مجهول"</span>
+        </div>
+
+        <label class="form-label" for="reportDetails">تفاصيل إضافية (اختياري)</label>
+        <textarea id="reportDetails" placeholder="اشرح المشكلة بشكل أوضح هنا..."></textarea>
+
+        <button id="submitBtn" disabled>🚩 إرسال البلاغ</button>
+
+    </div>
+
+    <!-- حالة النجاح -->
+    <div class="success-state" id="successState">
+        <span class="ss-icon">✅</span>
+        <h2>تم استلام البلاغ!</h2>
+        <p>شكراً لمساعدتنا في تحسين المحتوى.<br>الأدمن سيراجع البلاغ ويرد عليك قريباً.</p>
+        <button onclick="history.back()" style="background:var(--accent-gradient);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:Tajawal,sans-serif;font-weight:800;cursor:pointer;box-shadow:0 8px 20px rgba(139,92,246,0.3)">
+            رجوع للسكربت
+        </button>
+    </div>
+
+</div>
+
+<script type="module">
+import { get, getAuth, getDatabase, initializeApp, onAuthStateChanged, push, ref, set } from "./supabase-config.js";
+
+
+
+
+
+
+
+
+const db   = getDatabase(app);
+const auth = getAuth(app);
+
+const params   = new URLSearchParams(location.search);
+const scriptId = params.get('id');
+
+let selectedReason = null;
+let currentUser    = null;
+
+/* ---- تحقق Auth ---- */
+onAuthStateChanged(auth, user => {
+    currentUser = user;
+    if (!user) document.getElementById('loginNotice').style.display = 'flex';
+    updateSubmitBtn();
+});
+
+/* ---- جيب بيانات السكربت ---- */
+async function loadScript() {
+    if (!scriptId) {
+        document.getElementById('scriptTitle').innerText = 'سكربت غير محدد';
+        document.getElementById('scriptMeta').innerText  = 'تأكد من الرابط';
+        return;
+    }
+    const snap = await get(ref(db, `scripts/${scriptId}`));
+    if (!snap.exists()) {
+        document.getElementById('scriptTitle').innerText = 'سكربت غير موجود';
+        return;
+    }
+    const s = snap.val();
+    document.getElementById('scriptTitle').innerText = s.title || 'بدون عنوان';
+    document.getElementById('scriptMeta').innerText  =
+        `${s.category || '—'} • بقلم ${s.author || 'مجهول'} • 👍 ${s.likes || 0}`;
+}
+
+loadScript();
+
+/* ---- اختيار السبب ---- */
+document.querySelectorAll('.reason-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.reason-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedReason = btn.dataset.reason;
+        updateSubmitBtn();
+    });
+});
+
+function updateSubmitBtn() {
+    document.getElementById('submitBtn').disabled = !selectedReason;
+}
+
+/* ---- إرسال البلاغ ---- */
+document.getElementById('submitBtn').addEventListener('click', async () => {
+    if (!selectedReason) return;
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerText = '⏳ جارٍ الإرسال...';
+
+    const details   = document.getElementById('reportDetails').value.trim();
+    const reportRef = push(ref(db, 'reports'));
+
+    const reportData = {
+        scriptId:    scriptId || 'unknown',
+        scriptTitle: document.getElementById('scriptTitle').innerText,
+        reason:      selectedReason,
+        details:     details || '',
+        reporterUid:   currentUser?.uid   || 'anonymous',
+        reporterEmail: currentUser?.email || 'زائر مجهول',
+        timestamp:   Date.now(),
+        status:      'pending',   // pending | reviewed | resolved
+        adminReply:  '',
+    };
+
+    await set(reportRef, reportData);
+
+    // إشعار الأدمن في Firebase (للـ badge)
+    await set(ref(db, `adminNotifications/${reportRef.key}`), {
+        type:      'report',
+        scriptId:  scriptId,
+        reason:    selectedReason,
+        timestamp: Date.now(),
+        read:      false,
+    });
+
+    // إظهار نجاح
+    document.getElementById('reportForm').style.display     = 'none';
+    document.getElementById('scriptInfoCard').style.display = 'none';
+    document.querySelector('.report-hero').style.display    = 'none';
+    document.getElementById('successState').style.display   = 'block';
+});
+</script>
+
+</body>
+</html>

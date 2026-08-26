@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | شركاء التبادل</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+.pt-page { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+
+.pt-hero { text-align: center; padding: 40px 0 24px; }
+.pt-hero h1 {
+    font-size: clamp(1.7rem, 5vw, 2.3rem); font-weight: 900;
+    background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+.pt-hero p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; max-width: 480px; margin: 0 auto; }
+
+/* ---- Card بشكل عام ---- */
+.pt-card {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 22px; padding: 28px 26px; margin-bottom: 18px;
+    animation: fadeIn 0.4s ease both; position: relative; overflow: hidden;
+}
+.pt-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent-gradient);
+}
+
+/* ---- دعوة شراكة (مفيش شريك) ---- */
+.invite-icon { font-size: 2.6rem; display: block; text-align: center; margin-bottom: 10px; }
+.pt-card h3 { font-size: 1.1rem; font-weight: 900; color: var(--text-main); margin-bottom: 8px; text-align: center; }
+.pt-card p.desc { color: var(--text-muted); font-size: 0.85rem; text-align: center; line-height: 1.7; margin-bottom: 20px; }
+
+.invite-link-box { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.invite-link-input {
+    flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px;
+    padding: 10px 14px; color: var(--text-muted); font-size: 0.72rem; font-family: 'Fira Code', monospace;
+    outline: none; direction: ltr; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.copy-invite-btn {
+    background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 12px; padding: 10px 16px; font-size: 0.8rem; font-weight: 800; cursor: pointer;
+    white-space: nowrap; font-family: 'Tajawal', sans-serif; margin: 0; transition: var(--transition); flex-shrink: 0;
+}
+.copy-invite-btn:hover { background: var(--primary); color: white; transform: none; filter: none; }
+.copy-invite-btn.copied { background: rgba(74,222,128,0.12); color: var(--success); border-color: rgba(74,222,128,0.3); }
+
+.invite-hint { font-size: 0.72rem; color: var(--text-muted); text-align: center; margin-top: 6px; }
+
+/* ---- كارت قبول دعوة واردة ---- */
+.incoming-card { border-color: rgba(0,242,254,0.3); }
+.incoming-card::before { background: linear-gradient(90deg, #00f2fe, #8b5cf6); }
+.inviter-row { display: flex; align-items: center; gap: 14px; justify-content: center; margin-bottom: 18px; }
+.inviter-avatar { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(0,242,254,0.4); flex-shrink: 0; }
+.inviter-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.inviter-avatar .init { width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#8b5cf6,#00bcd4);color:white;font-weight:900;font-size:1.3rem; }
+.inviter-name { font-weight: 900; color: var(--text-main); font-size: 1.05rem; }
+
+.pt-actions { display: flex; gap: 10px; justify-content: center; }
+.btn-accept {
+    background: var(--accent-gradient); color: white; border: none; border-radius: 14px;
+    padding: 12px 26px; font-size: 0.9rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; box-shadow: 0 6px 18px rgba(139,92,246,0.35); margin: 0; transition: var(--transition);
+}
+.btn-accept:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.btn-decline {
+    background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid var(--border-color);
+    border-radius: 14px; padding: 12px 22px; font-size: 0.9rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0; transition: var(--transition);
+}
+.btn-decline:hover { border-color: var(--border-hover); color: var(--text-main); transform: none; filter: none; }
+
+/* ---- كارت الشريك النشط ---- */
+.partner-card { text-align: center; }
+.partner-avatar-row { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 18px; }
+.pa-avatar { width: 68px; height: 68px; border-radius: 50%; overflow: hidden; border: 3px solid rgba(139,92,246,0.35); flex-shrink: 0; box-shadow: 0 0 18px rgba(139,92,246,0.25); }
+.pa-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pa-avatar .init { width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#8b5cf6,#00bcd4);color:white;font-weight:900;font-size:1.5rem; }
+.pa-link { font-size: 1.8rem; color: var(--primary); }
+
+.partner-names { display:flex; align-items:center; justify-content:center; gap:24px; margin-bottom: 6px; }
+.partner-names .pname { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
+
+.streak-display { margin: 20px 0; }
+.streak-num {
+    font-size: 3.4rem; font-weight: 900; line-height: 1;
+    background: linear-gradient(135deg,#fb923c,#fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: inline-flex; align-items: center; gap: 10px;
+}
+.streak-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 700; margin-top: 4px; }
+
+.checkin-status { display: flex; justify-content: center; gap: 18px; margin: 18px 0; flex-wrap: wrap; }
+.cs-item { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-muted); }
+.cs-dot { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); }
+.cs-dot.done { background: rgba(74,222,128,0.12); border-color: rgba(74,222,128,0.4); }
+
+.checkin-btn {
+    background: var(--accent-gradient); color: white; border: none; border-radius: 16px;
+    padding: 14px 34px; font-size: 0.95rem; font-weight: 900; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; box-shadow: 0 8px 22px rgba(139,92,246,0.35); margin: 8px 0 4px; transition: var(--transition);
+}
+.checkin-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+.checkin-btn:disabled { opacity: 0.5; cursor: default; transform: none; filter: none; background: rgba(74,222,128,0.15); color: var(--success); box-shadow: none; }
+
+.milestone-hint { font-size: 0.72rem; color: var(--text-muted); margin-top: 10px; line-height: 1.7; }
+.milestone-hint b { color: #fbbf24; }
+
+.break-btn {
+    background: none; border: none; color: var(--danger); font-size: 0.76rem; font-weight: 700;
+    cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 18px 0 0; padding: 6px; opacity: 0.7; transition: opacity 0.2s;
+}
+.break-btn:hover { opacity: 1; filter: none; transform: none; }
+
+.pt-status-msg {
+    display: none; text-align: center; padding: 10px 16px; border-radius: 12px;
+    font-size: 0.82rem; font-weight: 700; margin-top: 10px;
+}
+.pt-status-msg.show { display: block; }
+.pt-status-msg.ok  { background: rgba(74,222,128,0.1); color: var(--success); border: 1px solid rgba(74,222,128,0.3); }
+.pt-status-msg.err { background: rgba(248,113,113,0.1); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+
+.loading-box { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+
+@media (max-width: 480px) {
+    .streak-num { font-size: 2.6rem; }
+    .partner-avatar-row { gap: 12px; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <button onclick="location.href='profile.html'">👤 بروفايلي</button>
+    <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div class="pt-page">
+
+    <div class="pt-hero">
+        <h1>🤝 شركاء التبادل</h1>
+        <p>اختار شريك وحافظوا على تبادل يومي مع بعض — كل ما الستريك المشترك يزيد كل ما تكسبوا نقاط أكتر سوا.</p>
+    </div>
+
+    <div id="ptContent">
+        <div class="loading-box">⏳ جارٍ التحميل...</div>
+    </div>
+
+</div>
+
+<script type="module">
+import { get, getApp, getApps, getAuth, getDatabase, initializeApp, onAuthStateChanged, ref, remove, set, update } from "./supabase-config.js";
+
+
+
+
+
+
+
+const db  = getDatabase(app);
+const auth = getAuth(app);
+
+const CHECKIN_POINTS   = 5;   // نقاط لكل شخص لما اليوم يكتمل
+const MILESTONE_POINTS = 50;  // بونص كل 7 أيام متتالية
+
+const urlParams  = new URLSearchParams(location.search);
+const inviteFrom = urlParams.get('invite');
+let currentUser  = null;
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+
+function pairIdFor(a, b) { return [a, b].sort().join('__'); }
+
+function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function yesterdayStr() {
+    const d = new Date(); d.setDate(d.getDate() - 1);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function avatarHTML(photo, name, size) {
+    if (photo) return `<img src="${photo}" alt="">`;
+    const initial = (name || '?').charAt(0).toUpperCase();
+    return `<div class="init">${initial}</div>`;
+}
+
+async function getUserBrief(uid) {
+    const snap = await get(ref(db, `users/${uid}`));
+    const d = snap.exists() ? snap.val() : {};
+    return { name: d.username || (d.email ? d.email.split('@')[0] : 'مستخدم'), photo: d.photo || null };
+}
+
+async function addPointsWithLog(uid, amount, logType, logNote) {
+    const cur = await get(ref(db, `users/${uid}/points`));
+    await set(ref(db, `users/${uid}/points`), (cur.exists() ? cur.val() : 0) + amount);
+    await set(ref(db, `users/${uid}/pointsLog/${Date.now()}_${uid.slice(0,4)}`), { type: logType, points: amount, note: logNote, timestamp: Date.now() });
+}
+
+/* ============================================================
+   Auth
+   ============================================================ */
+
+onAuthStateChanged(auth, async user => {
+    if (!user) { location.href = 'login.html'; return; }
+    currentUser = user;
+    await render();
+});
+
+async function render() {
+    // هل عنده شريك حالي؟
+    const myPartnerSnap = await get(ref(db, `partners/${currentUser.uid}`));
+
+    if (myPartnerSnap.exists()) {
+        await renderPartnerCard(myPartnerSnap.val().partnerId);
+        return;
+    }
+
+    // مفيش شريك — هل جاي من رابط دعوة؟
+    if (inviteFrom && inviteFrom !== currentUser.uid) {
+        const inviterPartnerSnap = await get(ref(db, `partners/${inviteFrom}`));
+        if (inviterPartnerSnap.exists()) {
+            renderMsg('err', '⚠️ الشخص ده عنده شريك بالفعل.');
+            renderInviteCard();
+            return;
+        }
+        await renderIncomingInvite(inviteFrom);
+        return;
+    }
+
+    renderInviteCard();
+}
+
+/* ============================================================
+   لا يوجد شريك — عرض رابط الدعوة
+   ============================================================ */
+
+function renderInviteCard() {
+    const link = `${location.origin}${location.pathname.replace('partners.html','')}partners.html?invite=${currentUser.uid}`;
+    const el = document.getElementById('ptContent');
+    el.innerHTML = `
+        <div class="pt-card">
+            <span class="invite-icon">📨</span>
+            <h3>مفيش شريك تبادل ليك دلوقتي</h3>
+            <p class="desc">ابعت رابط الدعوة ده لصاحبك — أول ما يفتحه ويوافق، تبقوا شركاء وتبدأوا الستريك المشترك.</p>
+            <div class="invite-link-box">
+                <input class="invite-link-input" id="inviteLinkInput" type="text" readonly value="${link}">
+                <button class="copy-invite-btn" id="copyInviteBtn">📋 نسخ</button>
+            </div>
+            <div class="invite-hint">لكل شخص كل يوم بتتبادلوا فيه تكسبوا ⭐ ${CHECKIN_POINTS} نقاط، وكل 7 أيام متتالية بونص ⭐ ${MILESTONE_POINTS} نقطة إضافية!</div>
+        </div>
+    `;
+    document.getElementById('copyInviteBtn').onclick = () => {
+        navigator.clipboard.writeText(link).then(() => {
+            const btn = document.getElementById('copyInviteBtn');
+            btn.innerText = '✅ اتنسخ'; btn.classList.add('copied');
+            setTimeout(() => { btn.innerText = '📋 نسخ'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+}
+
+function renderMsg(type, text) {
+    const el = document.getElementById('ptContent');
+    const div = document.createElement('div');
+    div.className = `pt-status-msg show ${type}`;
+    div.textContent = text;
+    el.prepend(div);
+}
+
+/* ============================================================
+   دعوة واردة — قبول / رفض
+   ============================================================ */
+
+async function renderIncomingInvite(inviterUid) {
+    const inviter = await getUserBrief(inviterUid);
+    const el = document.getElementById('ptContent');
+    el.innerHTML = `
+        <div class="pt-card incoming-card">
+            <h3>🤝 دعوة شراكة</h3>
+            <div class="inviter-row">
+                <div class="inviter-avatar">${avatarHTML(inviter.photo, inviter.name)}</div>
+                <div class="inviter-name">${inviter.name}</div>
+            </div>
+            <p class="desc">عايزك تبقوا شركاء تبادل. لما توافق هتقدروا تعملوا Check-in يومي مع بعض وتكسبوا نقاط.</p>
+            <div class="pt-actions">
+                <button class="btn-accept" id="acceptBtn">✅ موافقة</button>
+                <button class="btn-decline" id="declineBtn">رفض</button>
+            </div>
+        </div>
+    `;
+    document.getElementById('acceptBtn').onclick = () => acceptPartner(inviterUid);
+    document.getElementById('declineBtn').onclick = () => { history.replaceState(null,'','partners.html'); renderInviteCard(); };
+}
+
+async function acceptPartner(inviterUid) {
+    const mySnap = await get(ref(db, `partners/${currentUser.uid}`));
+    if (mySnap.exists()) { alert('لازم تفسخ شراكتك الحالية الأول'); return; }
+    const theirSnap = await get(ref(db, `partners/${inviterUid}`));
+    if (theirSnap.exists()) { alert('الشخص ده عنده شريك بالفعل'); render(); return; }
+
+    await set(ref(db, `partners/${currentUser.uid}`), { partnerId: inviterUid, since: Date.now() });
+    await set(ref(db, `partners/${inviterUid}`), { partnerId: currentUser.uid, since: Date.now() });
+
+    history.replaceState(null, '', 'partners.html');
+    await renderPartnerCard(inviterUid);
+}
+
+/* ============================================================
+   كارت الشريك النشط
+   ============================================================ */
+
+async function renderPartnerCard(partnerUid) {
+    const [me, partner] = await Promise.all([getUserBrief(currentUser.uid), getUserBrief(partnerUid)]);
+
+    const pairId = pairIdFor(currentUser.uid, partnerUid);
+    const streakSnap = await get(ref(db, `partnerStreaks/${pairId}`));
+    let data = streakSnap.exists() ? streakSnap.val() : { streak: 0, lastCompletedDate: null, todayDate: null, todayCheckins: {} };
+
+    const today = todayStr();
+    // لو يوم جديد وفيه ستريك قديم مكملش امبارح — يترجع صفر (عرض بس، الحفظ الفعلي بيحصل عند الـ check-in)
+    let displayStreak = data.streak || 0;
+    if (data.lastCompletedDate && data.lastCompletedDate !== today && data.lastCompletedDate !== yesterdayStr()) {
+        displayStreak = 0;
+    }
+
+    const todayCheckins = (data.todayDate === today) ? (data.todayCheckins || {}) : {};
+    const iCheckedIn = !!todayCheckins[currentUser.uid];
+    const partnerCheckedIn = !!todayCheckins[partnerUid];
+    const bothDone = iCheckedIn && partnerCheckedIn;
+
+    const el = document.getElementById('ptContent');
+    el.innerHTML = `
+        <div class="pt-card partner-card">
+            <div class="partner-avatar-row">
+                <div class="pa-avatar">${avatarHTML(me.photo, me.name)}</div>
+                <span class="pa-link">🔗</span>
+                <div class="pa-avatar">${avatarHTML(partner.photo, partner.name)}</div>
+            </div>
+            <div class="partner-names">
+                <span class="pname">${me.name} (إنت)</span>
+                <span class="pname">${partner.name}</span>
+            </div>
+
+            <div class="streak-display">
+                <div class="streak-num">🔥 ${displayStreak}</div>
+                <div class="streak-label">يوم متتالي من التبادل المشترك</div>
+            </div>
+
+            <div class="checkin-status">
+                <div class="cs-item">
+                    <div class="cs-dot ${iCheckedIn ? 'done' : ''}">${iCheckedIn ? '✅' : '⬜'}</div>
+                    <span>إنت</span>
+                </div>
+                <div class="cs-item">
+                    <div class="cs-dot ${partnerCheckedIn ? 'done' : ''}">${partnerCheckedIn ? '✅' : '⬜'}</div>
+                    <span>${partner.name}</span>
+                </div>
+            </div>
+
+            <button class="checkin-btn" id="checkinBtn" ${iCheckedIn ? 'disabled' : ''}>
+                ${iCheckedIn ? '✅ عملت Check-in النهارده' : '📨 اعمل Check-in النهارده'}
+            </button>
+
+            <div class="milestone-hint">
+                كل يوم يكتمل فيه Check-in من الاتنين ⭐ <b>${CHECKIN_POINTS} نقاط</b> لكل واحد،
+                وكل ٧ أيام متتالية بونص ⭐ <b>${MILESTONE_POINTS} نقطة</b> إضافية للاتنين.
+            </div>
+
+            <div id="ptResultMsg" class="pt-status-msg"></div>
+
+            <button class="break-btn" id="breakBtn">✕ فسخ الشراكة</button>
+        </div>
+    `;
+
+    document.getElementById('checkinBtn').onclick = () => doCheckIn(partnerUid);
+    document.getElementById('breakBtn').onclick = () => breakPartnership(partnerUid);
+}
+
+/* ============================================================
+   Check-in اليومي
+   ============================================================ */
+
+async function doCheckIn(partnerUid) {
+    const btn = document.getElementById('checkinBtn');
+    btn.disabled = true; btn.innerText = '⏳ جارٍ...';
+
+    const pairId = pairIdFor(currentUser.uid, partnerUid);
+    const streakRef = ref(db, `partnerStreaks/${pairId}`);
+    const snap = await get(streakRef);
+    let data = snap.exists() ? snap.val() : { streak: 0, lastCompletedDate: null, todayDate: null, todayCheckins: {} };
+
+    const today = todayStr(), yest = yesterdayStr();
+
+    if (data.todayDate !== today) {
+        data.todayDate = today;
+        data.todayCheckins = {};
+        if (data.lastCompletedDate && data.lastCompletedDate !== yest && data.lastCompletedDate !== today) {
+            data.streak = 0; // فوّتوا يوم — الستريك يترجع صفر
+        }
+    }
+
+    if (data.todayCheckins[currentUser.uid]) {
+        await renderPartnerCard(partnerUid); // بالفعل عمل تشيك إن
+        return;
+    }
+
+    data.todayCheckins[currentUser.uid] = true;
+
+    let completedNow = false, milestone = false;
+    if (data.todayCheckins[currentUser.uid] && data.todayCheckins[partnerUid] && data.lastCompletedDate !== today) {
+        data.streak = (data.lastCompletedDate === yest) ? (data.streak || 0) + 1 : 1;
+        data.lastCompletedDate = today;
+        completedNow = true;
+        if (data.streak % 7 === 0) milestone = true;
+    }
+
+    await set(streakRef, data);
+
+    if (completedNow) {
+        await addPointsWithLog(currentUser.uid, CHECKIN_POINTS, 'partner_streak', 'تبادل يومي مع شريكك');
+        await addPointsWithLog(partnerUid, CHECKIN_POINTS, 'partner_streak', 'تبادل يومي مع شريكك');
+        if (milestone) {
+            await addPointsWithLog(currentUser.uid, MILESTONE_POINTS, 'partner_milestone', `ستريك ${data.streak} يوم متتالي`);
+            await addPointsWithLog(partnerUid, MILESTONE_POINTS, 'partner_milestone', `ستريك ${data.streak} يوم متتالي`);
+        }
+    }
+
+    await renderPartnerCard(partnerUid);
+
+    const msgBox = document.getElementById('ptResultMsg');
+    if (msgBox) {
+        if (completedNow) {
+            msgBox.className = `pt-status-msg show ok`;
+            msgBox.textContent = milestone
+                ? `🎉 اكتمل اليوم! + ${CHECKIN_POINTS} نقطة، وبونص ٧ أيام + ${MILESTONE_POINTS} نقطة إضافية!`
+                : `✅ اكتمل اليوم! كسبتوا ⭐ ${CHECKIN_POINTS} نقطة لكل واحد.`;
+        } else {
+            msgBox.className = `pt-status-msg show ok`;
+            msgBox.textContent = `✅ سجّلنا حضورك — مستنيين ${document.querySelector('.cs-item:last-child span')?.textContent || 'شريكك'} يعمل Check-in كمان عشان الستريك يزيد.`;
+        }
+    }
+}
+
+/* ============================================================
+   فسخ الشراكة
+   ============================================================ */
+
+async function breakPartnership(partnerUid) {
+    if (!confirm('متأكد إنك عايز تفسخ الشراكة؟ الستريك المشترك هيتصفر.')) return;
+    await remove(ref(db, `partners/${currentUser.uid}`));
+    await remove(ref(db, `partners/${partnerUid}`));
+    const pairId = pairIdFor(currentUser.uid, partnerUid);
+    await remove(ref(db, `partnerStreaks/${pairId}`));
+    renderInviteCard();
+}
+</script>
+</body>
+</html>

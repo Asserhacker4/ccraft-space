@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نتائج البحث</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <button onclick="location.href='scripts.html'">العودة للصفحة الرئيسية</button>
+</header>
+
+<main>
+  <h1>نتائج البحث</h1>
+  <div id="searchResults"></div>
+</main>
+
+<script type="module">
+import { get, getDatabase, initializeApp, ref } from "./supabase-config.js";
+
+  
+  
+
+  
+
+  
+  const db = getDatabase(app);
+
+  function getSearchQuery() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('query') ? params.get('query').toLowerCase().trim() : '';
+  }
+
+  async function loadSearchResults() {
+    const results = document.getElementById('searchResults');
+    results.innerHTML = '';
+    const snapshot = await get(ref(db, 'scripts'));
+    if(snapshot.exists()) {
+      const scripts = snapshot.val();
+      const query = getSearchQuery();
+      let anyMatch = false;
+
+      Object.keys(scripts).forEach(id => {
+        const s = scripts[id];
+        const title = s.title.toLowerCase();
+        const category = s.category.toLowerCase();
+        if(title.includes(query) || category.includes(query)) {
+          const div = document.createElement('div');
+          div.className = 'script-card';
+          div.innerHTML = `
+            <h3>${s.title}</h3>
+            <pre id="code-${id}">${s.code}</pre>
+            <p>Category: ${s.category}</p>
+            <button onclick="copyScript('${id}')">نسخ السكربت</button>
+          `;
+          results.appendChild(div);
+          anyMatch = true;
+        }
+      });
+
+      if(!anyMatch) {
+        results.innerHTML = '<p style="color:red">لا توجد سكربتات مطابقة.</p>';
+      }
+    } else {
+      results.innerHTML = '<p>لا توجد سكربتات حتى الآن.</p>';
+    }
+  }
+
+  function copyScript(id) {
+    const codeEl = document.getElementById(`code-${id}`);
+    if(!codeEl) return alert("خطأ في السكربت");
+    navigator.clipboard.writeText(codeEl.innerText)
+      .then(() => alert("تم نسخ السكربت!"))
+      .catch(() => alert("حدث خطأ أثناء النسخ"));
+  }
+
+  window.addEventListener('DOMContentLoaded', loadSearchResults);
+  window.copyScript = copyScript;
+</script>
+</body>
+</html>

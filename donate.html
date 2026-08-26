@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تبرع للموقع | CCRAFT SPACE</title>
+    <meta name="description" content="ادعم CCRAFT SPACE مجانًا بمشاهدة إعلان قصير">
+    <link rel="icon" type="image/jpeg" href="cCraft.jpg">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --ink:    #07080f;
+    --violet: #8b5cf6;
+    --cyan:   #00f2fe;
+    --gold:   #fbbf24;
+    --hi:     #f0f0ff;
+    --mid:    #7878a0;
+    --lo:     #3a3a52;
+    --border: rgba(255,255,255,0.07);
+    --tr:     all 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--ink);
+    color: var(--hi);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.bg-canvas {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        radial-gradient(ellipse 100% 70% at 15% 10%, rgba(139,92,246,0.09) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 60% at 85% 80%, rgba(251,191,36,0.06) 0%, transparent 60%),
+        var(--ink);
+}
+
+.page-wrap {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.back-link {
+    position: fixed; top: 18px; right: 18px; z-index: 2;
+    color: var(--mid); text-decoration: none;
+    font-size: 0.78rem; font-weight: 800;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 50px; padding: 8px 16px;
+    transition: var(--tr);
+}
+.back-link:hover { color: var(--hi); border-color: rgba(139,92,246,0.3); }
+
+.donate-icon {
+    font-size: 3.4rem; margin-bottom: 18px;
+    animation: pulse 2s ease infinite;
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+h1 {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    font-weight: 900; margin-bottom: 12px;
+}
+
+.title-gold {
+    background: linear-gradient(135deg, #fbbf24, #f472b6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+p.sub {
+    color: var(--mid); font-size: 0.92rem; line-height: 1.85;
+    max-width: 440px; margin-bottom: 30px;
+}
+
+.donate-card {
+    background: rgba(13,14,28,0.7);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 20px;
+    padding: 30px 26px;
+    width: 100%; max-width: 400px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.donate-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #07080f; border: none; border-radius: 14px;
+    padding: 16px; font-size: 1rem; font-weight: 900;
+    font-family: 'Tajawal', sans-serif; cursor: pointer;
+    box-shadow: 0 10px 28px rgba(251,191,36,0.35);
+    transition: var(--tr);
+}
+.donate-btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.donate-btn:active { transform: scale(0.97); }
+.donate-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+.status-msg {
+    margin-top: 16px; font-size: 0.8rem; color: var(--mid);
+    min-height: 20px;
+}
+.status-msg.success { color: #4ade80; font-weight: 800; }
+
+.note {
+    margin-top: 22px; font-size: 0.72rem; color: var(--lo); line-height: 1.7;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-canvas"></div>
+<a href="index.html" class="back-link">← الرجوع للرئيسية</a>
+
+<div class="page-wrap">
+    <div class="donate-icon">💛</div>
+    <h1><span class="title-gold">تبرع للموقع</span></h1>
+    <p class="sub">
+        مش لازم تدفع أي فلوس. بمجرد ما تشاهد إعلان قصير، بتدعم CCRAFT SPACE
+        وتساعدنا نكمل ونطور الموقع أكتر.
+    </p>
+
+    <div class="donate-card">
+        <button class="donate-btn" id="donateBtn">👁️ شاهد إعلان وتبرع الآن</button>
+        <div class="status-msg" id="statusMsg"></div>
+    </div>
+
+    <div class="note">
+        الإعلان بيتشغل من شبكة إعلانات خارجية، ومشاهدتك ليه هي اللي بتدعم الموقع ماديًا — من غير أي خصم من حسابك.
+    </div>
+</div>
+
+<script>
+const btn = document.getElementById('donateBtn');
+const status = document.getElementById('statusMsg');
+
+btn.addEventListener('click', () => {
+    btn.disabled = true;
+    status.textContent = '⏳ جارٍ تحميل الإعلان...';
+    status.classList.remove('success');
+
+    setTimeout(() => {
+        status.textContent = '✅ شكرًا لدعمك! ساهمت في استمرار الموقع 💛';
+        status.classList.add('success');
+        setTimeout(() => { btn.disabled = false; btn.textContent = '👁️ شاهد إعلان تاني وتبرع'; }, 1500);
+    }, 2500);
+});
+</script>
+
+<script src="https://quge5.com/88/tag.min.js" data-zone="264579" async data-cfasync="false"></script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Raw Script</title>
+</head>
+<body>
+
+<pre id="script"></pre>
+
+<script type="module">
+import { get, getDatabase, initializeApp, ref } from "./supabase-config.js";
+
+
+
+
+
+
+
+const db = getDatabase(app);
+
+const params = new URLSearchParams(window.location.search);
+const scriptId = params.get('id');
+
+const snap = await get(ref(db, `scripts/${scriptId}`));
+
+if(snap.exists()){
+    document.getElementById("script").textContent = snap.val().code;
+}
+</script>
+
+</body>
+</html>

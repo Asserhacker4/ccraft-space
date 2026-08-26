@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض السكربت | CCRAFT SPACE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>(function(s){s.dataset.zone='11585956',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+<style>
+:root {
+    --glow-purple: rgba(139, 92, 246, 0.35);
+    --glow-cyan:   rgba(0, 242, 254, 0.25);
+    --code-bg:     #050810;
+    --card-depth:  rgba(6, 8, 20, 0.6);
+}
+body {
+    background:
+        radial-gradient(ellipse 80% 50% at 10% 10%, rgba(139,92,246,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(0,242,254,0.04) 0%, transparent 60%),
+        var(--bg-base, #09090f);
+    min-height: 100svh;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes riseUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes commentSlide { from { opacity:0; transform:translateX(10px); } to { opacity:1; transform:translateX(0); } }
+@keyframes scaleIn { from{opacity:0;transform:scale(0.92)} to{opacity:1;transform:scale(1)} }
+.script-layout { max-width: 960px; margin: 0 auto; padding: 18px 20px 80px; display: grid; grid-template-columns: 1fr 280px; gap: 24px; align-items: start; }
+.script-main { min-width: 0; }
+.script-crumb { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #45455f; margin-bottom: 14px; font-weight: 700; }
+.script-crumb a { color: #7c6fff; text-decoration: none; }
+.script-crumb a:hover { color: #a78bfa; }
+.script-image-wrap { display: none; margin-bottom: 18px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(139,92,246,0.2); position: relative; animation: slideDown 0.5s cubic-bezier(0.22,1,0.36,1) both; box-shadow: 0 16px 44px rgba(0,0,0,0.5); }
+.script-image-wrap.show { display: block; }
+.script-image-wrap img { width: 100%; max-height: 280px; object-fit: cover; display: block; transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+.script-image-wrap:hover img { transform: scale(1.03); }
+.script-image-wrap::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 70px; background: linear-gradient(to top, rgba(9,9,15,0.85) 0%, transparent 100%); pointer-events: none; }
+.img-expand-btn { position: absolute; bottom: 12px; left: 16px; z-index: 2; background: rgba(9,9,15,0.7); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 5px 13px; font-size: 0.7rem; font-weight: 800; font-family: 'Tajawal', sans-serif; margin: 0; cursor: pointer; backdrop-filter: blur(10px); transition: all 0.2s ease; }
+.img-expand-btn:hover { background: rgba(139,92,246,0.7); border-color: rgba(139,92,246,0.5); color: white; transform: none; filter: none; }
+.lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.94); backdrop-filter: blur(20px); z-index: 900; align-items: center; justify-content: center; padding: 24px; animation: fadeIn 0.25s ease; }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: min(100%, 900px); max-height: 88vh; border-radius: 16px; box-shadow: 0 0 0 1px rgba(139,92,246,0.3), 0 40px 80px rgba(0,0,0,0.9); animation: scaleIn 0.3s cubic-bezier(0.22,1,0.36,1); }
+.lightbox-close { position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem; cursor: pointer; margin: 0; transition: all 0.2s; }
+.lightbox-close:hover { background: rgba(248,113,113,0.25); border-color: rgba(248,113,113,0.4); transform: none; filter: none; }
+.script-hero { background: linear-gradient(145deg, rgba(16,18,32,0.95) 0%, rgba(12,12,24,0.9) 100%); border: 1px solid rgba(139,92,246,0.18); border-radius: 20px; padding: 24px 24px 20px; margin-bottom: 14px; position: relative; overflow: hidden; animation: riseUp 0.45s cubic-bezier(0.22,1,0.36,1) both; box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
+.script-hero::before { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, #8b5cf6, #00f2fe); box-shadow: 0 0 20px rgba(139,92,246,0.5); }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 0.68rem; font-weight: 900; color: #a78bfa; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; position: relative; z-index: 1; }
+.script-title { font-size: clamp(1.3rem, 3.2vw, 1.85rem); font-weight: 900; color: #f0f0ff; margin-bottom: 16px; line-height: 1.3; letter-spacing: -0.01em; position: relative; z-index: 1; }
+.author-row { display: flex; align-items: center; gap: 11px; margin-bottom: 16px; cursor: pointer; width: fit-content; position: relative; z-index: 1; padding: 5px 12px 5px 6px; border-radius: 50px; transition: background 0.2s; }
+.author-row:hover { background: rgba(139,92,246,0.08); }
+.author-row:hover .author-name { color: #a78bfa; }
+.author-avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(139,92,246,0.3); flex-shrink: 0; background-color: #0a0a14; overflow: hidden; color: #ffffff; font-weight: 900; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+.author-row:hover .author-avatar { border-color: #8b5cf6; box-shadow: 0 0 16px rgba(139,92,246,0.4); }
+.author-name { font-size: 0.87rem; font-weight: 800; color: #d4d4f0; transition: color 0.2s; }
+.author-date { font-size: 0.68rem; color: #5a5a78; margin-top: 1px; }
+.tags-row { display: flex; gap: 6px; flex-wrap: wrap; position: relative; z-index: 1; }
+.tag { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 50px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.2px; transition: all 0.2s; }
+.tag-cat { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+.tag-cat:hover { background: rgba(139,92,246,0.2); }
+.tag-map { background: rgba(0,242,254,0.07); color: #00d9e8; border: 1px solid rgba(0,242,254,0.2); }
+.tag-map:hover { background: rgba(0,242,254,0.14); }
+.tag-nomap { background: rgba(255,255,255,0.04); color: #55556a; border: 1px solid rgba(255,255,255,0.07); }
+.tag-verified { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.tag-unverified { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.key-banner { display: none; background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(245,158,11,0.04)); border: 1px solid rgba(251,191,36,0.35); border-radius: 16px; padding: 14px 18px; margin-bottom: 14px; align-items: center; gap: 12px; flex-wrap: wrap; animation: riseUp 0.45s 0.05s cubic-bezier(0.22,1,0.36,1) both; }
+.key-banner.show { display: flex; }
+#keyCard[style] { display: flex !important; align-items: center; gap: 12px; flex-wrap: wrap; }
+.kb-icon { font-size: 1.4rem; flex-shrink: 0; }
+.kb-text { flex: 1; min-width: 160px; }
+.kb-title { font-size: 0.82rem; font-weight: 900; color: #fbbf24; margin-bottom: 2px; }
+.kb-sub { font-size: 0.72rem; color: #b5a06a; }
+.kb-value { background: rgba(0,0,0,0.3); border: 1px solid rgba(251,191,36,0.3); border-radius: 10px; padding: 8px 14px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #8be9fd; direction: ltr; }
+.unverified-banner { display: none; background: linear-gradient(135deg, rgba(248,113,113,0.1), rgba(239,68,68,0.04)); border: 1px solid rgba(248,113,113,0.3); border-radius: 16px; padding: 12px 18px; margin-bottom: 14px; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 0.78rem; color: #fca5a5; animation: riseUp 0.45s 0.03s cubic-bezier(0.22,1,0.36,1) both; }
+.unverified-banner.show { display: flex; }
+.code-card { background: var(--code-bg); border: 1px solid rgba(139,92,246,0.15); border-radius: 20px; overflow: hidden; margin-bottom: 14px; animation: riseUp 0.45s 0.08s cubic-bezier(0.22,1,0.36,1) both; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.code-header { display: flex; align-items: center; gap: 12px; padding: 11px 18px; background: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(255,255,255,0.04); }
+.ch-dots { display: flex; gap: 7px; align-items: center; }
+.ch-dot { width: 11px; height: 11px; border-radius: 50%; }
+.ch-dot:nth-child(1) { background: #ff5f57; }
+.ch-dot:nth-child(2) { background: #febc2e; }
+.ch-dot:nth-child(3) { background: #28c840; }
+.ch-label { font-size: 0.72rem; color: #3a3a55; font-family: 'Fira Code', monospace; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
+.ch-lines { color: #2a2a40; }
+.copy-inline { background: rgba(139,92,246,0.1); color: #7c6fff; border: 1px solid rgba(139,92,246,0.22); border-radius: 7px; padding: 4px 12px; font-size: 0.7rem; font-weight: 800; cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0; transition: all 0.2s; }
+.copy-inline:hover { background: rgba(139,92,246,0.25); color: #a78bfa; transform: none; filter: none; }
+.copy-inline.copied { background: rgba(34,197,94,0.12); color: #4ade80; border-color: rgba(34,197,94,0.3); }
+#code { background: transparent !important; margin: 0; border: none; padding: 20px 22px; color: #8be9fd; font-family: 'Fira Code', monospace; font-size: 0.83rem; line-height: 1.85; direction: ltr; text-align: left; overflow-x: auto; white-space: pre-wrap; max-height: 420px; overflow-y: auto; tab-size: 4; }
+#code::-webkit-scrollbar { width: 5px; height: 5px; }
+#code::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+#code::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.3); border-radius: 3px; }
+.ad-slot { display: block; text-align: center; font-size: 0.7rem; font-weight: 700; color: #45455f; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.06); border-radius: 12px; padding: 8px; margin-bottom: 14px; text-decoration: none; transition: all 0.2s; }
+.ad-slot:hover { color: #7c6fff; border-color: rgba(139,92,246,0.25); }
+.desc-card { background: linear-gradient(145deg, rgba(14,16,30,0.9), rgba(10,12,22,0.8)); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 18px 20px; margin-bottom: 14px; animation: riseUp 0.45s 0.12s cubic-bezier(0.22,1,0.36,1) both; }
+.section-label { font-size: 0.65rem; font-weight: 800; color: #3d3d56; text-transform: uppercase; letter-spacing: 1.3px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
+#description { color: #b0b0cc; font-size: 0.9rem; line-height: 1.8; margin: 0; }
+.action-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; animation: riseUp 0.45s 0.16s cubic-bezier(0.22,1,0.36,1) both; }
+.action-row button { border-radius: 13px; padding: 12px 20px; font-size: 0.85rem; font-weight: 800; margin: 0; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: all 0.2s cubic-bezier(0.22,1,0.36,1); }
+#copyBtn { order: 1; flex: 2; min-width: 180px; background: linear-gradient(135deg, #7c3aed, #5b21b6); color: white; border: none; box-shadow: 0 4px 18px rgba(124,58,237,0.35); }
+#copyBtn:hover { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 6px 24px rgba(124,58,237,0.5); transform: translateY(-2px); }
+#copyBtn:active { transform: scale(0.98); }
+#rawBtn { order: 2; background: rgba(0,242,254,0.06); color: #00d9e8; border: 1px solid rgba(0,242,254,0.18); }
+#rawBtn:hover { background: rgba(0,242,254,0.12); border-color: rgba(0,242,254,0.35); transform: translateY(-2px); filter: none; }
+#reportBtn { order: 3; background: rgba(248,113,113,0.06); color: #f87171; border: 1px solid rgba(248,113,113,0.15); }
+#reportBtn:hover { background: rgba(248,113,113,0.14); border-color: rgba(248,113,113,0.35); transform: translateY(-2px); filter: none; }
+.comments-card { background: linear-gradient(160deg, rgba(14,16,30,0.95) 0%, rgba(10,12,24,0.9) 100%); border: 1px solid rgba(255,255,255,0.06); border-radius: 22px; padding: 22px; animation: riseUp 0.45s 0.2s cubic-bezier(0.22,1,0.36,1) both; }
+.comments-head { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.comments-head .ch-title { font-size: 0.95rem; font-weight: 900; color: #f0f0ff; display: flex; align-items: center; gap: 8px; }
+.comments-head .ch-title::before { content: '💬'; font-size: 1.05rem; }
+.comments-head::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+.comment-input-wrap { display: flex; gap: 10px; align-items: flex-start; background: rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 12px; margin-bottom: 20px; transition: border-color 0.2s, box-shadow 0.2s; }
+.comment-input-wrap:focus-within { border-color: rgba(139,92,246,0.4); box-shadow: 0 0 0 3px rgba(139,92,246,0.1); }
+.cw-avatar { width: 38px; height: 38px; border-radius: 50%; flex: 0 0 38px; overflow: hidden; background: linear-gradient(135deg,#8b5cf6,#00bcd4); color: #fff; font-weight: 900; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; }
+.cw-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cw-body { flex: 1; min-width: 0; }
+#commentInput { width: 100%; background: transparent; border: none; outline: none; color: #e5e5f5; font-family: 'Tajawal', sans-serif; font-size: 0.92rem; margin: 0; direction: rtl; padding: 8px 2px; }
+#commentInput::placeholder { color: #45455f; }
+.cw-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+.comment-count-hint { font-size: 0.68rem; color: #45455f; font-family: 'Fira Code', monospace; }
+#submitComment { background: linear-gradient(135deg, #7c3aed, #5b21b6); color: white; border: none; border-radius: 10px; padding: 8px 20px; font-size: 0.82rem; font-weight: 800; font-family: 'Tajawal', sans-serif; cursor: pointer; margin: 0; white-space: nowrap; transition: all 0.2s; box-shadow: 0 4px 14px rgba(124,58,237,0.3); }
+#submitComment:hover { background: linear-gradient(135deg, #8b5cf6, #6d28d9); transform: translateY(-1px); filter: none; }
+#submitComment:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+#comments { display: flex; flex-direction: column; gap: 10px; }
+.cmt-row { position: relative; display: flex; gap: 12px; padding: 14px 16px 14px 14px; border-radius: 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); transition: border-color 0.2s, transform 0.2s; animation: commentSlide 0.3s ease both; overflow: hidden; }
+.cmt-row::before { content: ''; position: absolute; top: 0; right: 0; width: 3px; height: 100%; background: linear-gradient(to bottom, #8b5cf6, #00f2fe); opacity: 0.6; }
+.cmt-row:hover { border-color: rgba(139,92,246,0.25); transform: translateX(-2px); }
+.cmt-pic { width: 42px; height: 42px; border-radius: 12px; flex: 0 0 42px; overflow: hidden; background: linear-gradient(135deg,#8b5cf6,#00bcd4); color: #ffffff; font-weight: 900; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.cmt-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cmt-main { flex: 1; min-width: 0; }
+.cmt-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 5px; }
+.cmt-user { font-size: 0.86rem; font-weight: 900; color: #e5e5f5; cursor: pointer; }
+.cmt-user:hover { color: #a78bfa; }
+.cmt-when { font-size: 0.68rem; color: #45455f; }
+.cmt-del { margin-right: auto; background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.68rem; font-weight: 700; font-family: 'Tajawal', sans-serif; padding: 2px 6px; opacity: 0.5; transition: opacity 0.15s; flex-shrink: 0; }
+.cmt-del:hover { opacity: 1; }
+.cmt-msg { font-size: 0.89rem; color: #c4c4dc; line-height: 1.7; word-break: break-word; margin: 0; }
+
+.cmt-actions { display: flex; align-items: center; gap: 8px; margin-top: 9px; flex-wrap: wrap; }
+.cmt-vote, .cmt-reply-toggle { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #8a8aa8; border-radius: 8px; padding: 5px 11px; font-size: 0.74rem; font-weight: 800; cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+.cmt-vote:hover, .cmt-reply-toggle:hover { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.3); color: #c4b5fd; transform: none; filter: none; }
+.cmt-vote.voted { background: rgba(139,92,246,0.18); border-color: rgba(139,92,246,0.4); color: #c4b5fd; }
+.cmt-reply-toggle { color: #00d9e8; border-color: rgba(0,217,232,0.18); background: rgba(0,217,232,0.05); }
+.cmt-reply-toggle:hover { background: rgba(0,217,232,0.14); border-color: rgba(0,217,232,0.35); color: #6ee7f0; }
+
+.reply-box { display: none; gap: 8px; margin-top: 10px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 8px; }
+.reply-box input { flex: 1; background: transparent; border: none; outline: none; color: #e5e5f5; font-family: 'Tajawal', sans-serif; font-size: 0.85rem; padding: 6px 8px; direction: rtl; }
+.reply-box input::placeholder { color: #45455f; }
+.reply-box button { background: linear-gradient(135deg, #7c3aed, #5b21b6); color: white; border: none; border-radius: 8px; padding: 7px 16px; font-size: 0.76rem; font-weight: 800; font-family: 'Tajawal', sans-serif; cursor: pointer; margin: 0; white-space: nowrap; transition: all 0.2s; }
+.reply-box button:hover { background: linear-gradient(135deg, #8b5cf6, #6d28d9); transform: none; filter: none; }
+.reply-box button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.replies-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; padding-right: 16px; border-right: 2px solid rgba(139,92,246,0.15); }
+.reply-row { display: flex; gap: 10px; }
+.reply-pic { width: 30px; height: 30px; border-radius: 10px; flex: 0 0 30px; overflow: hidden; background: linear-gradient(135deg,#8b5cf6,#00bcd4); color: #fff; font-weight: 900; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.reply-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.reply-main { flex: 1; min-width: 0; }
+.reply-main .cmt-msg { font-size: 0.83rem; }
+.reply-main .cmt-user { font-size: 0.8rem; }
+
+.sort-wrap { position: relative; }
+.sort-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #8a8aa8; border-radius: 9px; padding: 6px 13px; font-size: 0.73rem; font-weight: 800; cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+.sort-btn:hover { background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.25); color: #c4b5fd; transform: none; filter: none; }
+.sort-btn #sortLabel { color: #a78bfa; }
+.sort-menu { display: none; position: absolute; top: calc(100% + 6px); left: 0; background: #11111f; border: 1px solid rgba(139,92,246,0.2); border-radius: 12px; padding: 6px; min-width: 150px; z-index: 5; box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+.sort-menu.open { display: block; }
+.sort-menu button { display: block; width: 100%; text-align: right; background: none; border: none; color: #c4c4dc; padding: 8px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; font-family: 'Tajawal', sans-serif; cursor: pointer; margin: 0; transition: all 0.15s; }
+.sort-menu button:hover { background: rgba(139,92,246,0.15); color: #a78bfa; transform: none; filter: none; }
+
+.no-comments { text-align: center; padding: 34px 20px; color: #383854; font-size: 0.85rem; }
+.no-comments .nc-icon { font-size: 2.2rem; display: block; margin-bottom: 10px; }
+
+.cmt-load-more { display: block; margin: 10px auto 2px; background: rgba(139,92,246,0.08); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); border-radius: 50px; padding: 8px 22px; font-family: 'Tajawal', sans-serif; font-weight: 800; font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+.cmt-load-more:hover { background: rgba(139,92,246,0.16); transform: none; filter: none; }
+
+@media (max-width: 740px) {
+    .cmt-pic { width: 34px; height: 34px; flex-basis: 34px; font-size: 0.85rem; }
+    .cmt-user { font-size: 0.86rem; }
+    .cmt-when { font-size: 0.68rem; }
+    .cmt-msg { font-size: 0.9rem; line-height: 1.75; }
+    .replies-list { padding-right: 10px; }
+    .reply-box { flex-direction: column; }
+    .reply-box button { width: 100%; }
+}
+.script-sidebar { display: flex; flex-direction: column; gap: 14px; position: sticky; top: 90px; }
+.sidebar-thumb { display: none; border-radius: 16px; overflow: hidden; border: 1px solid rgba(139,92,246,0.18); cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,0.3); transition: all 0.25s; }
+.sidebar-thumb.show { display: block; animation: riseUp 0.45s ease both; }
+.sidebar-thumb img { width: 100%; display: block; max-height: 140px; object-fit: cover; transition: transform 0.3s; }
+.sidebar-thumb:hover { border-color: rgba(139,92,246,0.4); }
+.sidebar-thumb:hover img { transform: scale(1.06); }
+.side-card { background: linear-gradient(145deg, rgba(14,16,30,0.95), rgba(10,12,24,0.9)); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; transition: border-color 0.2s; animation: riseUp 0.45s ease both; overflow: hidden; }
+.side-card:hover { border-color: rgba(139,92,246,0.18); }
+.side-section { padding: 18px; text-align: center; }
+.side-section + .side-section { border-top: 1px solid rgba(255,255,255,0.05); }
+.mcs-icon { font-size: 2rem; display: block; margin-bottom: 6px; }
+.mcs-label { font-size: 0.6rem; font-weight: 800; color: #35355a; text-transform: uppercase; letter-spacing: 1.3px; margin-bottom: 4px; }
+.mcs-name { font-size: 0.95rem; font-weight: 900; color: #00d9e8; }
+.mcs-name.muted { color: #3d3d5a; font-size: 0.82rem; font-weight: 700; }
+.stats-side-label { font-size: 0.6rem; font-weight: 800; color: #35355a; text-transform: uppercase; letter-spacing: 1.3px; margin-bottom: 10px; text-align: right; }
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.82rem; }
+.stat-row:last-child { border-bottom: none; }
+.sr-label { color: #44445a; }
+.sr-val { font-weight: 800; color: #d0d0ee; font-variant-numeric: tabular-nums; }
+.like-btn-inline { display: flex; align-items: center; gap: 6px; background: rgba(248,113,113,0.07); border: 1px solid rgba(248,113,113,0.15); border-radius: 8px; padding: 5px 12px; color: #f87171; font-size: 0.77rem; font-weight: 800; cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0; width: 100%; justify-content: center; margin-top: 10px; transition: all 0.2s; }
+.like-btn-inline:hover { background: rgba(248,113,113,0.15); border-color: rgba(248,113,113,0.3); transform: none; filter: none; }
+.like-btn-inline.liked { background: rgba(248,113,113,0.2); color: #fca5a5; cursor: default; }
+.author-card-side { text-align: center; cursor: pointer; }
+.author-card-side:hover { background: rgba(139,92,246,0.03); }
+.acs-avatar { width: 62px; height: 62px; border-radius: 50%; border: 2px solid rgba(139,92,246,0.25); margin: 0 auto 10px; background-color: #0a0a14; overflow: hidden; color: #ffffff; font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+.author-card-side:hover .acs-avatar { border-color: #8b5cf6; box-shadow: 0 0 20px rgba(139,92,246,0.3); }
+.acs-name { font-size: 0.92rem; font-weight: 900; color: #d0d0ee; margin-bottom: 3px; }
+.acs-label { font-size: 0.65rem; color: #35355a; text-transform: uppercase; letter-spacing: 1px; }
+.acs-btn { background: rgba(139,92,246,0.1); color: #8b7fff; border: 1px solid rgba(139,92,246,0.22); border-radius: 50px; padding: 6px 16px; font-size: 0.73rem; font-weight: 800; font-family: 'Tajawal', sans-serif; cursor: pointer; margin-top: 10px; transition: all 0.2s; display: inline-block; }
+.acs-btn:hover { background: rgba(139,92,246,0.22); color: #c4b5fd; transform: none; filter: none; }
+@media (max-width: 740px) {
+    .script-layout { grid-template-columns: 1fr; padding: 14px 14px 60px; }
+    .script-sidebar { position: static; order: -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .sidebar-thumb { grid-column: 1 / -1; }
+    .author-card-side { grid-column: 1 / -1; }
+    .comment-input-wrap { flex-direction: column; padding: 10px; }
+    #commentInput { width: 100%; }
+    #submitComment { width: 100%; padding: 10px; }
+    .action-row { gap: 7px; }
+    .action-row button { flex: 1 1 100%; padding: 12px 14px; font-size: 0.82rem; }
+    #copyBtn { flex: 1 1 100%; }
+}
+</style>
+</head>
+<body data-script-id="">
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="event.stopPropagation(); closeLightbox()">✕</button>
+    <img id="lightboxImg" src="" alt="صورة السكربت" onclick="event.stopPropagation()">
+</div>
+
+<header>
+    <button onclick="location.href='scripts.html'">📜 قائمة السكربتات</button>
+    <button class="nav-button" onclick="location.href='index.html'">العودة للرئيسية</button>
+</header>
+
+<div class="script-layout">
+    <div class="script-main">
+
+        <div class="script-crumb">
+            <a href="scripts.html">📜 السكربتات</a> ← عرض سكربت
+        </div>
+
+        <div class="script-image-wrap" id="scriptImageWrap">
+            <img id="scriptImage" src="" alt="صورة السكربت">
+            <button class="img-expand-btn" onclick="openLightbox()">🔍 تكبير</button>
+        </div>
+
+        <div class="script-hero">
+            <div class="hero-eyebrow">📜 سكربت Roblox</div>
+            <h1 class="script-title" id="title">⏳ جارٍ التحميل...</h1>
+            <div class="author-row" id="authorRow">
+                <div class="author-avatar" id="authorAvatarInline"></div>
+                <div>
+                    <div class="author-name" id="authorName">—</div>
+                    <div class="author-date" id="scriptDate">—</div>
+                </div>
+            </div>
+            <div class="tags-row" id="tagsRow"></div>
+        </div>
+
+        <div class="unverified-banner" id="unverifiedBanner">
+            <span>⚠️</span>
+            <span>هذا السكربت <strong>غير موثّق</strong> من إدارة CCRAFT SPACE — تعامل معه بحذر، وسيُضاف تحذير تلقائي أعلى الكود عند نسخه.</span>
+        </div>
+
+        <div class="key-banner" id="keyCard">
+            <span class="kb-icon">🔑</span>
+            <div class="kb-text">
+                <div class="kb-title">السكربت ده يحتاج مفتاح تشغيل</div>
+                <div class="kb-sub">انسخ المفتاح تحت وحطّه في نافذة السكربت قبل ما يشتغل</div>
+            </div>
+            <code class="kb-value" id="keyValue">—</code>
+            <button id="copyKeyBtn" class="copy-inline">📋 نسخ المفتاح</button>
+        </div>
+
+        <div class="code-card">
+            <div class="code-header">
+                <div class="ch-dots">
+                    <div class="ch-dot"></div>
+                    <div class="ch-dot"></div>
+                    <div class="ch-dot"></div>
+                </div>
+                <span class="ch-label">script.lua <span class="ch-lines">· <span id="codeLineCount">0</span> سطر</span></span>
+                <button class="copy-inline" id="copyInline">📋 نسخ</button>
+            </div>
+            <pre id="code">-- جارٍ التحميل...</pre>
+        </div>
+
+        <a class="ad-slot" href="https://omg10.com/4/11458024" target="_blank" rel="noopener">إعلان</a>
+
+        <div class="desc-card">
+            <h3 class="section-label">📝 الوصف</h3>
+            <p id="description" style="color:#6a6a88;font-style:italic">جارٍ التحميل...</p>
+        </div>
+
+        <div class="action-row">
+            <button id="copyBtn">📋 نسخ السكربت</button>
+            <button id="rawBtn">📄 Raw</button>
+            <button id="reportBtn">🚩 إبلاغ</button>
+        </div>
+
+        <div class="comments-card">
+            <div class="comments-head">
+                <span class="ch-title">التعليقات <span id="commentBadge">0</span></span>
+                <div class="sort-wrap">
+                    <button type="button" class="sort-btn" id="sortBtn">☰ ترتيب: <span id="sortLabel">الأحدث</span></button>
+                    <div class="sort-menu" id="sortMenu">
+                        <button type="button" data-sort="new">🆕 الأحدث</button>
+                        <button type="button" data-sort="old">🕰️ الأقدم</button>
+                        <button type="button" data-sort="top">🔥 الأكثر إعجابًا</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comment-input-wrap">
+                <div class="cw-avatar" id="cwAvatar">؟</div>
+                <div class="cw-body">
+                    <input type="text" id="commentInput" maxlength="300" placeholder="شاركنا رأيك في هذا السكربت...">
+                    <div class="cw-footer">
+                        <span class="comment-count-hint"><span id="commentCharCount">0</span>/300</span>
+                        <button id="submitComment">إرسال ↵</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="comments">
+                <div class="no-comments" id="noComments">
+                    <span class="nc-icon">💬</span>
+                    كن أول من يعلّق على هذا السكربت!
+                </div>
+            </div>
+            <button type="button" class="cmt-load-more" id="cmtLoadMore" style="display:none">⬇️ عرض المزيد</button>
+        </div>
+
+    </div>
+
+    <aside class="script-sidebar">
+
+        <div class="sidebar-thumb" id="sidebarThumb">
+            <img id="sideThumbImg" src="" alt="صورة السكربت">
+        </div>
+
+        <div class="side-card">
+            <div class="side-section" id="mapCardSide">
+                <span class="mcs-icon">⏳</span>
+                <div class="mcs-label">الماب</div>
+                <div class="mcs-name muted">جارٍ التحميل...</div>
+            </div>
+            <div class="side-section" style="text-align:right">
+                <div class="stats-side-label">📊 إحصائيات</div>
+                <div class="stat-row">
+                    <span class="sr-label">👍 اللايكات</span>
+                    <span class="sr-val" id="st-likes">—</span>
+                </div>
+                <div class="stat-row">
+                    <span class="sr-label">⭐ التقييم</span>
+                    <span class="sr-val" id="st-rating">—</span>
+                </div>
+                <div class="stat-row">
+                    <span class="sr-label">💬 التعليقات</span>
+                    <span class="sr-val" id="st-comments">0</span>
+                </div>
+                <button class="like-btn-inline" id="likeBtn">❤️ إضافة لايك</button>
+            </div>
+        </div>
+
+        <div class="side-card author-card-side" id="authorCardSide">
+            <div class="side-section">
+                <div class="acs-avatar" id="authorAvatarSide"></div>
+                <div class="acs-name"  id="acName">—</div>
+                <div class="acs-label">المؤلف</div>
+                <button class="acs-btn" id="viewProfileBtn">👤 عرض البروفايل</button>
+            </div>
+        </div>
+
+    </aside>
+</div>
+
+<script src="scripts-data.js"></script>
+<script>
+(function () {
+    try {
+        const params   = new URLSearchParams(window.location.search);
+        const id       = document.body.dataset.scriptId || params.get('id');
+        const data     = window.__SCRIPTS_DATA__ && id ? window.__SCRIPTS_DATA__[id] : null;
+        if (!data) return;
+
+        document.title = `${data.title} | CCRAFT SPACE`;
+
+        const titleEl = document.getElementById('title');
+        if (titleEl) titleEl.innerText = data.title;
+
+        const codeEl = document.getElementById('code');
+        if (codeEl) codeEl.innerText = data.code || '-- لا يوجد كود';
+        const lcEl = document.getElementById('codeLineCount');
+        if (lcEl) lcEl.innerText = data.code ? data.code.split('\n').length : 0;
+
+        const descEl = document.getElementById('description');
+        if (descEl) {
+            descEl.innerText = data.description || 'لا يوجد وصف';
+            descEl.style.color = data.description ? '#b0b0cc' : '#44445a';
+            descEl.style.fontStyle = data.description ? 'normal' : 'italic';
+        }
+
+        if (data.key) {
+            const keyCard  = document.getElementById('keyCard');
+            const keyValue = document.getElementById('keyValue');
+            if (keyCard && keyValue) {
+                keyValue.innerText = data.key;
+                keyCard.style.display = 'block';
+                const copyBtn = document.getElementById('copyKeyBtn');
+                if (copyBtn) {
+                    copyBtn.onclick = () => {
+                        navigator.clipboard.writeText(data.key).then(() => {
+                            const orig = copyBtn.innerText;
+                            copyBtn.innerText = '✅ تم النسخ';
+                            setTimeout(() => { copyBtn.innerText = orig; }, 2000);
+                        });
+                    };
+                }
+            }
+        }
+
+        if (!data.verified) {
+            const ub = document.getElementById('unverifiedBanner');
+            if (ub) ub.classList.add('show');
+        }
+
+        const tagsRow = document.getElementById('tagsRow');
+        if (tagsRow) {
+            const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            tagsRow.innerHTML = data.verified
+                ? `<span class="tag tag-verified"><svg width="13" height="13" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:-2px;margin-left:4px"><defs><linearGradient id="vgSingle" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#00f2fe"/></linearGradient></defs><path d="M12 0l2.39 1.7 2.92-.2 1.29 2.6 2.6 1.29-.2 2.92L22.7 10.5 21 12l1.7 2.39-.2 2.92-2.6 1.29-1.29 2.6-2.92-.2L12 24l-2.39-1.7-2.92.2-1.29-2.6-2.6-1.29.2-2.92L1.3 13.5 3 12 1.3 9.61l.2-2.92 2.6-1.29 1.29-2.6 2.92.2L12 0z" fill="url(#vgSingle)"/><path d="M17 8.5l-6.2 7-3.3-3.2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>موثّق من الإدارة</span>`
+                : `<span class="tag tag-unverified">⚠️ غير موثّق</span>`;
+            tagsRow.innerHTML += `<span class="tag tag-cat">📁 ${esc(data.category||'—')}</span>`;
+            tagsRow.innerHTML += data.map
+                ? `<span class="tag tag-map">🗺️ ${esc(data.map)}</span>`
+                : `<span class="tag tag-nomap">🌐 ليس لماب محدد</span>`;
+            tagsRow.innerHTML += (data.hasKey || data.key)
+                ? `<span class="tag" style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:#fbbf24">🔒 يتطلب مفتاح</span>`
+                : `<span class="tag" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);color:#4ade80">🔓 بدون مفتاح</span>`;
+            if (Array.isArray(data.tags)) {
+                tagsRow.innerHTML += data.tags.map(t => `<span class="tag tag-map">#${esc(t)}</span>`).join('');
+            }
+        }
+
+        const authorNameEl = document.getElementById('authorName');
+        if (authorNameEl) authorNameEl.innerText = data.author || 'cCraft Space User';
+        const acNameEl = document.getElementById('acName');
+        if (acNameEl) acNameEl.innerText = data.author || 'cCraft Space User';
+
+        const mapCard = document.getElementById('mapCardSide');
+        if (mapCard) {
+            const MAP_ICONS = {
+                'Adopt Me':'🏡','Bloxburg':'🏗️','Brookhaven':'🌆','Arsenal':'🔫',
+                'Bedwars':'🛏️','Murder Mystery 2':'🔪','Jailbreak':'🚔',
+                'Pet Simulator X':'🐾','Doors':'🚪','Da Hood':'🏙️',
+                'Anime Fighting Sim':'⚔️','Tower of Hell':'🗼',
+            };
+            const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            if (data.map) {
+                const icon = MAP_ICONS[data.map] || '🗺️';
+                mapCard.innerHTML = `<span class="mcs-icon">${icon}</span><div class="mcs-label">مخصص لماب</div><div class="mcs-name">${esc(data.map)}</div>`;
+                mapCard.style.borderColor = 'rgba(0,242,254,0.18)';
+                mapCard.style.boxShadow   = '0 0 20px rgba(0,242,254,0.05)';
+            } else {
+                mapCard.innerHTML = `<span class="mcs-icon">🌐</span><div class="mcs-label">الماب</div><div class="mcs-name muted">يعمل على أي لعبة</div>`;
+            }
+        }
+
+        if (data.image) {
+            const img = document.getElementById('scriptImage');
+            const wrap = document.getElementById('scriptImageWrap');
+            if (img && wrap) { img.src = data.image; wrap.classList.add('show'); }
+            const sideImg = document.getElementById('sideThumbImg');
+            const sideWrap = document.getElementById('sidebarThumb');
+            if (sideImg && sideWrap) { sideImg.src = data.image; sideWrap.classList.add('show'); }
+        }
+
+        const stLikes = document.getElementById('st-likes');
+        if (stLikes) stLikes.innerText = data.likes || 0;
+        const stRating = document.getElementById('st-rating');
+        if (stRating) {
+            const avg = data.votes ? (data.rating / data.votes).toFixed(1) : '—';
+            stRating.innerText = avg === '—' ? '—' : `${avg} ⭐`;
+        }
+    } catch (e) {
+        console.warn('static data injection skipped:', e);
+    }
+})();
+</script>
+
+<script type="module">
+import { get, getAuth, getDatabase, initializeApp, onAuthStateChanged, onChildAdded, push, ref, remove, set } from "./supabase-config.js";
+
+
+
+
+import { guardAgainstBanned } from "./auth-guard.js";
+
+
+
+
+guardAgainstBanned(app);
+const db   = getDatabase(app);
+const auth = getAuth(app);
+
+const params    = new URLSearchParams(window.location.search);
+const scriptId  = document.body.dataset.scriptId || params.get('id');
+let currentUser = null;
+let scriptVerified = false;
+let scriptAuthorUid = null;
+let scriptTitleForNotif = 'سكربت';
+const avatarCache = {};
+
+const UNVERIFIED_WARNING = '--[[\n\tتحذير هذا السكربت ليس تم التحقق منه من قبل cCraft space يرجي الحظر منه\n]]\n\n';
+
+function withCopyWarning(code) {
+    return scriptVerified ? code : (UNVERIFIED_WARNING + code);
+}
+
+// ✅ اسم العرض الحقيقي للمستخدم الحالي (username المحفوظ في البروفايل) — مش الإيميل ولا جزء منه
+let myUsernameCache = null;
+async function getMyDisplayName() {
+    if (!currentUser) return 'cCraft Space User';
+    if (myUsernameCache) return myUsernameCache;
+    try {
+        const snap = await get(ref(db, `users/${currentUser.uid}/username`));
+        myUsernameCache = (snap.exists() && snap.val()) ? snap.val() : 'cCraft Space User';
+    } catch { myUsernameCache = 'cCraft Space User'; }
+    return myUsernameCache;
+}
+
+// 🔔 إرسال إشعار لصاحب السكربت (لايك أو تعليق) — ما بيبعتش لنفسه لو هو صاحب السكربت
+function notifyAuthor(type, text) {
+    if (!scriptAuthorUid || !currentUser || scriptAuthorUid === currentUser.uid) return;
+    push(ref(db, `notifications/${scriptAuthorUid}`), {
+        type,
+        text,
+        timestamp: Date.now(),
+    }).catch(() => { /* فشل الإشعار مش لازم يوقف باقي العملية */ });
+}
+
+// 🔔 إشعار عام لأي مستخدم (يُستخدم للردود على التعليقات)
+function notifyUser(uid, type, text) {
+    if (!uid || !currentUser || uid === currentUser.uid) return;
+    push(ref(db, `notifications/${uid}`), {
+        type,
+        text,
+        timestamp: Date.now(),
+    }).catch(() => {});
+}
+
+window.openLightbox = function() {
+    document.getElementById('lightboxImg').src = document.getElementById('scriptImage').src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+};
+
+window.closeLightbox = function() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+};
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ✅ applyAvatar بيجيب الصورة "لايف" من بروفايل المستخدم مباشرة (مش من قيمة مجمّدة اتخزنت وقت كتابة التعليق)
+// وده اللي بيحل مشكلة إن صورة البروفايل مكنتش بتظهر في التعليقات
+async function applyAvatar(el, uid, fallbackName) {
+    if (!el) return;
+    el.innerHTML = '';
+    el.textContent = '';
+
+    let photo = null;
+    if (uid) {
+        if (uid in avatarCache && avatarCache[uid]) {
+            // ✅ نستخدم الكاش بس لو فيه صورة فعلاً — لو كانت فاضية، نجرب نجيبها تاني
+            // (عشان لو حد ضاف صورة بروفايل جديدة أثناء تصفحك، السكربتات/التعليقات بتاعته تعرضها فورًا من غير ما تحتاج ريفريش)
+            photo = avatarCache[uid];
+        } else {
+            try {
+                const snap = await get(ref(db, `users/${uid}/photo`));
+                photo = snap.exists() ? snap.val() : null;
+            } catch { photo = null; }
+            if (photo) avatarCache[uid] = photo;
+        }
+    }
+
+    if (!photo) {
+        el.textContent = (fallbackName || '؟').charAt(0).toUpperCase();
+        return;
+    }
+
+    const img = document.createElement('img');
+    img.src = photo;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.referrerPolicy = 'no-referrer';
+    img.style.setProperty('width', '100%', 'important');
+    img.style.setProperty('height', '100%', 'important');
+    img.style.setProperty('max-width', 'none', 'important');
+    img.style.setProperty('object-fit', 'cover', 'important');
+    img.style.setProperty('object-position', 'center', 'important');
+    img.style.setProperty('display', 'block', 'important');
+    img.onerror = () => {
+        img.remove();
+        el.textContent = (fallbackName || '؟').charAt(0).toUpperCase();
+    };
+    el.appendChild(img);
+}
+
+function escHTML(s) {
+    return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+const MAP_ICONS = {
+    'Adopt Me':'🏡','Bloxburg':'🏗️','Brookhaven':'🌆','Arsenal':'🔫',
+    'Bedwars':'🛏️','Murder Mystery 2':'🔪','Jailbreak':'🚔',
+    'Pet Simulator X':'🐾','Doors':'🚪','Da Hood':'🏙️',
+    'Anime Fighting Sim':'⚔️','Tower of Hell':'🗼',
+};
+
+onAuthStateChanged(auth, user => {
+    currentUser = user;
+    myUsernameCache = null;
+    refreshCommentBoxAvatar();
+    renderComments();
+});
+
+loadScript();
+
+async function loadScript() {
+    if (!scriptId) {
+        location.href = 'scripts.html';
+        return;
+    }
+
+    const snap = await get(ref(db, `scripts/${scriptId}`));
+    if (!snap.exists()) {
+        document.getElementById('title').innerText = "❌ هذا السكربت غير موجود";
+        return;
+    }
+    const data = snap.val();
+    scriptVerified = !!data.verified;
+    scriptAuthorUid = data.authorUid || null;
+    scriptTitleForNotif = data.title || 'سكربت';
+
+    document.getElementById('title').innerText       = data.title;
+    document.title = `${data.title} | CCRAFT SPACE`;
+    document.getElementById('code').innerText        = data.code;
+    document.getElementById('codeLineCount').innerText = data.code ? data.code.split('\n').length : 0;
+    document.getElementById('description').innerText = data.description || "لا يوجد وصف";
+    document.getElementById('description').style.color = data.description ? '#b0b0cc' : '#44445a';
+    document.getElementById('description').style.fontStyle = data.description ? 'normal' : 'italic';
+
+    document.getElementById('unverifiedBanner').classList.toggle('show', !scriptVerified);
+
+    if (data.key) {
+        const keyCard  = document.getElementById('keyCard');
+        const keyValue = document.getElementById('keyValue');
+        keyValue.innerText = data.key;
+        keyCard.style.display = 'block';
+        document.getElementById('copyKeyBtn').onclick = () => {
+            navigator.clipboard.writeText(data.key).then(() => {
+                const btn = document.getElementById('copyKeyBtn');
+                const orig = btn.innerText;
+                btn.innerText = '✅ تم النسخ';
+                setTimeout(() => { btn.innerText = orig; }, 2000);
+            });
+        };
+    }
+
+    if (data.image) {
+        document.getElementById('scriptImage').src     = data.image;
+        document.getElementById('scriptImageWrap').classList.add('show');
+        document.getElementById('sideThumbImg').src    = data.image;
+        document.getElementById('sidebarThumb').classList.add('show');
+        document.getElementById('sidebarThumb').onclick = openLightbox;
+    }
+
+    const date = data.timestamp
+        ? new Date(data.timestamp).toLocaleDateString('ar-EG', {year:'numeric',month:'long',day:'numeric'})
+        : '—';
+    document.getElementById('scriptDate').innerText = `نُشر في ${date}`;
+
+    const authorName = data.author || 'cCraft Space User';
+    document.getElementById('authorName').innerText = authorName;
+    document.getElementById('acName').innerText     = authorName;
+
+    await Promise.all([
+        applyAvatar(document.getElementById('authorAvatarInline'), data.authorUid, authorName),
+        applyAvatar(document.getElementById('authorAvatarSide'), data.authorUid, authorName),
+    ]);
+
+    const goProfile = () => { if (data.authorUid) location.href = `profile.html?uid=${data.authorUid}`; };
+    document.getElementById('authorRow').onclick      = goProfile;
+    document.getElementById('authorCardSide').onclick = goProfile;
+    document.getElementById('viewProfileBtn').onclick = e => { e.stopPropagation(); goProfile(); };
+
+    const tagsRow = document.getElementById('tagsRow');
+    tagsRow.innerHTML = scriptVerified
+        ? `<span class="tag tag-verified"><svg width="13" height="13" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:-2px;margin-left:4px"><defs><linearGradient id="vgSingle" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#00f2fe"/></linearGradient></defs><path d="M12 0l2.39 1.7 2.92-.2 1.29 2.6 2.6 1.29-.2 2.92L22.7 10.5 21 12l1.7 2.39-.2 2.92-2.6 1.29-1.29 2.6-2.92-.2L12 24l-2.39-1.7-2.92.2-1.29-2.6-2.6-1.29.2-2.92L1.3 13.5 3 12 1.3 9.61l.2-2.92 2.6-1.29 1.29-2.6 2.92.2L12 0z" fill="url(#vgSingle)"/><path d="M17 8.5l-6.2 7-3.3-3.2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>موثّق من الإدارة</span>`
+        : `<span class="tag tag-unverified">⚠️ غير موثّق</span>`;
+    tagsRow.innerHTML += `<span class="tag tag-cat">📁 ${escHTML(data.category||'—')}</span>`;
+    tagsRow.innerHTML += data.map
+        ? `<span class="tag tag-map">🗺️ ${escHTML(data.map)}</span>`
+        : `<span class="tag tag-nomap">🌐 ليس لماب محدد</span>`;
+    tagsRow.innerHTML += (data.hasKey || data.key)
+        ? `<span class="tag" style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:#fbbf24">🔒 يتطلب مفتاح</span>`
+        : `<span class="tag" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);color:#4ade80">🔓 بدون مفتاح</span>`;
+    if (Array.isArray(data.tags)) {
+        tagsRow.innerHTML += data.tags.map(t => `<span class="tag tag-map">#${escHTML(t)}</span>`).join('');
+    }
+
+    const mapCard = document.getElementById('mapCardSide');
+    if (data.map) {
+        const icon = MAP_ICONS[data.map] || '🗺️';
+        mapCard.innerHTML = `
+            <span class="mcs-icon">${icon}</span>
+            <div class="mcs-label">مخصص لماب</div>
+            <div class="mcs-name">${escHTML(data.map)}</div>
+        `;
+        mapCard.style.borderColor = 'rgba(0,242,254,0.18)';
+        mapCard.style.boxShadow   = '0 0 20px rgba(0,242,254,0.05)';
+    } else {
+        mapCard.innerHTML = `
+            <span class="mcs-icon">🌐</span>
+            <div class="mcs-label">الماب</div>
+            <div class="mcs-name muted">يعمل على أي لعبة</div>
+        `;
+    }
+
+    document.getElementById('st-likes').innerText = data.likes || 0;
+    const avg = data.votes ? (data.rating / data.votes).toFixed(1) : '—';
+    document.getElementById('st-rating').innerText = avg === '—' ? '—' : `${avg} ⭐`;
+
+    const liked = !!localStorage.getItem(`liked_${scriptId}`);
+    const likeBtn = document.getElementById('likeBtn');
+
+    if (liked) {
+        likeBtn.classList.add('liked');
+        likeBtn.innerText = '❤️ أعجبك';
+        likeBtn.disabled = true;
+    }
+
+    likeBtn.addEventListener('click', async () => {
+        if (!currentUser) { alert("يجب تسجيل الدخول لإضافة لايك"); location.href = "login.html"; return; }
+        if (liked || likeBtn.disabled) return;
+        const likeRef = ref(db, `scripts/${scriptId}/likes`);
+        const s = await get(likeRef);
+        const newVal = (s.exists() ? s.val() : 0) + 1;
+        await set(likeRef, newVal);
+        localStorage.setItem(`liked_${scriptId}`, 'true');
+        likeBtn.classList.add('liked');
+        likeBtn.innerText = '❤️ أعجبك';
+        likeBtn.disabled = true;
+        document.getElementById('st-likes').innerText = newVal;
+
+        // 🔔 إشعار لصاحب السكربت باللايك
+        const likerName = await getMyDisplayName();
+        notifyAuthor('like', `👍 ${likerName} أعجب بسكربتك: ${scriptTitleForNotif}`);
+    });
+
+    loadComments();
+}
+
+const COMMENTS_PAGE_SIZE = 5;
+let commentsVisible = COMMENTS_PAGE_SIZE;
+let allComments = [];
+let commentSort = 'new'; // new | old | top
+
+function timeAgoAr(ts) {
+    const diff = Date.now() - ts;
+    const m = Math.floor(diff/60000), h = Math.floor(diff/3600000), d = Math.floor(diff/86400000);
+    if (d > 0) return `منذ ${d} يوم`;
+    if (h > 0) return `منذ ${h} ساعة`;
+    if (m > 0) return `منذ ${m} دقيقة`;
+    return 'الآن';
+}
+
+async function loadComments() {
+    const snap = await get(ref(db, `scripts/${scriptId}/comments`));
+    if (snap.exists()) {
+        allComments = Object.entries(snap.val()).map(([key, c]) => ({ key, ...c }));
+    }
+    renderComments();
+
+    onChildAdded(ref(db, `scripts/${scriptId}/comments`), snapshot => {
+        if (allComments.some(c => c.key === snapshot.key)) return; // اتحمّل بالفعل مع الدفعة الأولى
+        allComments.push({ key: snapshot.key, ...snapshot.val() });
+        commentsVisible++; // تعليق جديد لازم يظهر فورًا من غير ما يستنى "عرض المزيد"
+        renderComments();
+    });
+}
+
+function countAllComments() {
+    return allComments.reduce((sum, c) => sum + 1 + (c.replies ? Object.keys(c.replies).length : 0), 0);
+}
+
+function sortComments(list) {
+    const arr = [...list];
+    if (commentSort === 'old') arr.sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+    else if (commentSort === 'top') arr.sort((a,b) => ((b.likes||0)-(b.dislikes||0)) - ((a.likes||0)-(a.dislikes||0)));
+    else arr.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+    return arr;
+}
+
+function buildAvatarEl(uid, name, photo, sizeClass) {
+    const pic = document.createElement('div');
+    pic.className = sizeClass;
+    pic.onclick = () => { if (uid) location.href = `profile.html?uid=${uid}`; };
+    // ✅ بنجيب الصورة لايف من applyAvatar بدل ما نعتمد على قيمة c.photo القديمة بس —
+    // ده اللي بيضمن ظهور الصورة دايمًا حتى لو اتغيرت أو محفوظتش وقت كتابة التعليق
+    applyAvatar(pic, uid, name);
+    return pic;
+}
+
+function commentVoteKey(key) { return `cvote_${scriptId}_${key}`; }
+
+async function voteComment(path, key, type) {
+    const storageKey = commentVoteKey(key);
+    const existing = localStorage.getItem(storageKey);
+    if (existing) return; // صوّت قبل كده على الموضوع ده
+
+    const field = type === 'like' ? 'likes' : 'dislikes';
+    const nodeRef = ref(db, `${path}/${field}`);
+    const s = await get(nodeRef);
+    const newVal = (s.exists() ? s.val() : 0) + 1;
+    await set(nodeRef, newVal);
+    localStorage.setItem(storageKey, type);
+    return newVal;
+}
+
+function renderComments() {
+    const commentsDiv = document.getElementById('comments');
+    const loadMoreBtn = document.getElementById('cmtLoadMore');
+    const sorted = sortComments(allComments);
+    const totalCount = countAllComments();
+
+    document.getElementById('commentBadge').innerText = totalCount;
+    document.getElementById('st-comments').innerText  = totalCount;
+
+    if (!sorted.length) {
+        commentsDiv.innerHTML = `<div class="no-comments" id="noComments"><span class="nc-icon">💬</span>كن أول من يعلّق على هذا السكربت!</div>`;
+        loadMoreBtn.style.display = 'none';
+        return;
+    }
+
+    commentsDiv.innerHTML = '';
+    sorted.slice(0, commentsVisible).forEach(c => {
+        commentsDiv.appendChild(buildCommentRow(c));
+    });
+
+    if (commentsVisible < sorted.length) {
+        loadMoreBtn.style.display = 'inline-block';
+        loadMoreBtn.innerText = `⬇️ عرض المزيد (${sorted.length - commentsVisible} متبقي)`;
+    } else {
+        loadMoreBtn.style.display = 'none';
+    }
+}
+
+function buildCommentRow(c) {
+    const canDelete = currentUser && c.uid === currentUser.uid;
+    const votedAs = localStorage.getItem(commentVoteKey(c.key));
+
+    const row = document.createElement('div');
+    row.className = 'cmt-row';
+
+    const pic = buildAvatarEl(c.uid, c.name, c.photo, 'cmt-pic');
+    row.appendChild(pic);
+
+    const main = document.createElement('div');
+    main.className = 'cmt-main';
+
+    const head = document.createElement('div');
+    head.className = 'cmt-head';
+
+    const userEl = document.createElement('span');
+    userEl.className = 'cmt-user';
+    userEl.textContent = c.name || 'cCraft Space User';
+    userEl.onclick = () => { if (c.uid) location.href = `profile.html?uid=${c.uid}`; };
+    head.appendChild(userEl);
+
+    const whenEl = document.createElement('span');
+    whenEl.className = 'cmt-when';
+    whenEl.textContent = c.timestamp ? timeAgoAr(c.timestamp) : '';
+    head.appendChild(whenEl);
+
+    if (canDelete) {
+        const delBtn = document.createElement('button');
+        delBtn.className = 'cmt-del';
+        delBtn.textContent = '🗑️ حذف';
+        delBtn.onclick = async e => {
+            e.stopPropagation();
+            if (!confirm('متأكد إنك عايز تحذف تعليقك؟')) return;
+            await remove(ref(db, `scripts/${scriptId}/comments/${c.key}`));
+            allComments = allComments.filter(x => x.key !== c.key);
+            renderComments();
+        };
+        head.appendChild(delBtn);
+    }
+
+    const msgEl = document.createElement('p');
+    msgEl.className = 'cmt-msg';
+    msgEl.textContent = c.text;
+
+    // صف الأزرار: لايك / ديسلايك / رد
+    const actions = document.createElement('div');
+    actions.className = 'cmt-actions';
+
+    const likeBtn = document.createElement('button');
+    likeBtn.className = 'cmt-vote' + (votedAs === 'like' ? ' voted' : '');
+    likeBtn.innerHTML = `👍 <span>${c.likes || 0}</span>`;
+    likeBtn.onclick = async () => {
+        if (!currentUser) { alert('يجب تسجيل الدخول'); location.href = 'login.html'; return; }
+        const nv = await voteComment(`scripts/${scriptId}/comments/${c.key}`, c.key, 'like');
+        if (nv !== undefined) { c.likes = nv; renderComments(); }
+    };
+
+    const dislikeBtn = document.createElement('button');
+    dislikeBtn.className = 'cmt-vote' + (votedAs === 'dislike' ? ' voted' : '');
+    dislikeBtn.innerHTML = `👎 <span>${c.dislikes || 0}</span>`;
+    dislikeBtn.onclick = async () => {
+        if (!currentUser) { alert('يجب تسجيل الدخول'); location.href = 'login.html'; return; }
+        const nv = await voteComment(`scripts/${scriptId}/comments/${c.key}`, c.key, 'dislike');
+        if (nv !== undefined) { c.dislikes = nv; renderComments(); }
+    };
+
+    const replyBtn = document.createElement('button');
+    replyBtn.className = 'cmt-reply-toggle';
+    replyBtn.innerHTML = `↩️ رد`;
+
+    actions.appendChild(likeBtn);
+    actions.appendChild(dislikeBtn);
+    actions.appendChild(replyBtn);
+
+    // صندوق كتابة الرد (مخفي افتراضيًا)
+    const replyBox = document.createElement('div');
+    replyBox.className = 'reply-box';
+    replyBox.style.display = 'none';
+    const replyInput = document.createElement('input');
+    replyInput.type = 'text';
+    replyInput.maxLength = 300;
+    replyInput.placeholder = `الرد على ${c.name || 'cCraft Space User'}...`;
+    const replySend = document.createElement('button');
+    replySend.textContent = 'إرسال';
+    replyBox.appendChild(replyInput);
+    replyBox.appendChild(replySend);
+
+    replyBtn.onclick = () => {
+        if (!currentUser) { alert('يجب تسجيل الدخول للرد'); location.href = 'login.html'; return; }
+        replyBox.style.display = replyBox.style.display === 'none' ? 'flex' : 'none';
+        if (replyBox.style.display === 'flex') replyInput.focus();
+    };
+
+    async function sendReply() {
+        const text = replyInput.value.trim();
+        if (!text) return;
+        if (text.length > 300) { alert('الرد طويل جدًا (الحد الأقصى 300 حرف)'); return; }
+        replySend.disabled = true;
+        const replierName = await getMyDisplayName();
+        const replyData = { name: replierName, uid: currentUser.uid, text, timestamp: Date.now() };
+        try {
+            await push(ref(db, `scripts/${scriptId}/comments/${c.key}/replies`), replyData);
+            // 🔔 إشعار لصاحب التعليق الأصلي بالرد (مش لنفس الشخص لو بيرد على نفسه)
+            notifyUser(c.uid, 'reply', `↩️ ${replierName} ردّ على تعليقك في سكربت: ${scriptTitleForNotif}`);
+            c.replies = c.replies || {};
+            const localKey = `local_${Date.now()}`;
+            c.replies[localKey] = replyData;
+            replyInput.value = '';
+            replyBox.style.display = 'none';
+            renderComments();
+        } catch (e) {
+            alert('❌ تعذّر إرسال الرد، حاول تاني');
+        } finally {
+            replySend.disabled = false;
+        }
+    }
+    replySend.onclick = sendReply;
+    replyInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendReply(); });
+
+    main.appendChild(head);
+    main.appendChild(msgEl);
+    main.appendChild(actions);
+    main.appendChild(replyBox);
+
+    // عرض الردود
+    if (c.replies) {
+        const repliesWrap = document.createElement('div');
+        repliesWrap.className = 'replies-list';
+        Object.entries(c.replies)
+            .sort((a,b) => (a[1].timestamp||0) - (b[1].timestamp||0))
+            .forEach(([rkey, r]) => {
+                repliesWrap.appendChild(buildReplyRow(c, rkey, r));
+            });
+        main.appendChild(repliesWrap);
+    }
+
+    row.appendChild(main);
+    return row;
+}
+
+function buildReplyRow(parentComment, rkey, r) {
+    const canDelete = currentUser && r.uid === currentUser.uid;
+
+    const row = document.createElement('div');
+    row.className = 'reply-row';
+
+    const pic = buildAvatarEl(r.uid, r.name, r.photo, 'reply-pic');
+    row.appendChild(pic);
+
+    const main = document.createElement('div');
+    main.className = 'reply-main';
+
+    const head = document.createElement('div');
+    head.className = 'cmt-head';
+
+    const userEl = document.createElement('span');
+    userEl.className = 'cmt-user';
+    userEl.textContent = r.name || 'cCraft Space User';
+    userEl.onclick = () => { if (r.uid) location.href = `profile.html?uid=${r.uid}`; };
+    head.appendChild(userEl);
+
+    const whenEl = document.createElement('span');
+    whenEl.className = 'cmt-when';
+    whenEl.textContent = r.timestamp ? timeAgoAr(r.timestamp) : '';
+    head.appendChild(whenEl);
+
+    if (canDelete && !rkey.startsWith('local_')) {
+        const delBtn = document.createElement('button');
+        delBtn.className = 'cmt-del';
+        delBtn.textContent = '🗑️ حذف';
+        delBtn.onclick = async e => {
+            e.stopPropagation();
+            if (!confirm('متأكد إنك عايز تحذف ردك؟')) return;
+            await remove(ref(db, `scripts/${scriptId}/comments/${parentComment.key}/replies/${rkey}`));
+            delete parentComment.replies[rkey];
+            renderComments();
+        };
+        head.appendChild(delBtn);
+    }
+
+    const msgEl = document.createElement('p');
+    msgEl.className = 'cmt-msg';
+    msgEl.textContent = r.text;
+
+    main.appendChild(head);
+    main.appendChild(msgEl);
+    row.appendChild(main);
+    return row;
+}
+
+document.getElementById('cmtLoadMore').addEventListener('click', () => {
+    commentsVisible += COMMENTS_PAGE_SIZE;
+    renderComments();
+});
+
+const commentInputEl = document.getElementById('commentInput');
+const commentCharCountEl = document.getElementById('commentCharCount');
+const cwAvatarEl = document.getElementById('cwAvatar');
+
+commentInputEl.addEventListener('input', () => {
+    commentCharCountEl.innerText = commentInputEl.value.length;
+});
+
+// 🖼️ صورة المستخدم في صندوق كتابة التعليق نفسه — بتتجدد لايف مع الكاش المشترك
+async function refreshCommentBoxAvatar() {
+    if (!currentUser) { cwAvatarEl.innerHTML = ''; cwAvatarEl.textContent = '؟'; return; }
+    delete avatarCache[currentUser.uid]; // نجبر تحديث الكاش عشان لو المستخدم غيّر صورته لسه
+    const myName = await getMyDisplayName();
+    await applyAvatar(cwAvatarEl, currentUser.uid, myName);
+}
+
+document.getElementById('submitComment').addEventListener('click', async () => {
+    if (!currentUser) { alert("يجب تسجيل الدخول للتعليق"); location.href = "login.html"; return; }
+
+    const inp  = commentInputEl;
+    const text = inp.value.trim();
+    if (!text) return;
+    if (text.length > 300) { alert('التعليق طويل جدًا (الحد الأقصى 300 حرف)'); return; }
+
+    const btn = document.getElementById('submitComment');
+    btn.disabled = true;
+    btn.innerText = '⏳';
+
+    const commenterName = await getMyDisplayName();
+
+    // ✅ التصميم الجديد بيجيب صورة المعلّق لايف وقت العرض (applyAvatar) مش من الفيلد المخزّن،
+    // فمفيش داعي نحفظ نسخة تجمّدت من الصورة مع كل تعليق — ده اللي كان بيسبب اختفاءها أحيانًا.
+    const commentData = {
+        name:      commenterName,
+        uid:       currentUser.uid,
+        text,
+        timestamp: Date.now(),
+        likes: 0,
+        dislikes: 0,
+    };
+
+    try {
+        await push(ref(db, `scripts/${scriptId}/comments`), commentData);
+        // 🔔 إشعار لصاحب السكربت بالتعليق الجديد
+        notifyAuthor('comment', `💬 ${commenterName} علّق على سكربتك: ${scriptTitleForNotif}`);
+        inp.value = '';
+        commentCharCountEl.innerText = '0';
+    } catch (e) {
+        alert('❌ تعذّر إرسال التعليق، حاول تاني');
+    } finally {
+        btn.disabled = false;
+        btn.innerText = 'إرسال ↵';
+    }
+});
+
+commentInputEl.addEventListener('keypress', e => {
+    if (e.key === 'Enter') document.getElementById('submitComment').click();
+});
+
+// ↕️ فرز التعليقات
+const sortBtn  = document.getElementById('sortBtn');
+const sortMenu = document.getElementById('sortMenu');
+const sortLabel = document.getElementById('sortLabel');
+const SORT_LABELS = { new: 'الأحدث', old: 'الأقدم', top: 'الأكثر إعجابًا' };
+
+if (sortBtn) {
+    sortBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        sortMenu.classList.toggle('open');
+    });
+    document.addEventListener('click', () => sortMenu.classList.remove('open'));
+    sortMenu.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            commentSort = btn.dataset.sort;
+            sortLabel.innerText = SORT_LABELS[commentSort];
+            sortMenu.classList.remove('open');
+            renderComments();
+        });
+    });
+}
+
+function copyCode() {
+    const code = withCopyWarning(document.getElementById('code').innerText);
+    navigator.clipboard.writeText(code).then(() => {
+        ['copyInline','copyBtn'].forEach(id => {
+            const btn = document.getElementById(id);
+            const orig = btn.innerText;
+            btn.innerText = '✅ تم';
+            if (id === 'copyInline') btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerText = orig;
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    });
+}
+
+document.getElementById('copyBtn').addEventListener('click',    copyCode);
+document.getElementById('copyInline').addEventListener('click', copyCode);
+document.getElementById('rawBtn').addEventListener('click',     () => { if (!currentUser) { alert("يجب تسجيل الدخول"); location.href="login.html"; return; } location.href = `raw.html?id=${scriptId}`; });
+document.getElementById('reportBtn').addEventListener('click',  () => location.href = `report.html?id=${scriptId}`);
+</script>
+</body>
+</html>

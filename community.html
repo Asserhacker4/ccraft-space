@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCRAFT SPACE | المجتمع</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+.cm-page { max-width: 880px; margin: 0 auto; padding: 0 20px 80px; }
+
+.cm-hero {
+    padding: 32px 0 18px; display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); margin-bottom: 20px;
+}
+.cm-hero h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 900;
+    background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;
+}
+.cm-hero p { color: var(--text-muted); font-size: 0.8rem; margin-top: 4px; }
+
+.new-post-btn {
+    background: var(--accent-gradient); color: white; border: none; border-radius: 14px;
+    padding: 11px 22px; font-size: 0.86rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0; transition: var(--transition);
+    box-shadow: 0 6px 18px rgba(139,92,246,0.35); white-space: nowrap;
+}
+.new-post-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+
+/* ---- Category chips ---- */
+.cat-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.cat-chip {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); border-radius: 50px;
+    padding: 7px 16px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted);
+    cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0; transition: var(--transition);
+}
+.cat-chip:hover { border-color: var(--border-hover); color: var(--text-main); transform: none; filter: none; }
+.cat-chip.active { background: var(--primary-dim); color: var(--primary); border-color: rgba(139,92,246,0.4); }
+
+/* ---- Sort tabs ---- */
+.sort-row { display: flex; gap: 6px; margin-bottom: 18px; }
+.sort-btn {
+    background: none; border: none; color: var(--text-muted); font-size: 0.8rem; font-weight: 800;
+    cursor: pointer; font-family: 'Tajawal', sans-serif; padding: 6px 12px; border-radius: 8px;
+    margin: 0; transition: var(--transition);
+}
+.sort-btn:hover { background: rgba(255,255,255,0.04); color: var(--text-main); transform: none; filter: none; }
+.sort-btn.active { background: var(--primary-dim); color: var(--primary); }
+
+/* ---- New post form ---- */
+.new-post-form {
+    display: none; background: var(--bg-card); border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 18px; padding: 22px; margin-bottom: 20px; animation: fadeIn 0.3s ease both;
+}
+.new-post-form.show { display: block; }
+.field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.field-label { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.field-group input, .field-group textarea, .field-group select {
+    background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 12px;
+    padding: 11px 14px; color: var(--text-main); font-family: 'Tajawal', sans-serif;
+    font-size: 0.88rem; outline: none; transition: var(--transition); direction: rtl; margin: 0;
+}
+.field-group input:focus, .field-group textarea:focus, .field-group select:focus {
+    border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139,92,246,0.08);
+}
+.field-group textarea { resize: vertical; min-height: 110px; }
+.field-group select option { background: #1a1a2e; }
+.form-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+.form-cancel-btn {
+    background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid var(--border-color);
+    border-radius: 12px; padding: 10px 18px; font-size: 0.84rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0;
+}
+.form-submit-btn {
+    background: var(--accent-gradient); color: white; border: none; border-radius: 12px;
+    padding: 10px 22px; font-size: 0.84rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0; box-shadow: 0 4px 14px rgba(139,92,246,0.3);
+}
+.form-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---- Post card (feed) ---- */
+.post-card {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px;
+    padding: 16px 18px; display: flex; gap: 14px; margin-bottom: 12px;
+    transition: var(--transition); animation: fadeIn 0.4s ease both;
+}
+.post-card:hover { border-color: var(--border-hover); }
+
+.vote-col { display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; padding-top: 2px; }
+.vote-btn {
+    background: none; border: none; color: var(--text-muted); font-size: 1.05rem; cursor: pointer;
+    padding: 2px 6px; border-radius: 6px; margin: 0; transition: var(--transition); line-height: 1;
+}
+.vote-btn:hover { background: rgba(139,92,246,0.1); color: var(--text-main); transform: none; filter: none; }
+.vote-btn.up.voted   { color: #fb923c; }
+.vote-btn.down.voted { color: #60a5fa; }
+.vote-score { font-size: 0.85rem; font-weight: 900; color: var(--text-main); }
+
+.post-body-col { flex: 1; min-width: 0; cursor: pointer; }
+.post-cat-pill {
+    display: inline-block; background: var(--primary-dim); color: #b48bf8; padding: 2px 10px;
+    border-radius: 50px; font-size: 0.66rem; font-weight: 800; margin-bottom: 6px;
+}
+.post-title { font-size: 0.98rem; font-weight: 800; color: var(--text-main); margin-bottom: 5px; line-height: 1.4; }
+.post-snippet {
+    font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.post-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 0.72rem; color: var(--text-muted); }
+.post-meta .pm-author { display: flex; align-items: center; gap: 6px; }
+.pm-avatar { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.pm-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pm-avatar .init { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#8b5cf6,#00bcd4); color: white; font-weight: 900; font-size: 0.6rem; }
+
+.empty-box { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+.empty-box .ee-icon { font-size: 2.6rem; display: block; margin-bottom: 12px; }
+.loading-box { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+
+/* ---- Post Detail ---- */
+.back-link {
+    display: inline-flex; align-items: center; gap: 6px; color: var(--primary); font-size: 0.84rem;
+    font-weight: 800; text-decoration: none; margin-bottom: 16px; cursor: pointer;
+}
+.back-link:hover { text-decoration: underline; }
+
+.post-detail-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 26px; margin-bottom: 20px; }
+.pd-title { font-size: 1.3rem; font-weight: 900; color: var(--text-main); margin: 8px 0 12px; line-height: 1.4; }
+.pd-body { font-size: 0.92rem; color: var(--text-main); line-height: 1.9; white-space: pre-wrap; margin-bottom: 18px; }
+.pd-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 14px; }
+.pd-author { display: flex; align-items: center; gap: 8px; }
+.pd-avatar { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.pd-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pd-avatar .init { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#8b5cf6,#00bcd4); color: white; font-weight: 900; font-size: 0.8rem; }
+.pd-vote-row { display: flex; align-items: center; gap: 6px; margin-right: auto; }
+.delete-post-btn { background: none; border: none; color: var(--danger); font-size: 0.76rem; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0; opacity: 0.7; }
+.delete-post-btn:hover { opacity: 1; filter: none; transform: none; }
+
+/* ---- Comments ---- */
+.comments-section { }
+.comments-count-title { font-size: 0.85rem; font-weight: 800; color: var(--text-muted); margin-bottom: 14px; }
+.comment-form { display: flex; gap: 10px; margin-bottom: 20px; align-items: flex-start; }
+.comment-form textarea {
+    flex: 1; background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 12px;
+    padding: 10px 14px; color: var(--text-main); font-family: 'Tajawal', sans-serif; font-size: 0.85rem;
+    outline: none; resize: vertical; min-height: 44px; direction: rtl; transition: var(--transition);
+}
+.comment-form textarea:focus { border-color: var(--primary); }
+.comment-submit-btn {
+    background: var(--accent-gradient); color: white; border: none; border-radius: 12px;
+    padding: 10px 18px; font-size: 0.82rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0; flex-shrink: 0; box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+}
+.comment-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.comment-item {
+    display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    animation: fadeIn 0.3s ease both;
+}
+.comment-item:last-child { border-bottom: none; }
+.cm-avatar { width: 28px; height: 28px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.cm-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cm-avatar .init { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg,#8b5cf6,#00bcd4); color: white; font-weight: 900; font-size: 0.68rem; }
+.cm-body { flex: 1; min-width: 0; }
+.cm-head { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; flex-wrap: wrap; }
+.cm-name { font-size: 0.8rem; font-weight: 800; color: var(--text-main); }
+.cm-time { font-size: 0.68rem; color: var(--text-muted); }
+.cm-text { font-size: 0.85rem; color: var(--text-main); line-height: 1.65; white-space: pre-wrap; }
+.cm-del-btn { background: none; border: none; color: var(--danger); font-size: 0.7rem; cursor: pointer; font-family: 'Tajawal', sans-serif; margin: 0; opacity: 0.65; padding: 0; }
+.cm-del-btn:hover { opacity: 1; filter: none; transform: none; }
+
+.cm-toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px);
+    background: var(--bg-card); border: 1px solid var(--primary); border-radius: 50px;
+    padding: 10px 24px; font-size: 0.85rem; font-weight: 800; color: var(--text-main);
+    z-index: 600; transition: transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); pointer-events: none; white-space: nowrap;
+}
+.cm-toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 600px) {
+    .cm-hero { flex-direction: column; align-items: stretch; }
+    .new-post-btn { width: 100%; }
+    .post-title { font-size: 0.9rem; }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <button onclick="location.href='scripts.html'">📜 السكربتات</button>
+    <button class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</header>
+
+<div class="cm-page">
+
+    <div class="cm-hero">
+        <div>
+            <h1>🗣️ مجتمع CCRAFT</h1>
+            <p>نقاشات، أسئلة، اقتراحات، ومشاكل — كل حاجة في مكان واحد.</p>
+        </div>
+        <button class="new-post-btn" id="toggleFormBtn">✍️ منشور جديد</button>
+    </div>
+
+    <!-- Feed view -->
+    <div id="feedView">
+
+        <div class="new-post-form" id="newPostForm">
+            <div class="field-group">
+                <label class="field-label">العنوان</label>
+                <input type="text" id="postTitle" placeholder="عنوان واضح ومختصر..." maxlength="120">
+            </div>
+            <div class="field-group">
+                <label class="field-label">القسم</label>
+                <select id="postCategory">
+                    <option value="general">💬 عام</option>
+                    <option value="scripts">📜 سكربتات</option>
+                    <option value="apks">📱 APK</option>
+                    <option value="help">🆘 مساعدة</option>
+                    <option value="suggestions">💡 اقتراحات</option>
+                    <option value="bugs">🐛 مشاكل وبلاغات</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label class="field-label">النص</label>
+                <textarea id="postBody" placeholder="اكتب تفاصيل المنشور هنا..." maxlength="4000"></textarea>
+            </div>
+            <div class="form-actions">
+                <button class="form-cancel-btn" id="cancelFormBtn">إلغاء</button>
+                <button class="form-submit-btn" id="submitPostBtn">📤 نشر</button>
+            </div>
+        </div>
+
+        <div class="cat-row" id="catRow">
+            <button class="cat-chip active" data-cat="all">🌟 الكل</button>
+            <button class="cat-chip" data-cat="general">💬 عام</button>
+            <button class="cat-chip" data-cat="scripts">📜 سكربتات</button>
+            <button class="cat-chip" data-cat="apks">📱 APK</button>
+            <button class="cat-chip" data-cat="help">🆘 مساعدة</button>
+            <button class="cat-chip" data-cat="suggestions">💡 اقتراحات</button>
+            <button class="cat-chip" data-cat="bugs">🐛 مشاكل</button>
+        </div>
+
+        <div class="sort-row" id="sortRow">
+            <button class="sort-btn active" data-sort="hot">🔥 الأكثر تفاعلًا</button>
+            <button class="sort-btn" data-sort="new">🆕 الأحدث</button>
+            <button class="sort-btn" data-sort="top">⬆️ الأعلى تقييمًا</button>
+        </div>
+
+        <div id="postsFeed"><div class="loading-box">⏳ جارٍ التحميل...</div></div>
+    </div>
+
+    <!-- Detail view -->
+    <div id="detailView" style="display:none"></div>
+
+</div>
+
+<div class="cm-toast" id="cmToast"></div>
+
+<script type="module">
+import { get, getApp, getApps, getAuth, getDatabase, initializeApp, onAuthStateChanged, push, ref, remove, set, update } from "./supabase-config.js";
+
+
+
+
+
+
+
+const db   = getDatabase(app);
+const auth = getAuth(app);
+
+const CAT_LABELS = { general:'💬 عام', scripts:'📜 سكربتات', apks:'📱 APK', help:'🆘 مساعدة', suggestions:'💡 اقتراحات', bugs:'🐛 مشاكل' };
+
+let currentUser  = null;
+let allPosts     = {};
+let activeCat    = 'all';
+let activeSort   = 'hot';
+const urlParams  = new URLSearchParams(location.search);
+
+/* ---- Toast ---- */
+function toast(msg, dur = 2600) {
+    const t = document.getElementById('cmToast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), dur);
+}
+
+/* ---- Helpers ---- */
+function scoreOf(post) {
+    return Object.values(post.votes || {}).reduce((a, b) => a + b, 0);
+}
+function timeAgo(ts) {
+    const s = Math.floor((Date.now() - (ts || 0)) / 1000);
+    if (s < 60) return 'الآن';
+    if (s < 3600) return `منذ ${Math.floor(s/60)} د`;
+    if (s < 86400) return `منذ ${Math.floor(s/3600)} س`;
+    if (s < 2592000) return `منذ ${Math.floor(s/86400)} يوم`;
+    return new Date(ts).toLocaleDateString('ar-EG', { month:'short', day:'numeric' });
+}
+function avatarHTML(photo, name) {
+    if (photo) return `<img src="${photo}" alt="">`;
+    return `<div class="init">${(name || '?').charAt(0).toUpperCase()}</div>`;
+}
+async function getUserBrief(uid) {
+    if (!uid) return { name: 'مجهول', photo: null };
+    const snap = await get(ref(db, `users/${uid}`));
+    const d = snap.exists() ? snap.val() : {};
+    return { name: d.username || (d.email ? d.email.split('@')[0] : 'مجهول'), photo: d.photo || null };
+}
+function escapeHTML(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+async function addPointsWithLog(uid, amount, type, note) {
+    const cur = await get(ref(db, `users/${uid}/points`));
+    await set(ref(db, `users/${uid}/points`), (cur.exists() ? cur.val() : 0) + amount);
+    await set(ref(db, `users/${uid}/pointsLog/${Date.now()}_${uid.slice(0,4)}`), { type, points: amount, note, timestamp: Date.now() });
+}
+
+/* ---- Auth ---- */
+onAuthStateChanged(auth, async user => {
+    if (!user) { location.href = 'login.html'; return; }
+    currentUser = user;
+    await loadPosts();
+    routeView();
+});
+
+function routeView() {
+    const postId = urlParams.get('post');
+    if (postId) {
+        document.getElementById('feedView').style.display = 'none';
+        document.getElementById('detailView').style.display = 'block';
+        renderDetail(postId);
+    } else {
+        document.getElementById('feedView').style.display = 'block';
+        document.getElementById('detailView').style.display = 'none';
+        renderFeed();
+    }
+}
+
+async function loadPosts() {
+    const snap = await get(ref(db, 'communityPosts'));
+    allPosts = snap.exists() ? snap.val() : {};
+}
+
+/* ============================================================
+   New Post Form
+   ============================================================ */
+
+document.getElementById('toggleFormBtn').onclick = () => {
+    document.getElementById('newPostForm').classList.toggle('show');
+};
+document.getElementById('cancelFormBtn').onclick = () => {
+    document.getElementById('newPostForm').classList.remove('show');
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postBody').value = '';
+};
+
+document.getElementById('submitPostBtn').onclick = async () => {
+    const title    = document.getElementById('postTitle').value.trim();
+    const body     = document.getElementById('postBody').value.trim();
+    const category = document.getElementById('postCategory').value;
+
+    if (!title || !body) { toast('❌ العنوان والنص مطلوبين'); return; }
+
+    const btn = document.getElementById('submitPostBtn');
+    btn.disabled = true; btn.innerText = '⏳ جارٍ النشر...';
+
+    try {
+        const authorName = currentUser.email.split('@')[0];
+        const newRef = push(ref(db, 'communityPosts'));
+        const data = { title, body, category, authorUid: currentUser.uid, authorName, timestamp: Date.now(), commentCount: 0, votes: {} };
+        await set(newRef, data);
+        allPosts[newRef.key] = data;
+
+        await addPointsWithLog(currentUser.uid, 3, 'community_post', `منشور جديد: ${title}`);
+
+        toast('✅ تم النشر!');
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postBody').value = '';
+        document.getElementById('newPostForm').classList.remove('show');
+        renderFeed();
+    } catch (err) {
+        toast('❌ حصل خطأ: ' + err.message);
+    } finally {
+        btn.disabled = false; btn.innerText = '📤 نشر';
+    }
+};
+
+/* ============================================================
+   Category & Sort filters
+   ============================================================ */
+
+document.getElementById('catRow').addEventListener('click', e => {
+    const chip = e.target.closest('.cat-chip'); if (!chip) return;
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeCat = chip.dataset.cat;
+    renderFeed();
+});
+
+document.getElementById('sortRow').addEventListener('click', e => {
+    const btn = e.target.closest('.sort-btn'); if (!btn) return;
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeSort = btn.dataset.sort;
+    renderFeed();
+});
+
+/* ============================================================
+   Feed
+   ============================================================ */
+
+async function renderFeed() {
+    const box = document.getElementById('postsFeed');
+    box.innerHTML = '<div class="loading-box">⏳ جارٍ التحميل...</div>';
+
+    let entries = Object.entries(allPosts);
+    if (activeCat !== 'all') entries = entries.filter(([, p]) => p.category === activeCat);
+
+    if (activeSort === 'new') {
+        entries.sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
+    } else if (activeSort === 'top') {
+        entries.sort((a, b) => scoreOf(b[1]) - scoreOf(a[1]));
+    } else {
+        // hot: score / (age_hours + 2)^1.3
+        entries.sort((a, b) => {
+            const ageA = Math.max(1, (Date.now() - (a[1].timestamp||0)) / 3600000);
+            const ageB = Math.max(1, (Date.now() - (b[1].timestamp||0)) / 3600000);
+            return (scoreOf(b[1]) + 1) / Math.pow(ageB + 2, 1.3) - (scoreOf(a[1]) + 1) / Math.pow(ageA + 2, 1.3);
+        });
+    }
+
+    if (!entries.length) {
+        box.innerHTML = `<div class="empty-box"><span class="ee-icon">🗣️</span><h3 style="color:var(--text-main);margin-bottom:8px">لا توجد منشورات هنا</h3><p>كن أول من ينشر في القسم ده!</p></div>`;
+        return;
+    }
+
+    box.innerHTML = '';
+    for (const [id, post] of entries) {
+        const brief = await getUserBrief(post.authorUid);
+        const score = scoreOf(post);
+        const myVote = (post.votes || {})[currentUser.uid] || 0;
+
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.innerHTML = `
+            <div class="vote-col">
+                <button class="vote-btn up ${myVote === 1 ? 'voted' : ''}" data-dir="1">▲</button>
+                <span class="vote-score">${score}</span>
+                <button class="vote-btn down ${myVote === -1 ? 'voted' : ''}" data-dir="-1">▼</button>
+            </div>
+            <div class="post-body-col">
+                <span class="post-cat-pill">${CAT_LABELS[post.category] || post.category}</span>
+                <div class="post-title">${escapeHTML(post.title)}</div>
+                <div class="post-snippet">${escapeHTML(post.body)}</div>
+                <div class="post-meta">
+                    <span class="pm-author"><span class="pm-avatar">${avatarHTML(brief.photo, brief.name)}</span> ${brief.name}</span>
+                    <span>🕐 ${timeAgo(post.timestamp)}</span>
+                    <span>💬 ${post.commentCount || 0}</span>
+                </div>
+            </div>
+        `;
+        card.querySelector('.post-body-col').onclick = () => { location.href = `community.html?post=${id}`; };
+        card.querySelectorAll('.vote-btn').forEach(b => {
+            b.onclick = (e) => { e.stopPropagation(); castVote(id, parseInt(b.dataset.dir)); };
+        });
+        box.appendChild(card);
+    }
+}
+
+/* ============================================================
+   Voting
+   ============================================================ */
+
+async function castVote(postId, dir) {
+    const post = allPosts[postId]; if (!post) return;
+    if (!post.votes) post.votes = {};
+    const current = post.votes[currentUser.uid] || 0;
+    const newVal = current === dir ? 0 : dir;
+
+    if (newVal === 0) {
+        await remove(ref(db, `communityPosts/${postId}/votes/${currentUser.uid}`));
+        delete post.votes[currentUser.uid];
+    } else {
+        await set(ref(db, `communityPosts/${postId}/votes/${currentUser.uid}`), newVal);
+        post.votes[currentUser.uid] = newVal;
+    }
+
+    routeView();
+}
+
+/* ============================================================
+   Post Detail
+   ============================================================ */
+
+async function renderDetail(postId) {
+    const box = document.getElementById('detailView');
+    const post = allPosts[postId];
+
+    if (!post) {
+        box.innerHTML = `<a class="back-link" href="community.html">← رجوع للمجتمع</a><div class="empty-box"><span class="ee-icon">❓</span><h3 style="color:var(--text-main)">المنشور مش موجود</h3></div>`;
+        return;
+    }
+
+    const brief = await getUserBrief(post.authorUid);
+    const score = scoreOf(post);
+    const myVote = (post.votes || {})[currentUser.uid] || 0;
+    const isMine = post.authorUid === currentUser.uid;
+
+    box.innerHTML = `
+        <a class="back-link" href="community.html">← رجوع للمجتمع</a>
+        <div class="post-detail-card">
+            <span class="post-cat-pill">${CAT_LABELS[post.category] || post.category}</span>
+            <div class="pd-title">${escapeHTML(post.title)}</div>
+            <div class="pd-body">${escapeHTML(post.body)}</div>
+            <div class="pd-meta">
+                <div class="pd-author">
+                    <span class="pd-avatar">${avatarHTML(brief.photo, brief.name)}</span>
+                    <span>${brief.name}</span>
+                </div>
+                <span>🕐 ${timeAgo(post.timestamp)}</span>
+                <div class="pd-vote-row">
+                    <button class="vote-btn up ${myVote === 1 ? 'voted' : ''}" id="pdUp">▲</button>
+                    <span class="vote-score">${score}</span>
+                    <button class="vote-btn down ${myVote === -1 ? 'voted' : ''}" id="pdDown">▼</button>
+                </div>
+                ${isMine ? `<button class="delete-post-btn" id="pdDelete">🗑️ حذف المنشور</button>` : ''}
+            </div>
+        </div>
+
+        <div class="comments-section">
+            <div class="comments-count-title" id="commentsCountTitle">💬 التعليقات</div>
+            <div class="comment-form">
+                <textarea id="commentInput" placeholder="اكتب تعليقك..." maxlength="1000"></textarea>
+                <button class="comment-submit-btn" id="submitCommentBtn">إرسال</button>
+            </div>
+            <div id="commentsList"><div class="loading-box">⏳ جارٍ التحميل...</div></div>
+        </div>
+    `;
+
+    document.getElementById('pdUp').onclick   = async () => { await castVote(postId, 1);  renderDetail(postId); };
+    document.getElementById('pdDown').onclick = async () => { await castVote(postId, -1); renderDetail(postId); };
+    if (isMine) document.getElementById('pdDelete').onclick = () => deletePost(postId);
+
+    document.getElementById('submitCommentBtn').onclick = () => submitComment(postId);
+
+    await loadComments(postId);
+}
+
+async function deletePost(postId) {
+    if (!confirm('حذف هذا المنشور نهائيًا؟ هيتشال مع كل تعليقاته.')) return;
+    await remove(ref(db, `communityPosts/${postId}`));
+    await remove(ref(db, `communityComments/${postId}`));
+    location.href = 'community.html';
+}
+
+/* ============================================================
+   Comments
+   ============================================================ */
+
+async function loadComments(postId) {
+    const listBox = document.getElementById('commentsList');
+    const snap = await get(ref(db, `communityComments/${postId}`));
+    const comments = snap.exists() ? Object.entries(snap.val()) : [];
+
+    document.getElementById('commentsCountTitle').innerText = `💬 التعليقات (${comments.length})`;
+
+    if (!comments.length) {
+        listBox.innerHTML = `<div style="color:var(--text-muted);font-size:0.85rem;padding:20px 0;text-align:center">لسه مفيش تعليقات — كن أول من يعلّق!</div>`;
+        return;
+    }
+
+    comments.sort((a, b) => (a[1].timestamp || 0) - (b[1].timestamp || 0));
+    listBox.innerHTML = '';
+
+    for (const [cid, c] of comments) {
+        const brief = await getUserBrief(c.authorUid);
+        const isMine = c.authorUid === currentUser.uid;
+        const item = document.createElement('div');
+        item.className = 'comment-item';
+        item.innerHTML = `
+            <span class="cm-avatar">${avatarHTML(brief.photo, brief.name)}</span>
+            <div class="cm-body">
+                <div class="cm-head">
+                    <span class="cm-name">${brief.name}</span>
+                    <span class="cm-time">${timeAgo(c.timestamp)}</span>
+                    ${isMine ? `<button class="cm-del-btn" data-cid="${cid}">حذف</button>` : ''}
+                </div>
+                <div class="cm-text">${escapeHTML(c.text)}</div>
+            </div>
+        `;
+        if (isMine) {
+            item.querySelector('.cm-del-btn').onclick = () => deleteComment(postId, cid);
+        }
+        listBox.appendChild(item);
+    }
+}
+
+async function submitComment(postId) {
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if (!text) { toast('❌ اكتب تعليق الأول'); return; }
+
+    const btn = document.getElementById('submitCommentBtn');
+    btn.disabled = true;
+
+    try {
+        const authorName = currentUser.email.split('@')[0];
+        const newRef = push(ref(db, `communityComments/${postId}`));
+        await set(newRef, { text, authorUid: currentUser.uid, authorName, timestamp: Date.now() });
+
+        const newCount = (allPosts[postId].commentCount || 0) + 1;
+        await update(ref(db, `communityPosts/${postId}`), { commentCount: newCount });
+        allPosts[postId].commentCount = newCount;
+
+        await addPointsWithLog(currentUser.uid, 1, 'community_comment', 'تعليق في المجتمع');
+
+        input.value = '';
+        await loadComments(postId);
+        toast('✅ تم إضافة تعليقك');
+    } catch (err) {
+        toast('❌ حصل خطأ: ' + err.message);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function deleteComment(postId, cid) {
+    if (!confirm('حذف هذا التعليق؟')) return;
+    await remove(ref(db, `communityComments/${postId}/${cid}`));
+    const newCount = Math.max(0, (allPosts[postId].commentCount || 1) - 1);
+    await update(ref(db, `communityPosts/${postId}`), { commentCount: newCount });
+    allPosts[postId].commentCount = newCount;
+    await loadComments(postId);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="styles.css">
+<title>تسجيل الدخول أو إنشاء حساب</title>
+<style>
+    /* تحسين شكل زر جوجل */
+    #googleLoginBtn {
+        background-color: #fff;
+        color: #757575;
+        border: 1px solid #ddd;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: bold;
+        margin-top: 10px;
+        width: 100%;
+        transition: background-color 0.3s;
+    }
+    #googleLoginBtn:hover {
+        background-color: #f8f9fa;
+    }
+    #msg {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        display: none;
+    }
+    .error-msg {
+        background-color: #ffebee;
+        color: #c62828;
+        display: block !important;
+    }
+</style>
+</head>
+<body>
+
+<div id="authContainer">
+    <h1>تسجيل الدخول إلى CCRAFT SPACE</h1>
+    <p>هذه الصفحة خاصة بحسابات موقع CCRAFT SPACE فقط</p>
+
+    <button id="googleLoginBtn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" width="18">
+        تسجيل الدخول عبر جوجل
+    </button>
+
+    <p id="msg"></p>
+    <button id="privacy" class="nav-button" onclick="location.href='privacy.html'">سياسة الخصوصية</button>
+    <button id="home" class="nav-button" onclick="location.href='index.html'">رجوع للصفحة الرئيسية</button>
+</div>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+// ⚠️ حط الـ anon key بتاعك هنا (من Supabase Dashboard > Project Settings > API)
+// الـ URL ده مستخرج من الـ callback اللي بعتّه
+const SUPABASE_URL = "https://nthqrfsdshsreqdoksyv.supabase.co";
+const SUPABASE_ANON_KEY = "ضع_ANON_KEY_هنا";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// لو المستخدم لسه ما اختارش اسم مستخدم، نبعته لصفحة البروفايل
+// عشان يظهر له فورًا فورم "اختر اسم مستخدم" (الإجباري) بدل ما يشوف بريده الإلكتروني في أي مكان
+let redirecting = false;
+
+const googleLoginBtn = document.getElementById("googleLoginBtn");
+const msg = document.getElementById("msg");
+const authContainer = document.getElementById("authContainer");
+
+function showMessage(text, isError = true) {
+    msg.textContent = text;
+    msg.className = isError ? "error-msg" : "";
+    msg.style.display = "block";
+}
+
+// دالة موحدة تتنفذ بعد أي تسجيل دخول (سواء أول مرة أو رجوع بعد الـ redirect)
+async function handleUser(user) {
+    if (!user) {
+        localStorage.removeItem("currentUser");
+        return;
+    }
+
+    // 🚫 تحقق إن الحساب مش محظور — لو محظور، خروج فوري ومنعه من استخدام أي حاجة
+    try {
+        const { data: profile, error } = await supabase
+            .from("profiles")
+            .select("banned, username")
+            .eq("id", user.id)
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (profile?.banned === true) {
+            await supabase.auth.signOut();
+            localStorage.removeItem("currentUser");
+            showMessage("🚫 حسابك محظور من CCRAFT SPACE. لو ده خطأ، تواصل مع الإدارة.");
+            return;
+        }
+
+        localStorage.setItem("currentUser", user.id);
+
+        // تحديث بيانات المستخدم في جدول profiles
+        // ملاحظة: ما بنخزّنش الإيميل خالص من هنا ولا في أي مكان تاني في الموقع
+        await supabase.from("profiles").upsert({
+            id: user.id,
+            display_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+            photo_url: user.user_metadata?.avatar_url || null,
+            last_login: new Date().toISOString()
+        });
+
+        const hasUsername = !!profile?.username;
+
+        if (!hasUsername) {
+            // يظهر له فورم اختيار الاسم في صفحة البروفايل (إجباري هناك)
+            redirecting = true;
+            location.href = "profile.html";
+            return;
+        }
+
+        showLoggedInView(user);
+    } catch (e) {
+        // لو التحقق فشل لأي سبب، منكملش تسجيل دخول بأمان
+        console.error(e);
+    }
+}
+
+function showLoggedInView(user){
+    if (redirecting) return;
+    const name = user.user_metadata?.full_name || user.user_metadata?.name || "مجهول";
+    authContainer.innerHTML = `
+        <h2>مرحبا بك ${name}!</h2>
+        <button id="logoutBtn">تسجيل خروج</button>
+        <button onclick="location.href='index.html'">الصفحة الرئيسية</button>
+    `;
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", async ()=>{
+        try{
+            await supabase.auth.signOut();
+            window.location.reload();
+        }catch(e){
+            alert("حدث خطأ أثناء تسجيل الخروج");
+        }
+    });
+}
+
+// مراقبة حالة المصادقة (بتتفعل أول ما الصفحة تفتح، وكمان بعد الرجوع من جوجل)
+supabase.auth.onAuthStateChange((event, session) => {
+    handleUser(session?.user ?? null);
+});
+
+// تحقق من وجود جلسة حالية عند تحميل الصفحة لأول مرة
+supabase.auth.getSession().then(({ data: { session } }) => {
+    handleUser(session?.user ?? null);
+});
+
+// تسجيل الدخول عبر جوجل
+googleLoginBtn.addEventListener("click", async () => {
+    try {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+                redirectTo: window.location.href
+            }
+        });
+        if (error) throw error;
+        // هيحصل تحويل (redirect) لصفحة جوجل، وبعد الموافقة هيرجع تاني للصفحة دي
+        // وهيتم التعامل مع النتيجة تلقائيًا في onAuthStateChange فوق
+    } catch (error) {
+        console.error("Google Login Error:", error);
+        showMessage("فشل تسجيل الدخول عبر جوجل: " + error.message);
+    }
+});
+</script>
+</body>
+</html>

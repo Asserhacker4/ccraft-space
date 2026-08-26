@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9131038282158705" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCRAFT SPACE | منصة سكربتات Roblox العربية</title>
+    <meta property="og:site_name" content="CCRAFT SPACE">
+    <meta name="application-name" content="CCRAFT SPACE">
+    <meta name="description" content="أفضل منصة عربية لسكربتات Roblox — سكربتات، بادجات، ذكاء اصطناعي، وأكثر">
+    <meta property="og:title" content="CCRAFT SPACE">
+    <meta property="og:image" content="https://ccraftspace.github.io/cCraft.jpg">
+    <meta property="og:type" content="website">
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <link rel="icon" type="image/jpeg" href="cCraft.jpg">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --ink:    #07080f;
+    --ink2:   #0c0e1c;
+    --ink3:   #131628;
+    --violet: #8b5cf6;
+    --cyan:   #00f2fe;
+    --pink:   #f472b6;
+    --gold:   #fbbf24;
+    --green:  #4ade80;
+    --red:    #f87171;
+    --hi:     #f0f0ff;
+    --mid:    #7878a0;
+    --lo:     #3a3a52;
+    --border: rgba(255,255,255,0.07);
+    --glow-v: rgba(139,92,246,0.18);
+    --glow-c: rgba(0,242,254,0.12);
+    --tr:     all 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--ink);
+    color: var(--hi);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+header { display: none; }
+
+.bg-canvas {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        radial-gradient(ellipse 100% 70% at 15% 10%, rgba(139,92,246,0.09) 0%, transparent 60%),
+        radial-gradient(ellipse 80%  60% at 85% 80%, rgba(0,242,254,0.07)  0%, transparent 60%),
+        radial-gradient(ellipse 60%  50% at 50% 50%, rgba(244,114,182,0.04) 0%, transparent 60%),
+        var(--ink);
+}
+
+.stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.star {
+    position: absolute; border-radius: 50%;
+    background: white; opacity: 0;
+    animation: twinkle var(--d, 4s) var(--del, 0s) ease infinite;
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: var(--op, 0.6); transform: scale(1); }
+}
+
+.orb {
+    position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+    filter: blur(80px); animation: drift var(--dt, 12s) ease infinite alternate;
+}
+@keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(var(--tx, 40px), var(--ty, 30px)) scale(var(--sc, 1.1)); }
+}
+
+.hero {
+    position: relative; z-index: 1;
+    min-height: 100svh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 20px 24px;
+    text-align: center;
+    transition: padding-top 0.3s ease;
+}
+
+.logo-wrap {
+    position: relative; display: inline-block;
+    margin-bottom: 30px;
+}
+
+.logo-ring {
+    position: absolute; inset: -12px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #8b5cf6, #00f2fe, #f472b6, #8b5cf6);
+    animation: spin-ring 6s linear infinite;
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 3px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 3px));
+    opacity: 0.7;
+}
+
+@keyframes spin-ring { to { transform: rotate(360deg); } }
+
+.logo-glow-ring {
+    position: absolute; inset: -24px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%);
+    animation: pulse-glow 3s ease infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
+
+.site-logo {
+    width: 130px; height: 130px; border-radius: 50%;
+    object-fit: cover; display: block; position: relative; z-index: 1;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    animation: logoIn 0.8s cubic-bezier(0.175,0.885,0.32,1.275) both;
+    transition: transform 0.3s ease;
+}
+
+.site-logo:hover { transform: scale(1.08) rotate(4deg); }
+
+@keyframes logoIn {
+    from { opacity: 0; transform: scale(0.4) rotate(-20deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+.hero-title {
+    font-size: clamp(2.4rem, 8vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    position: relative; z-index: 1;
+    animation: fadeUp 0.7s 0.2s ease both;
+    letter-spacing: -0.02em;
+}
+
+.title-cc { background: linear-gradient(135deg, #a78bfa 0%, #00f2fe 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.title-raft { color: rgba(240,240,255,0.9); }
+
+.hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 50px; padding: 5px 14px;
+    font-size: 0.75rem; font-weight: 800; color: #a78bfa;
+    margin-bottom: 16px; position: relative; z-index: 1;
+    animation: fadeUp 0.7s 0.3s ease both;
+    letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+.hero-sub {
+    color: var(--mid); font-size: clamp(0.88rem, 2.5vw, 1.05rem);
+    line-height: 1.85; max-width: 480px; margin: 0 auto 28px;
+    position: relative; z-index: 1;
+    animation: fadeUp 0.7s 0.4s ease both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.stats-bar {
+    display: flex; align-items: center; gap: 0;
+    background: rgba(13,14,28,0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0; margin-bottom: 36px;
+    position: relative; z-index: 1;
+    animation: fadeUp 0.7s 0.5s ease both;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.sb-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 18px; font-size: 0.8rem; color: var(--mid);
+    white-space: nowrap; position: relative;
+}
+
+.sb-item + .sb-item::before {
+    content: ''; position: absolute; right: 0; top: 20%; bottom: 20%;
+    width: 1px; background: var(--border);
+}
+
+.sb-val {
+    font-weight: 900; font-size: 0.92rem;
+    background: linear-gradient(135deg, #a78bfa, #67e8f9);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px rgba(74,222,128,0.8);
+    animation: live-pulse 1.5s ease infinite;
+}
+
+@keyframes live-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(74,222,128,0.8); }
+    50% { opacity: 0.3; box-shadow: none; }
+}
+
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 9px;
+    width: min(780px, 95%);
+    position: relative; z-index: 1;
+    animation: fadeUp 0.7s 0.55s ease both;
+}
+
+.nav-btn {
+    position: relative;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 7px; padding: 17px 10px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.025);
+    cursor: pointer; color: var(--hi);
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 800; font-size: 0.8rem;
+    overflow: hidden; text-align: center;
+    transition: var(--tr);
+    animation: navIn 0.45s ease both;
+    backdrop-filter: blur(4px);
+}
+
+.nav-btn::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--nb-color, rgba(139,92,246,0.12));
+    opacity: 0; transition: opacity 0.22s;
+}
+
+.nav-btn:hover { transform: translateY(-6px) scale(1.03); filter: none; box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px var(--nb-glow, rgba(139,92,246,0.35)); }
+.nav-btn:hover::after { opacity: 1; }
+.nav-btn:active { transform: scale(0.96); }
+
+.nav-btn::before {
+    content: ''; position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    transition: left 0.5s ease;
+}
+.nav-btn:hover::before { left: 100%; }
+
+.nb-icon { font-size: 1.55rem; line-height: 1; position: relative; z-index: 1; }
+.nb-label { position: relative; z-index: 1; line-height: 1.2; }
+
+.nav-btn-badge {
+    position: absolute; top: 6px; left: 6px; z-index: 2;
+    background: linear-gradient(135deg, #f87171, #fbbf24);
+    color: #07080f; font-size: 0.55rem; font-weight: 900;
+    padding: 2px 7px; border-radius: 50px;
+    letter-spacing: 0.3px;
+    animation: badgePulse 1.6s ease infinite;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.12); opacity: 0.85; }
+}
+
+.nav-btn.c-violet  { border-bottom: 2.5px solid #8b5cf6; --nb-color: rgba(139,92,246,0.1); --nb-glow: rgba(139,92,246,0.4); }
+.nav-btn.c-cyan    { border-bottom: 2.5px solid #00f2fe; --nb-color: rgba(0,242,254,0.08); --nb-glow: rgba(0,242,254,0.35); }
+.nav-btn.c-pink    { border-bottom: 2.5px solid #f472b6; --nb-color: rgba(244,114,182,0.08); --nb-glow: rgba(244,114,182,0.35); }
+.nav-btn.c-orange  { border-bottom: 2.5px solid #fb923c; --nb-color: rgba(251,146,60,0.08);  --nb-glow: rgba(251,146,60,0.35); }
+.nav-btn.c-indigo  { border-bottom: 2.5px solid #818cf8; --nb-color: rgba(129,140,248,0.08); --nb-glow: rgba(129,140,248,0.35); }
+.nav-btn.c-gold    { border-bottom: 2.5px solid #fbbf24; --nb-color: rgba(251,191,36,0.08);  --nb-glow: rgba(251,191,36,0.35); }
+.nav-btn.c-green   { border-bottom: 2.5px solid #4ade80; --nb-color: rgba(74,222,128,0.08);  --nb-glow: rgba(74,222,128,0.35); }
+.nav-btn.c-red     { border-bottom: 2.5px solid #f87171; --nb-color: rgba(248,113,113,0.08); --nb-glow: rgba(248,113,113,0.35); }
+.nav-btn.c-purple  { border-bottom: 2.5px solid #a78bfa; --nb-color: rgba(167,139,250,0.1);  --nb-glow: rgba(167,139,250,0.35); }
+.nav-btn.c-emerald { border-bottom: 2.5px solid #34d399; --nb-color: rgba(52,211,153,0.08);  --nb-glow: rgba(52,211,153,0.35); }
+.nav-btn.c-blue    { border-bottom: 2.5px solid #60a5fa; --nb-color: rgba(96,165,250,0.08);  --nb-glow: rgba(96,165,250,0.35); }
+.nav-btn.c-rose    { border-bottom: 2.5px solid #fb7185; --nb-color: rgba(251,113,133,0.08); --nb-glow: rgba(251,113,133,0.35); }
+.nav-btn.c-teal    { border-bottom: 2.5px solid #2dd4bf; --nb-color: rgba(45,212,191,0.08);  --nb-glow: rgba(45,212,191,0.35); }
+
+.nav-btn.wide-2 { grid-column: span 2; flex-direction: row; gap: 10px; padding: 14px 20px; justify-content: center; }
+
+.nav-btn.c-special {
+    grid-column: span 2;
+    background: linear-gradient(135deg, rgba(244,114,182,0.08), rgba(139,92,246,0.06));
+    border: 1px solid rgba(244,114,182,0.2);
+    border-bottom: 2.5px solid #f472b6;
+    --nb-glow: rgba(244,114,182,0.4);
+}
+
+.nav-btn.c-apk {
+    background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(0,242,254,0.06));
+    border: 1px solid rgba(74,222,128,0.25);
+    border-bottom: 2.5px solid #4ade80;
+    --nb-glow: rgba(74,222,128,0.4);
+}
+
+.nav-btn.c-partner {
+    background: linear-gradient(135deg, rgba(251,146,60,0.12), rgba(244,114,182,0.08));
+    border: 1px solid rgba(251,146,60,0.3);
+    border-bottom: 2.5px solid #fb923c;
+    --nb-glow: rgba(251,146,60,0.45);
+}
+
+.nav-btn.c-market {
+    background: linear-gradient(135deg, rgba(251,191,36,0.14), rgba(245,158,11,0.08));
+    border: 1px solid rgba(251,191,36,0.35);
+    border-bottom: 2.5px solid #fbbf24;
+    --nb-glow: rgba(251,191,36,0.5);
+}
+
+.nav-btn.c-safety {
+    background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(139,92,246,0.06));
+    border: 1px solid rgba(56,189,248,0.3);
+    border-bottom: 2.5px solid #38bdf8;
+    --nb-glow: rgba(56,189,248,0.45);
+}
+
+@keyframes navIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.92); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.nav-btn:nth-of-type(1)  { animation-delay: 0.56s }
+.nav-btn:nth-of-type(2)  { animation-delay: 0.60s }
+.nav-btn:nth-of-type(3)  { animation-delay: 0.64s }
+.nav-btn:nth-of-type(4)  { animation-delay: 0.68s }
+.nav-btn:nth-of-type(5)  { animation-delay: 0.72s }
+.nav-btn:nth-of-type(6)  { animation-delay: 0.76s }
+.nav-btn:nth-of-type(7)  { animation-delay: 0.80s }
+.nav-btn:nth-of-type(8)  { animation-delay: 0.84s }
+.nav-btn:nth-of-type(9)  { animation-delay: 0.88s }
+.nav-btn:nth-of-type(10) { animation-delay: 0.92s }
+.nav-btn:nth-of-type(11) { animation-delay: 0.96s }
+.nav-btn:nth-of-type(12) { animation-delay: 1.00s }
+.nav-btn:nth-of-type(13) { animation-delay: 1.04s }
+.nav-btn:nth-of-type(14) { animation-delay: 1.08s }
+.nav-btn:nth-of-type(15) { animation-delay: 1.12s }
+.nav-btn:nth-of-type(16) { animation-delay: 1.16s }
+.nav-btn:nth-of-type(17) { animation-delay: 1.20s }
+.nav-btn:nth-of-type(18) { animation-delay: 1.24s }
+
+.nav-group-label {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.68rem; font-weight: 900; color: var(--mid);
+    text-transform: uppercase; letter-spacing: 1px;
+    padding: 2px 2px 0; margin-top: 6px;
+}
+.nav-group-label:first-child { margin-top: 0; }
+.nav-group-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.scroll-hint {
+    position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--lo); font-size: 0.65rem; font-weight: 700; letter-spacing: 1px;
+    animation: bounce 2s ease infinite; z-index: 1;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+}
+
+.content-wrap {
+    position: relative; z-index: 1;
+    max-width: 920px; margin: 0 auto;
+    padding: 0 20px 80px;
+}
+
+.ann-banner {
+    display: none;
+    background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.07));
+    border: 1px solid rgba(139,92,246,0.28);
+    border-radius: 16px; padding: 14px 18px;
+    margin-bottom: 8px;
+    align-items: center; gap: 12px;
+    animation: fadeUp 0.5s ease both;
+    position: relative; overflow: hidden;
+}
+
+.ann-banner::before {
+    content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+    width: 3px; background: linear-gradient(to bottom, #8b5cf6, #00f2fe);
+}
+
+.ann-banner.show { display: flex; }
+.ann-icon { font-size: 1.2rem; flex-shrink: 0; }
+.ann-text { flex: 1; font-size: 0.88rem; color: var(--hi); line-height: 1.5; }
+.ann-close { background: none; border: none; color: var(--lo); cursor: pointer; font-size: 1rem; margin: 0; padding: 0; transition: color 0.2s; }
+.ann-close:hover { color: var(--red); }
+
+.sec-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 52px 0 18px;
+}
+
+.sec-head h3 {
+    font-size: 0.88rem; font-weight: 900; color: var(--hi);
+    display: flex; align-items: center; gap: 9px;
+    text-transform: uppercase; letter-spacing: 1px;
+}
+
+.sec-head h3::before {
+    content: ''; width: 3px; height: 18px; border-radius: 2px;
+    background: linear-gradient(to bottom, #8b5cf6, #00f2fe);
+}
+
+.sec-all {
+    font-size: 0.75rem; font-weight: 800; color: var(--violet);
+    background: none; border: none; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; padding: 6px 12px;
+    border-radius: 8px; transition: var(--tr); margin: 0;
+}
+.sec-all:hover { background: rgba(139,92,246,0.12); color: var(--hi); transform: none; filter: none; }
+
+.scripts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+    gap: 12px;
+}
+
+.feat-card {
+    background: rgba(13,14,28,0.6);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px;
+    cursor: pointer; transition: var(--tr);
+    position: relative; overflow: hidden;
+    backdrop-filter: blur(8px);
+}
+
+.feat-card::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, #8b5cf6, transparent);
+    opacity: 0; transition: opacity 0.3s;
+}
+
+.feat-card:hover {
+    border-color: rgba(139,92,246,0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(139,92,246,0.12);
+}
+
+.feat-card:hover::before { opacity: 1; }
+
+.fc-title {
+    font-size: 0.92rem; font-weight: 800; color: var(--hi);
+    margin-bottom: 8px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+}
+
+.fc-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+.fc-cat {
+    background: rgba(139,92,246,0.12); color: #a78bfa;
+    padding: 2px 9px; border-radius: 50px;
+    font-size: 0.65rem; font-weight: 800;
+    border: 1px solid rgba(139,92,246,0.2);
+}
+
+.fc-map {
+    background: rgba(0,242,254,0.07); color: #67e8f9;
+    padding: 2px 9px; border-radius: 50px;
+    font-size: 0.65rem; font-weight: 800;
+    border: 1px solid rgba(0,242,254,0.18);
+}
+
+.fc-stat { font-size: 0.7rem; color: var(--lo); }
+
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px;
+}
+
+.user-card {
+    background: rgba(13,14,28,0.6);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; transition: var(--tr);
+    backdrop-filter: blur(8px);
+}
+
+.user-card:hover {
+    border-color: rgba(139,92,246,0.28);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+}
+
+.uc-rank {
+    font-size: 1.1rem; font-weight: 900;
+    flex-shrink: 0; min-width: 22px; text-align: center;
+}
+.uc-rank.gold   { color: #ffd700; filter: drop-shadow(0 0 6px rgba(255,215,0,0.5)); }
+.uc-rank.silver { color: #c0c0c0; }
+.uc-rank.bronze { color: #cd7f32; }
+
+.uc-av {
+    width: 36px; height: 36px; border-radius: 50%;
+    overflow: hidden; flex-shrink: 0;
+    border: 2px solid rgba(139,92,246,0.3);
+    background: var(--ink3);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 0.85rem;
+}
+
+.uc-info { flex: 1; min-width: 0; }
+.uc-name { font-size: 0.82rem; font-weight: 800; color: var(--hi); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.uc-stat { font-size: 0.68rem; color: var(--lo); margin-top: 1px; }
+
+.pages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+}
+
+.page-card {
+    background: rgba(13,14,28,0.6);
+    border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+    cursor: pointer; transition: var(--tr);
+    backdrop-filter: blur(8px);
+}
+
+.page-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.4); }
+
+.pc-banner {
+    height: 68px; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 2.2rem;
+}
+
+.pc-body { padding: 10px 12px; }
+.pc-name  { font-size: 0.82rem; font-weight: 800; color: var(--hi); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pc-meta  { font-size: 0.65rem; color: var(--lo); margin-top: 1px; }
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.action-card {
+    background: rgba(13,14,28,0.6);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px;
+    cursor: pointer; transition: var(--tr);
+    display: flex; align-items: center; gap: 14px;
+    position: relative; overflow: hidden;
+    backdrop-filter: blur(8px);
+}
+
+.action-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--ac-color, rgba(139,92,246,0.3)), transparent);
+}
+
+.action-card:hover {
+    border-color: var(--ac-color, rgba(139,92,246,0.3));
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.4);
+}
+
+.ac-icon { font-size: 1.9rem; flex-shrink: 0; }
+.ac-title { font-size: 0.88rem; font-weight: 800; color: var(--hi); margin-bottom: 3px; }
+.ac-desc  { font-size: 0.7rem; color: var(--lo); line-height: 1.5; }
+
+.site-footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 36px 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+}
+
+.footer-links {
+    display: flex; justify-content: center; gap: 20px;
+    margin-bottom: 14px; flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--lo); text-decoration: none;
+    font-size: 0.76rem; font-weight: 700;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--violet); }
+
+.footer-copy {
+    font-size: 0.72rem; color: var(--lo);
+    font-weight: 700; letter-spacing: 0.5px;
+}
+
+@media (max-width: 640px) {
+    .nav-grid { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .nav-btn  { padding: 13px 6px; font-size: 0.73rem; border-radius: 14px; }
+    .nb-icon  { font-size: 1.3rem; }
+    .nav-btn.wide-2, .nav-btn.c-special { grid-column: span 2; }
+    .stats-bar { flex-wrap: wrap; border-radius: 16px; }
+    .sb-item + .sb-item::before { display: none; }
+    .sb-item { padding: 8px 12px; }
+    .scripts-grid { grid-template-columns: 1fr; }
+    .users-grid   { grid-template-columns: 1fr 1fr; }
+    .actions-grid { grid-template-columns: 1fr; }
+    .site-logo { width: 110px; height: 110px; }
+    .hero { padding: 30px 14px 20px; }
+}
+
+.discord-modal-overlay {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.discord-modal-overlay.open { display: flex; }
+
+.discord-modal-box {
+    background: rgba(13,14,28,0.96); border: 1px solid rgba(88,101,242,0.35);
+    border-radius: 22px; padding: 32px 28px; width: 100%; max-width: 380px;
+    text-align: center; position: relative; overflow: hidden;
+    animation: discordPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+}
+@keyframes discordPop {
+    from { opacity: 0; transform: scale(0.9) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.discord-modal-box::before {
+    content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 2px;
+    background: linear-gradient(90deg, transparent, #5865F2, transparent);
+}
+.discord-close-btn {
+    position: absolute; top: 14px; left: 14px;
+    background: none; border: none; color: var(--mid);
+    font-size: 1.1rem; cursor: pointer; margin: 0; padding: 4px; line-height: 1;
+    transition: color 0.2s;
+}
+.discord-close-btn:hover { color: var(--hi); filter: none; transform: none; }
+
+.discord-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, #5865F2, #7289da);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; margin: 0 auto 16px;
+    box-shadow: 0 8px 24px rgba(88,101,242,0.45);
+}
+.discord-modal-box h3 {
+    font-size: 1.2rem; font-weight: 900; color: var(--hi); margin-bottom: 8px;
+}
+.discord-modal-box p {
+    font-size: 0.85rem; color: var(--mid); line-height: 1.75; margin-bottom: 22px;
+}
+.discord-join-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; background: linear-gradient(135deg, #5865F2, #4752c4);
+    color: white; border: none; border-radius: 14px; padding: 13px;
+    font-size: 0.92rem; font-weight: 800; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; margin: 0; text-decoration: none;
+    box-shadow: 0 8px 22px rgba(88,101,242,0.4); transition: var(--tr);
+}
+.discord-join-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.discord-later-btn {
+    display: block; margin: 12px auto 0; background: none; border: none;
+    color: var(--lo); font-size: 0.78rem; font-weight: 700; cursor: pointer;
+    font-family: 'Tajawal', sans-serif; padding: 4px;
+}
+.discord-later-btn:hover { color: var(--mid); filter: none; transform: none; }
+
+/* Roblox Link Modal — inputs */
+#robloxLinkModal input {
+    width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: var(--hi);
+    font-family: 'Tajawal', sans-serif; font-size: 0.9rem;
+}
+
+/* ---- Notifications widget (replaces the old language toggle) ---- */
+#notifWidget { position: fixed; top: 14px; right: 14px; z-index: 999; }
+#notifBellBtn {
+    position: relative;
+    background: rgba(13,14,28,0.85); backdrop-filter: blur(10px);
+    border: 1px solid rgba(139,92,246,0.3); border-radius: 50%;
+    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    color: #f0f0ff; font-size: 1.15rem; cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35); transition: var(--tr); margin: 0; padding: 0;
+}
+#notifBellBtn:hover { border-color: rgba(139,92,246,0.55); transform: translateY(-1px); filter: none; }
+#notifBadge {
+    position: absolute; top: -3px; left: -3px;
+    min-width: 17px; height: 17px; border-radius: 50px;
+    background: linear-gradient(135deg, #f87171, #fbbf24);
+    color: #07080f; font-size: 0.62rem; font-weight: 900;
+    display: none; align-items: center; justify-content: center; padding: 0 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+#notifBadge.show { display: flex; }
+#notifPanel {
+    display: none; position: absolute; top: 48px; right: 0;
+    width: min(320px, 88vw); max-height: 380px; overflow-y: auto;
+    background: rgba(13,14,28,0.97); backdrop-filter: blur(16px);
+    border: 1px solid rgba(139,92,246,0.28); border-radius: 16px;
+    padding: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+}
+#notifPanel.open { display: block; }
+.notif-head { font-size: 0.78rem; font-weight: 900; color: var(--hi); padding: 6px 8px 10px; display: flex; align-items: center; gap: 8px; }
+.notif-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.notif-empty { text-align: center; color: var(--lo); font-size: 0.8rem; padding: 24px 10px; }
+.notif-item { padding: 10px 10px; border-radius: 10px; margin-bottom: 4px; transition: var(--tr); }
+.notif-item:hover { background: rgba(139,92,246,0.08); }
+.notif-item .ni-text { font-size: 0.82rem; color: var(--hi); line-height: 1.55; }
+.notif-item .ni-time { font-size: 0.68rem; color: var(--lo); margin-top: 4px; }
+.notif-item.unread { background: rgba(139,92,246,0.06); border: 1px solid rgba(139,92,246,0.2); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<!-- Notifications -->
+<div id="notifWidget">
+  <button id="notifBellBtn" type="button" onclick="toggleNotifPanel()" aria-label="الإشعارات">
+    <i class="fa-solid fa-bell"></i>
+    <span id="notifBadge">0</span>
+  </button>
+  <div id="notifPanel">
+    <div class="notif-head"><i class="fa-solid fa-bell"></i> الإشعارات</div>
+    <div id="notifList"><div class="notif-empty">جارٍ التحميل...</div></div>
+  </div>
+</div>
+
+<!-- Top-corner account widget -->
+<div id="topAccountWidget" style="position:fixed;top:14px;left:14px;z-index:250;">
+  <button id="linkRobloxBtn" type="button" onclick="openRobloxLinkModal()"
+    style="background:rgba(13,14,28,0.85);backdrop-filter:blur(10px);
+    border:1px solid rgba(139,92,246,0.3);border-radius:50px;padding:8px 16px;
+    color:#f0f0ff;font-family:'Tajawal',sans-serif;font-weight:800;font-size:0.78rem;
+    cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.35);">
+    <i class="fa-solid fa-link"></i> اربط حسابك
+  </button>
+
+  <div id="rlLinkedBadge" onclick="location.href='profile.html'" style="display:none;cursor:pointer;
+    align-items:center;gap:8px;background:rgba(13,14,28,0.85);backdrop-filter:blur(10px);
+    border:1px solid rgba(139,92,246,0.3);border-radius:50px;padding:5px 6px 5px 12px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.35);">
+    <span style="font-weight:800;font-size:0.78rem;color:#f0f0ff;" id="rlLinkedName"></span>
+    <img id="rlLinkedAvatar" src="" alt="" style="width:30px;height:30px;border-radius:50%;
+      object-fit:cover;border:2px solid rgba(139,92,246,0.4);">
+    <button type="button" onclick="unlinkRoblox(event)" title="حذف الربط" style="background:rgba(248,113,113,0.15);
+      border:1px solid rgba(248,113,113,0.35);border-radius:50%;width:20px;height:20px;
+      color:#f87171;font-size:0.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      margin:0;padding:0;flex-shrink:0;"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+</div>
+
+<div class="bg-canvas"></div>
+<div class="stars" id="stars"></div>
+<div class="orb" style="width:500px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(139,92,246,0.08),transparent 70%);--dt:10s;--tx:50px;--ty:40px;--sc:1.1"></div>
+<div class="orb" style="width:400px;height:400px;bottom:-80px;left:-80px;background:radial-gradient(circle,rgba(0,242,254,0.06),transparent 70%);--dt:14s;--tx:-40px;--ty:-30px;--sc:1.08"></div>
+
+<header></header>
+
+<section class="hero">
+
+    <div class="logo-wrap">
+        <div class="logo-glow-ring"></div>
+        <div class="logo-ring"></div>
+        <img src="cCraft.jpg" alt="CCRAFT SPACE" class="site-logo">
+    </div>
+
+    <div class="hero-badge">
+        <span class="live-dot"></span>
+        <span>منصة سكربتات Roblox العربية</span>
+    </div>
+
+    <h1 class="hero-title">
+        <span class="title-cc">CCRAFT</span><span class="title-raft"> SPACE</span>
+    </h1>
+
+    <p class="hero-sub"><i class="fa-solid fa-bolt"></i></p>
+
+    <div class="stats-bar">
+        <div class="sb-item"><div class="live-dot"></div> <span>مباشر</span></div>
+        <div class="sb-item"><i class="fa-solid fa-scroll"></i> <span class="sb-val" id="ls-scripts">—</span> <span>سكربت</span></div>
+        <div class="sb-item"><i class="fa-solid fa-users"></i> <span class="sb-val" id="ls-users">—</span> <span>مستخدم</span></div>
+        <div class="sb-item"><i class="fa-solid fa-thumbs-up"></i> <span class="sb-val" id="ls-likes">—</span> <span>لايك</span></div>
+        <div class="sb-item"><i class="fa-solid fa-circle" style="color:#4ade80;font-size:0.6em"></i> <span class="sb-val" id="ls-online">—</span> <span>أونلاين</span></div>
+        <div class="sb-item"><i class="fa-solid fa-file-circle-plus"></i> <span class="sb-val" id="ls-newscripts">—</span> <span>سكربت جديد اليوم</span></div>
+        <div class="sb-item"><i class="fa-solid fa-eye"></i> <span class="sb-val" id="ls-visitstoday">—</span> <span>زيارة اليوم</span></div>
+        <div class="sb-item"><i class="fa-solid fa-user-plus"></i> <span class="sb-val" id="ls-newusers">—</span> <span>يوزر جديد اليوم</span></div>
+    </div>
+
+    <nav class="nav-grid">
+        <div class="nav-group-label"><span><i class="fa-solid fa-bullseye"></i> الأساسيات</span></div>
+        <button class="nav-btn c-indigo"  onclick="location.href='scripts.html'">   <span class="nb-icon"><i class="fa-solid fa-scroll"></i></span><span class="nb-label">السكربتات</span></button>
+        <button class="nav-btn c-orange"  onclick="location.href='publish.html'">   <span class="nb-icon"><i class="fa-solid fa-upload"></i></span><span class="nb-label">نشر سكربت</span></button>
+        <button class="nav-btn c-safety"  onclick="location.href='script-safety-check.html'"><span class="nb-icon"><i class="fa-solid fa-shield-halved"></i></span><span class="nb-label"> أمان سكربتات</span></button>
+        <button class="nav-btn c-pink"    onclick="location.href='community.html'"><span class="nb-icon"><i class="fa-solid fa-comments"></i></span><span class="nb-label">المجتمع</span></button>
+        <button class="nav-btn c-rose"    onclick="window.open('https://t.me/cCraftspace','_blank')"><span class="nb-icon"><i class="fa-solid fa-paper-plane"></i></span><span class="nb-label">تلجرام</span></button>
+        <button class="nav-btn c-pink"    onclick="location.href='chat.html'"><span class="nb-icon"><i class="fa-solid fa-comments"></i></span><span class="nb-label">شات </span></button>
+        <button class="nav-btn c-purple"  onclick="location.href='hacks.html'">     <span class="nb-icon"><i class="fa-solid fa-bolt"></i></span><span class="nb-label">هاكات</span></button>
+
+        <div class="nav-group-label"><span><i class="fa-solid fa-code"></i> أدوات مطورين</span></div>
+        <button class="nav-btn c-cyan"    onclick="location.href='editor.html'">    <span class="nb-icon"><i class="fa-solid fa-code"></i></span><span class="nb-label">محرر الأكواد</span></button>
+        <button class="nav-btn c-teal"    onclick="location.href='api.html'">       <span class="nb-icon"><i class="fa-solid fa-key"></i></span><span class="nb-label">واجهة API</span></button>
+
+        <div class="nav-group-label"><span><i class="fa-solid fa-coins"></i> التبادل</span></div>
+        <button class="nav-btn c-market"  onclick="location.href='market.html'">   <span class="nav-btn-badge">جديد</span><span class="nb-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="nb-label">سوق التبادل</span></button>
+        <button class="nav-btn c-partner" onclick="location.href='partners.html'"> <span class="nav-btn-badge">جديد</span><span class="nb-icon"><i class="fa-solid fa-handshake"></i></span><span class="nb-label">شركاء التبادل</span></button>
+
+        <div class="nav-group-label"><span><i class="fa-solid fa-users"></i> المجتمع</span></div>
+        <button class="nav-btn c-gold"    onclick="location.href='leaderboard.html'"><span class="nb-icon"><i class="fa-solid fa-trophy"></i></span><span class="nb-label">ليدربورد</span></button>
+        <button class="nav-btn c-green"   onclick="location.href='top-badges.html'"><span class="nb-icon"><i class="fa-solid fa-medal"></i></span><span class="nb-label">بادجات</span></button>
+
+        <div class="nav-group-label"><span><i class="fa-solid fa-screwdriver-wrench"></i> أدوات</span></div>
+        <button class="nav-btn c-cyan"    onclick="location.href='nova.html'">      <span class="nb-icon"><i class="fa-solid fa-robot"></i></span><span class="nb-label">NOVA AI</span></button>
+        <button class="nav-btn c-apk"     onclick="location.href='apks.html'">      <span class="nav-btn-badge">جديد</span><span class="nb-icon"><i class="fa-solid fa-mobile-screen-button"></i></span><span class="nb-label">APK موديفايد</span></button>
+        
+        <div class="nav-group-label"><span><i class="fa-solid fa-user"></i> حسابك</span></div>
+        <button class="nav-btn c-violet"  onclick="location.href='profile.html'">   <span class="nb-icon"><i class="fa-solid fa-user"></i></span><span class="nb-label">بروفايلي</span></button>
+        <button class="nav-btn c-emerald" onclick="location.href='login.html'">     <span class="nb-icon"><i class="fa-solid fa-lock"></i></span><span class="nb-label">تسجيل الدخول</span></button>
+
+        <div class="nav-group-label"><span><i class="fa-solid fa-circle-info"></i> معلومات ودعم</span></div>
+        <button class="nav-btn c-red"     onclick="location.href='stats.html'">     <span class="nb-icon"><i class="fa-solid fa-chart-column"></i></span><span class="nb-label">إحصائيات</span></button>
+        <button class="nav-btn c-blue"    onclick="location.href='help.html'">      <span class="nb-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span><span class="nb-label">الدعم</span></button>
+        <button class="nav-btn c-rose"    onclick="window.open('https://t.me/cCraftspace','_blank')"><span class="nb-icon"><i class="fa-solid fa-paper-plane"></i></span><span class="nb-label">تلجرام</span></button>
+        <button class="nav-btn c-special" onclick="location.href='page-builder.html'"><span class="nb-icon"><i class="fa-solid fa-globe"></i></span><span class="nb-label">أنشئ صفحتك!</span></button>
+    </nav>
+
+    <div class="scroll-hint">▼ اكتشف المزيد</div>
+</section>
+
+<div class="content-wrap">
+
+    <div class="ann-banner" id="annBanner">
+        <span class="ann-icon"><i class="fa-solid fa-bullhorn"></i></span>
+        <div class="ann-text" id="annText">—</div>
+        <button class="ann-close" onclick="this.closest('.ann-banner').classList.remove('show')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="sec-head"><h3><span><i class="fa-solid fa-star"></i> سكربت اليوم المميز</span></h3></div>
+    <div class="feat-card" id="featuredToday">
+        <div style="color:var(--lo);text-align:center;padding:20px;font-size:0.8rem"><i class="fa-solid fa-spinner fa-spin"></i> جارٍ التحميل...</div>
+    </div>
+
+    <div class="sec-head">
+        <h3><span><i class="fa-solid fa-fire"></i> أحدث السكربتات</span></h3>
+        <button class="sec-all" onclick="location.href='scripts.html'">عرض الكل ←</button>
+    </div>
+    <div class="scripts-grid" id="featScripts">
+        <div style="color:var(--lo);text-align:center;padding:28px;grid-column:1/-1;font-size:0.82rem"><i class="fa-solid fa-spinner fa-spin"></i> جارٍ التحميل...</div>
+    </div>
+
+    <div class="sec-head">
+        <h3><span><i class="fa-solid fa-globe"></i> صفحات المستخدمين</span></h3>
+        <button class="sec-all" onclick="location.href='page-builder.html'">أنشئ صفحتك ←</button>
+    </div>
+    <div class="pages-grid" id="userPagesGallery">
+        <div style="color:var(--lo);text-align:center;padding:24px;grid-column:1/-1;font-size:0.8rem"><i class="fa-solid fa-spinner fa-spin"></i> جارٍ التحميل...</div>
+    </div>
+
+    <div class="sec-head"><h3><span><i class="fa-solid fa-bolt"></i> إجراءات سريعة</span></h3></div>
+    <div class="actions-grid">
+        <div class="action-card" onclick="location.href='publish.html'" style="--ac-color:rgba(139,92,246,0.3)">
+            <span class="ac-icon"><i class="fa-solid fa-upload"></i></span>
+            <div><div class="ac-title">انشر سكربت الآن</div><div class="ac-desc">شارك سكربتك واكسب لايكات وبادجات</div></div>
+        </div>
+        <div class="action-card" onclick="location.href='apks.html'" style="--ac-color:rgba(74,222,128,0.35)">
+            <span class="ac-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+            <div><div class="ac-title">تصفح تطبيقات APK</div><div class="ac-desc">ألعاب وتطبيقات أندرويد معدلة — تحديث جديد</div></div>
+        </div>
+        <div class="action-card" onclick="location.href='profile.html'" style="--ac-color:rgba(244,114,182,0.3)">
+            <span class="ac-icon"><i class="fa-solid fa-image"></i></span>
+            <div><div class="ac-title">غيّر صورة البروفايل</div><div class="ac-desc">ارفع صورتك الشخصية وتظهر في الشات والسكربتات</div></div>
+        </div>
+        <div class="action-card" onclick="location.href='nova.html'" style="--ac-color:rgba(0,242,254,0.25)">
+            <span class="ac-icon"><i class="fa-solid fa-robot"></i></span>
+            <div><div class="ac-title">اسأل NOVA AI</div><div class="ac-desc">مساعدة فورية في الكود والسكربتات</div></div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="site-footer">
+    <div class="footer-links">
+        <a href="scripts.html">السكربتات</a>
+        <a href="apks.html">APK Mods</a>
+        <a href="leaderboard.html">الليدربورد</a>
+        <a href="stats.html">الإحصائيات</a>
+        <a href="api.html">API</a>
+        <a href="help.html">الدعم</a>
+        <a href="privacy.html">الخصوصية</a>
+        <a href="https://t.me/cCraftspace" target="_blank">تلجرام</a>
+    </div>
+    <div class="footer-copy">© CCRAFT SPACE 2026 — جميع الحقوق محفوظة</div>
+</footer>
+
+<!-- Roblox Account Link Modal -->
+<div class="discord-modal-overlay" id="robloxLinkModal">
+  <div class="discord-modal-box">
+    <button class="discord-close-btn" onclick="closeRobloxLinkModal()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="discord-icon" style="background:linear-gradient(135deg,#8b5cf6,#00f2fe)"><i class="fa-brands fa-discord"></i></div>
+    <h3>اربط حساب روبلوكس</h3>
+    <p style="text-align:right">اكتب اسم المستخدم بتاعك على روبلوكس واضغط ربط.</p>
+    <input type="text" id="rlUsername" placeholder="اسم المستخدم على روبلوكس">
+    <button class="discord-join-btn" id="rlVerifyBtn" onclick="verifyRobloxLink()"><i class="fa-solid fa-link"></i> ربط الحساب</button>
+    <div id="rlResult" style="margin-top:14px;font-size:0.85rem;"></div>
+  </div>
+</div>
+
+<script type="module">
+// ============================================================
+// Supabase بدل Firebase — صفحة index.html
+// ============================================================
+const SUPABASE_URL = 'https://nthqrfsdshsreqdoksyv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_kHd5Y4bBnUDJxCFV-aKg-Q_T9XRJckN';
+const SB_HEADERS = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type': 'application/json'
+};
+
+// دوال مساعدة محلية لاستعلام Supabase
+async function sbGet(table, params = '') {
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, { headers: SB_HEADERS });
+        if (!res.ok) return [];
+        return await res.json();
+    } catch { return []; }
+}
+
+async function sbGetField(table, id, field) {
+    try {
+        const rows = await sbGet(table, `id=eq.${encodeURIComponent(id)}&select=${field}`);
+        return rows.length ? rows[0][field] : null;
+    } catch { return null; }
+}
+
+async function sbPatch(table, id, data) {
+    try {
+        await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${encodeURIComponent(id)}`, {
+            method: 'PATCH',
+            headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' },
+            body: JSON.stringify(data)
+        });
+    } catch { /* تجاهل */ }
+}
+
+async function sbInsert(table, data) {
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+            method: 'POST',
+            headers: { ...SB_HEADERS, 'Prefer': 'return=minimal' },
+            body: JSON.stringify(data)
+        });
+        return res.ok;
+    } catch { return false; }
+}
+
+// مستخدم حالي من localStorage
+let currentUser = null;
+try {
+    const saved = localStorage.getItem('ccraft_user');
+    if (saved) currentUser = JSON.parse(saved);
+} catch { currentUser = null; }
+
+let notifUid = currentUser ? currentUser.uid : null;
+
+(function(){
+    const c = document.getElementById('stars');
+    for(let i = 0; i < 80; i++){
+        const s = document.createElement('div'); s.className = 'star';
+        const size = Math.random() * 2.5 + 0.5;
+        s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;--d:${2+Math.random()*5}s;--del:${Math.random()*6}s;--op:${0.3+Math.random()*0.5}`;
+        c.appendChild(s);
+    }
+})();
+
+function animCount(id, target){
+    const el = document.getElementById(id); if(!el) return;
+    let cur = 0; const step = Math.max(1, Math.ceil(target/40));
+    const t = setInterval(()=>{
+        cur = Math.min(cur+step, target);
+        el.innerText = cur.toLocaleString('ar-EG');
+        if(cur >= target) clearInterval(t);
+    }, 35);
+}
+
+function startOfTodayTs(){
+    const d = new Date();
+    d.setHours(0,0,0,0);
+    return d.getTime();
+}
+
+function todayKey(){
+    return new Date().toISOString().slice(0,10); // YYYY-MM-DD
+}
+
+/* ─── زيارات اليوم: عدّاد صحيح بدون تكرار للتابات/الزيارات المتعددة من نفس الجهاز ─── */
+function trackVisitToday(){
+    const key = 'ccraft_visited_' + todayKey();
+    if(localStorage.getItem(key)) return; // الجهاز ده اتحسب النهاردة قبل كده
+    localStorage.setItem(key, '1');
+    runTransaction(ref(db, `dailyVisits/${todayKey()}`), cur => (cur || 0) + 1)
+        .catch(() => { localStorage.removeItem(key); }); // لو فشلت المعاملة، امسح العلامة عشان تتحاول تاني بعدين
+}
+trackVisitToday();
+
+// تحميل عدد زيارات اليوم عند بدء التحميل
+(async () => {
+    const rows = await sbGet('daily_visits', `date=eq.${todayKey()}&select=count`);
+    animCount('ls-visitstoday', rows.length ? (rows[0].count || 0) : 0);
+})();
+
+/* ─── إحصائيات: كل قراءة منفصلة عن التانية عشان فشل قراءة واحدة (زي users
+   المحمية للأدمن بس) ميوقفش باقي الصفحة عن التحميل ─── */
+async function loadStats(){
+    // السكربتات — عامة دايمًا، ومنها بتتغذى كل أقسام الصفحة الرئيسية
+    let scripts = {};
+    try{
+        const rows = await sbGet('scripts', 'select=*&order=timestamp.desc');
+        rows.forEach(r => { scripts[r.id] = r; });
+    }catch(err){
+        console.error('تعذر تحميل السكربتات:', err);
+    }
+
+    let likes = 0; Object.values(scripts).forEach(s => likes += s.likes||0);
+    animCount('ls-scripts', Object.keys(scripts).length);
+    animCount('ls-likes',   likes);
+
+    const todayTs = startOfTodayTs();
+    const newScriptsToday = Object.values(scripts).filter(s => (s.timestamp||0) >= todayTs).length;
+    animCount('ls-newscripts', newScriptsToday);
+
+    // السكربتات مستقلة عن users، فتشتغل حتى لو users اترفضت
+    loadFeaturedScripts(scripts);
+    loadFeaturedToday(scripts);
+    loadTopUsers(scripts);
+
+    // المستخدمون — محمية (بس للأدمن)، فمحتاجة تتعامل بمفردها
+    // ولو المستخدم الحالي مش أدمن هترجع Permission Denied وهنسيب العداد "—"
+    try{
+        const userRows = await sbGet('users', 'select=id,created_at');
+        animCount('ls-users', userRows.length);
+        const newUsersToday = userRows.filter(u => {
+            const t = new Date(u.created_at||0).getTime();
+            return t >= todayTs;
+        }).length;
+        animCount('ls-newusers', newUsersToday);
+    }catch(err){
+        // متوقع لغير الأدمن بعد تحديث صلاحيات users — مش خطأ حقيقي
+        document.getElementById('ls-users').innerText = '—';
+        document.getElementById('ls-newusers').innerText = '—';
+    }
+}
+
+let _lastOnline = -1;
+
+// تحميل عدد المتصلين من Supabase (presence جدول)
+async function loadOnlineCount(){
+    try {
+        const since = Date.now() - 60000;
+        const rows = await sbGet('presence', `ts=gte.${since}&select=id`);
+        const total = Math.max(rows.length, 1);
+        if (total !== _lastOnline) {
+            _lastOnline = total;
+            animCount('ls-online', total);
+        }
+    } catch {
+        if (_lastOnline < 0) animCount('ls-online', 1);
+    }
+}
+loadOnlineCount();
+setInterval(loadOnlineCount, 30000);
+
+function loadFeaturedScripts(scripts){
+    const c = document.getElementById('featScripts'); c.innerHTML='';
+    const latest = Object.entries(scripts).sort((a,b)=>(b[1].timestamp||0)-(a[1].timestamp||0)).slice(0,6);
+    if(!latest.length){ c.innerHTML='<div style="color:var(--lo);text-align:center;padding:28px;grid-column:1/-1">لا توجد سكربتات بعد</div>'; return; }
+    latest.forEach(([id,s])=>{
+        const card = document.createElement('div'); card.className='feat-card';
+        card.onclick = () => location.href = `script.html?id=${id}`;
+        card.innerHTML = `<div class="fc-title">${s.title||'بدون عنوان'}</div><div class="fc-meta"><span class="fc-cat">${s.category||'—'}</span>${s.map?`<span class="fc-map"><i class="fa-solid fa-map-location-dot"></i> ${s.map}</span>`:''}<span class="fc-stat"><i class="fa-solid fa-thumbs-up"></i> ${s.likes||0}</span><span class="fc-stat"><i class="fa-solid fa-star"></i> ${s.votes?(s.rating/s.votes).toFixed(1):'—'}</span></div>`;
+        c.appendChild(card);
+    });
+}
+
+/* ─── سكربت اليوم المميز: بيعتمد على daily_stats ───
+   لازم تسجّل الـ views/likes دول من script.html (وأي صفحة فيها زرار لايك) بنفس المسار،
+   وإلا الكارت هيفضل فاضي لغاية ما يبدأ يتسجل نشاط اليوم. */
+async function loadFeaturedToday(scripts){
+    const box = document.getElementById('featuredToday'); if(!box) return;
+    try{
+        const dsRows = await sbGet('daily_stats', `date=eq.${todayKey()}&select=script_id,views,likes&order=views.desc`);
+        let bestId = null, bestScore = -1, bestViews = 0, bestLikes = 0;
+        dsRows.forEach(d => {
+            const views = d.views||0, lk = d.likes||0;
+            const score = views + lk*3;
+            if(score > bestScore){ bestScore = score; bestId = d.script_id; bestViews = views; bestLikes = lk; }
+        });
+        
+        if(!bestId || !scripts[bestId]){
+            box.style.cursor = 'default';
+            box.onclick = null;
+            box.innerHTML = '<div style="color:var(--lo);text-align:center;padding:20px;font-size:0.8rem">لا يوجد سكربت مميز النهاردة لسه</div>';
+            return;
+        }
+        const s = scripts[bestId];
+        box.style.cursor = 'pointer';
+        box.onclick = () => location.href = `script.html?id=${bestId}`;
+        box.innerHTML = `<div class="fc-title">${s.title||'بدون عنوان'}</div>
+            <div class="fc-meta"><span class="fc-cat">${s.category||'—'}</span>
+            <span class="fc-stat"><i class="fa-solid fa-thumbs-up"></i> ${bestLikes} اليوم</span>
+            <span class="fc-stat"><i class="fa-solid fa-eye"></i> ${bestViews} اليوم</span></div>`;
+    }catch(err){
+        box.innerHTML = '<div style="color:var(--lo);text-align:center;padding:20px;font-size:0.8rem">لا يوجد سكربت مميز النهاردة لسه</div>';
+    }
+}
+
+/* ─── أفضل المستخدمين: بيتحسب من بيانات السكربتات نفسها (author, authorUid)
+   بدل ما يقرا users/ كامل — وبيقرا بس users/{uid}/photo المسموح بيها للعامة ─── */
+async function loadTopUsers(scripts){
+    const c = document.getElementById('topUsers'); if(!c) return; c.innerHTML='';
+    const us = {};
+    Object.entries(scripts).forEach(([,s])=>{
+        const uid = s.authorUid||s.authorEmail||s.author; if(!uid) return;
+        if(!us[uid]) us[uid]={likes:0,scripts:0,uid:s.authorUid,email:s.authorEmail,name:s.author};
+        us[uid].likes+=s.likes||0; us[uid].scripts+=1;
+    });
+    const sorted = Object.values(us).sort((a,b)=>b.likes-a.likes).slice(0,4);
+    if(!sorted.length){ c.innerHTML='<div style="color:var(--lo);text-align:center;padding:24px;grid-column:1/-1">لا بيانات بعد</div>'; return; }
+    const rc=['gold','silver','bronze',''], re=['<i class="fa-solid fa-medal"></i>','<i class="fa-solid fa-medal"></i>','<i class="fa-solid fa-medal"></i>','4'];
+    for(let i=0; i<sorted.length; i++){
+        const u = sorted[i], uid = u.uid||'';
+        let av = `<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#00bcd4);display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:0.85rem">${(u.name||'?').charAt(0).toUpperCase()}</div>`;
+        if(uid){
+            try{
+                // جلب صورة المستخدم من Supabase
+                const photoRows = await sbGet('users', `id=eq.${encodeURIComponent(uid)}&select=photo`);
+                if(photoRows.length && photoRows[0].photo){
+                    av = `<img src="${photoRows[0].photo}" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block">`;
+                }
+            }catch{}
+        }
+        const card = document.createElement('div'); card.className='user-card';
+        card.onclick = () => { if(uid) location.href=`profile.html?uid=${uid}`; };
+        card.innerHTML = `<div class="uc-rank ${rc[i]}">${re[i]}</div><div class="uc-av">${av}</div><div class="uc-info"><div class="uc-name">${u.name||'مجهول'}</div><div class="uc-stat"><i class="fa-solid fa-thumbs-up"></i> ${u.likes} · <i class="fa-solid fa-scroll"></i> ${u.scripts}</div></div>`;
+        c.appendChild(card);
+    }
+}
+
+async function loadAnnouncement(){
+    try{
+        const rows = await sbGet('announcements', 'select=*&order=timestamp.desc&limit=1');
+        if(!rows.length) return;
+        const latest = rows[0];
+        if(Date.now()-(latest.timestamp||0)<7*24*3600*1000){
+            document.getElementById('annText').innerText = latest.text;
+            document.getElementById('annBanner').classList.add('show');
+        }
+    }catch(err){
+        console.error('تعذر تحميل الإعلانات:', err);
+    }
+}
+
+async function loadUserPages(){
+    try{
+        const c = document.getElementById('userPagesGallery');
+        const rows = await sbGet('user_pages', 'select=*&order=updated_at.desc&limit=8');
+        
+        if(!rows.length){
+            c.innerHTML='<div style="color:var(--lo);text-align:center;padding:22px;grid-column:1/-1;font-size:0.78rem">لا توجد صفحات — <a href="page-builder.html" style="color:var(--violet)">كن أول من ينشئ!</a></div>';
+            return;
+        }
+        
+        c.innerHTML='';
+        const TC={dark:'#8b5cf6',space:'#818cf8',ocean:'#00bcd4',sunset:'#f97316',forest:'#4ade80',neon:'#a78bfa'};
+        rows.forEach(p=>{
+            const uid = p.user_id || p.id;
+            const accent = p.accent||TC[p.theme]||'#8b5cf6';
+            const name = (p.name||p.display_name||'مستخدم').replace(/[<>&"]/g,'');
+            const card = document.createElement('div'); card.className='page-card';
+            card.style.setProperty('--acc', accent);
+            card.style.borderColor = accent+'22';
+            card.onmouseenter = () => card.style.borderColor = accent+'55';
+            card.onmouseleave = () => card.style.borderColor = accent+'22';
+            card.onclick = () => location.href=`user-page.html?uid=${uid}`;
+            card.innerHTML = `<div class="pc-banner" style="background:linear-gradient(135deg,${accent}20,${accent}08)"><i class="fa-solid fa-globe"></i></div><div class="pc-body"><div class="pc-name">${name}</div><div class="pc-meta">صفحة شخصية</div></div>`;
+            c.appendChild(card);
+        });
+    }catch(err){
+        console.error('تعذر تحميل صفحات المستخدمين:', err);
+    }
+}
+
+/* ─── Notifications ─── */
+const NOTIF_SEEN_KEY = 'ccraft_notif_seen';
+
+function timeAgo(ts){
+    const diff = Date.now() - ts;
+    const m = Math.floor(diff/60000), h = Math.floor(diff/3600000), d = Math.floor(diff/86400000);
+    if (d > 0) return `منذ ${d} يوم`;
+    if (h > 0) return `منذ ${h} ساعة`;
+    if (m > 0) return `منذ ${m} دقيقة`;
+    return 'الآن';
+}
+
+const NOTIF_ICONS = { like:'<i class="fa-solid fa-thumbs-up"></i>', comment:'<i class="fa-solid fa-comment"></i>', announcement:'<i class="fa-solid fa-bullhorn"></i>', report_reply:'<i class="fa-solid fa-shield-halved"></i>' };
+
+async function loadNotifications(){
+    const listEl = document.getElementById('notifList');
+    try{
+        const fetches = [sbGet('announcements', 'select=*&order=timestamp.desc&limit=10')];
+        if(notifUid) fetches.push(sbGet('notifications', `user_id=eq.${encodeURIComponent(notifUid)}&select=*&order=timestamp.desc&limit=25`));
+        const [annRows, personalRows = []] = await Promise.all(fetches);
+
+        let items = [];
+        annRows.forEach(n => items.push({ type: 'announcement', text: n.text||'', timestamp: n.timestamp||0 }));
+        (personalRows||[]).forEach(n => items.push({
+            id: n.id, type: n.type||'like', text: n.text||'', timestamp: n.timestamp||0, scriptId: n.script_id||null
+        }));
+
+        if(!items.length){
+            listEl.innerHTML = '<div class="notif-empty">لا توجد إشعارات حالياً</div>';
+            document.getElementById('notifBadge').classList.remove('show');
+            return;
+        }
+
+        items.sort((a,b)=>b.timestamp-a.timestamp);
+        items = items.slice(0,25);
+
+        const lastSeen = parseInt(localStorage.getItem(NOTIF_SEEN_KEY) || '0');
+        const unreadCount = items.filter(n => n.timestamp > lastSeen).length;
+
+        const badge = document.getElementById('notifBadge');
+        if(unreadCount > 0){
+            badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            badge.classList.add('show');
+        } else {
+            badge.classList.remove('show');
+        }
+
+        listEl.innerHTML = '';
+        items.forEach(n => {
+            const isUnread = n.timestamp > lastSeen;
+            const item = document.createElement('div');
+            item.className = `notif-item${isUnread ? ' unread' : ''}`;
+            item.innerHTML = `<div class="ni-text">${NOTIF_ICONS[n.type]||'<i class="fa-solid fa-bell"></i>'} ${n.text}</div><div class="ni-time">${timeAgo(n.timestamp)}</div>`;
+            if(n.id) item.onclick = () => location.href = n.scriptId ? `script.html?id=${n.scriptId}` : 'profile.html';
+            listEl.appendChild(item);
+        });
+    }catch(err){
+        listEl.innerHTML = '<div class="notif-empty">لا توجد إشعارات حالياً</div>';
+    }
+}
+
+window.toggleNotifPanel = function(){
+    const panel = document.getElementById('notifPanel');
+    const opening = !panel.classList.contains('open');
+    panel.classList.toggle('open');
+    if(opening){
+        localStorage.setItem(NOTIF_SEEN_KEY, Date.now().toString());
+        setTimeout(()=>{ document.getElementById('notifBadge').classList.remove('show'); }, 400);
+    }
+};
+
+document.addEventListener('click', e => {
+    const widget = document.getElementById('notifWidget');
+    if(widget && !widget.contains(e.target)) document.getElementById('notifPanel').classList.remove('open');
+});
+
+loadStats();
+loadAnnouncement();
+loadUserPages();
+loadNotifications();
+
+(function(){
+    const modal = document.getElementById('discordModal');
+    if(!modal) return;
+    if(!sessionStorage.getItem('discordModalSeen')){
+        setTimeout(()=>modal.classList.add('open'), 500);
+    }
+    function closeModal(){
+        modal.classList.remove('open');
+        sessionStorage.setItem('discordModalSeen','1');
+    }
+    document.getElementById('discordCloseBtn').onclick = closeModal;
+    document.getElementById('discordLaterBtn').onclick = closeModal;
+    document.getElementById('discordJoinBtn').addEventListener('click', closeModal);
+    modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+})();
+
+</script>
+
+<!-- Roblox account link logic -->
+<script>
+const RL_STORAGE_KEY = 'ccraftspace_roblox_link';
+
+function openRobloxLinkModal(){
+  document.getElementById('rlResult').innerText = '';
+  document.getElementById('rlUsername').value = '';
+  document.getElementById('robloxLinkModal').classList.add('open');
+}
+function closeRobloxLinkModal(){
+  document.getElementById('robloxLinkModal').classList.remove('open');
+}
+
+async function verifyRobloxLink(){
+  const username = document.getElementById('rlUsername').value.trim();
+  const resultDiv = document.getElementById('rlResult');
+  if(!username){ resultDiv.innerText = '<i class="fa-solid fa-triangle-exclamation"></i> اكتب اليوزرنيم الأول'; return; }
+
+  const btn = document.getElementById('rlVerifyBtn');
+  btn.disabled = true;
+  resultDiv.innerText = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الربط...';
+
+  try {
+    const res = await fetch('https://Anas9vmhh.pythonanywhere.com/lookup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username })
+    });
+    const data = await res.json();
+
+    if(data.success){
+      resultDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + data.message;
+      const linkedData = { userId: data.userId, username: data.username, avatarUrl: data.avatarUrl };
+      localStorage.setItem(RL_STORAGE_KEY, JSON.stringify(linkedData));
+      showLinkedRoblox(linkedData);
+      setTimeout(closeRobloxLinkModal, 1000);
+    } else {
+      resultDiv.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.message;
+    }
+  } catch(err){
+    resultDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> حصل خطأ في الاتصال بالسيرفر';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function showLinkedRoblox(linked){
+  const badge = document.getElementById('rlLinkedBadge');
+  const avatar = document.getElementById('rlLinkedAvatar');
+  const nameEl = document.getElementById('rlLinkedName');
+  const linkBtn = document.getElementById('linkRobloxBtn');
+
+  if(linked.userId) avatar.src = `https://Anas9vmhh.pythonanywhere.com/avatar/${linked.userId}`;
+  nameEl.innerText = linked.username;
+  badge.style.display = 'inline-flex';
+  if(linkBtn) linkBtn.style.display = 'none';
+}
+
+function unlinkRoblox(e){
+  if(e) e.stopPropagation();
+  localStorage.removeItem(RL_STORAGE_KEY);
+  document.getElementById('rlLinkedBadge').style.display = 'none';
+  const linkBtn = document.getElementById('linkRobloxBtn');
+  if(linkBtn) linkBtn.style.display = 'inline-flex';
+}
+
+// تحميل حالة الربط المحفوظة عند فتح الصفحة
+(function(){
+  const saved = localStorage.getItem(RL_STORAGE_KEY);
+  if(saved){
+    try { showLinkedRoblox(JSON.parse(saved)); } catch(e){}
+  }
+})();
+</script>
+
+<!-- تسجيل هذه الصفحة ضمن المتصلين الآن فعليًا -->
+<script type="module" src="presence.js"></script>
+</body>
+</html>
